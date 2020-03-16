@@ -1,6 +1,6 @@
 # frame
 
-> a mpvue frame for wxapp
+> Because Of Books Created By Mpvue && Vant
 
 ## Build Setup
 
