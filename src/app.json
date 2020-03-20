@@ -1,34 +1,43 @@
 {
-	"pages": [
-		"pages/index/main",
-		"pages/book/main",
-		"pages/course/main",
-		"pages/user/main"
-	],
-	"window": {
-		"backgroundTextStyle": "light",
-		"navigationBarBackgroundColor": "#fff",
-		"navigationBarTitleText": "因为书悦读馆",
-		"navigationBarTextStyle": "black"
-	},
-	"tabBar": {
-		"list": [
-			{
-				"pagePath": "pages/index/main",
-				"text": "主页"
-			},
-			{
-				"pagePath": "pages/book/main",
-				"text": "图书"
-			},
-			{
-				"pagePath": "pages/course/main",
-				"text": "课程"
-			},
-			{
-				"pagePath": "pages/user/main",
-				"text": "我的"
-			}
-		]
-	}
+    "pages": [
+        "pages/index/main",
+        "pages/book/main",
+        "pages/course/main",
+        "pages/user/main",
+        "pages/index/bookRecom/main"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "因为书悦读馆",
+        "navigationBarTextStyle": "black"
+    },
+    "tabBar": {
+        "selectedColor": "#F1961A",
+        "list": [{
+                "pagePath": "pages/index/main",
+                "text": "主页",
+                "iconPath": "static/images/index/tab_1.png",
+                "selectedIconPath": "static/images/index/tab_1_active.png"
+            },
+            {
+                "pagePath": "pages/book/main",
+                "text": "图书",
+                "iconPath": "static/images/index/tab_2.png",
+                "selectedIconPath": "static/images/index/tab_2_active.png"
+            },
+            {
+                "pagePath": "pages/course/main",
+                "text": "课程",
+                "iconPath": "static/images/index/tab_3.png",
+                "selectedIconPath": "static/images/index/tab_3_active.png"
+            },
+            {
+                "pagePath": "pages/user/main",
+                "text": "我的",
+                "iconPath": "static/images/index/tab_4.png",
+                "selectedIconPath": "static/images/index/tab_4_active.png"
+            }
+        ]
+    }
 }
