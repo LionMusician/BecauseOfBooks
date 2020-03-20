@@ -1,4 +1,5 @@
 <script>
+import "./styles/index.scss";
 export default {
 	created() {}
 };
