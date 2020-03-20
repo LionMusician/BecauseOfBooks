@@ -19,6 +19,7 @@
 				</div>
 			</swiper-item>
 		</swiper>
+		<!-- 搜索 -->
 		<div class="searchDiv">
 			<search placeholder="图书搜索"></search>
 		</div>
@@ -79,7 +80,6 @@ import CONFIG from "@/config";
 import { mapState, mapMutations } from "vuex";
 import { TEST, MASTER_KEY } from "@/store/mutation-type";
 import search from "@components/search.vue";
-// import headerView from "@components/headerView.vue";
 
 export default {
 	components: { search },
@@ -160,10 +160,10 @@ export default {
 		navigate(index) {
 			switch (String(index)) {
 				case "0":
-					console.log(wx.navigateTo);
-					wx.navigateTo("pages/index/bookRecom/main");
+					wx.navigateTo("/pages/index/bookRecom/main");
 					break;
 				case "1":
+					wx.navigateTo("/pages/index/readGuide/main");
 					break;
 				case "2":
 					break;
@@ -206,7 +206,6 @@ export default {
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		background: red;
 		img {
 			position: absolute;
 			width: 100%;
