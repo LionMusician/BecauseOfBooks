@@ -12,6 +12,14 @@
 				</van-dropdown-menu>
 			</van-col>
 		</van-row>
+		<swiper :autoplay="true" :indicator-dots="true">
+			<swiper-item>
+				<img src="../../../static/images/home/logo.png" alt>
+			</swiper-item>
+			<swiper-item>
+				<img src="../../../static/images/home/logo.png" alt>
+			</swiper-item>
+		</swiper>
 	</div>
 </template>
 
@@ -64,11 +72,9 @@ export default {
 			padding-left: 4rpx;
 		}
 		.dropdownMenu {
-			display: flex;
-			justify-content: flex-start;
+			@include fj(flex-start);
 			height: 50rpx;
-			align-items: center;
-			// font-size: $--text-nm;
+			font-size: $--text-sm;
 		}
 	}
 }
