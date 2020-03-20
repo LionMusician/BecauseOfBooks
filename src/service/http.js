@@ -43,7 +43,7 @@ fly.interceptors.response.use(
 				utils.log(`${utils.mklog()}【M="${res.request.url}"】【接口响应：】${JSON.stringify(res.data)}`);
 				return promise.resolve(res.data);//请求成功之后将返回值返回
 			}else {
-				utils.error(`${utils.mklog()}【M="${res.request.url}"】【接口错误提示：】msg=${res.data.result_msg} code=${res.data.result_code}`);
+				utils.error(`${utils.mklog()}【M="${res.request.url}"】【接口错误提示：】msg=${res.data.msg} code=${res.data.code}`);
 			}
 		} catch(err) {
 			Tips.loaded();
@@ -52,7 +52,7 @@ fly.interceptors.response.use(
 	},
 	(err) => {
 		//请求出错，根据返回状态码判断出错原因
-		utils.error(`${utils.mklog()}【M="${err.engine._options.url}"】【接口错误提示：】${err.engine.response.result_msg} code=${err.engine.response.resultCode}`);
+		utils.error(`${utils.mklog()}【M="${err.engine._options.url}"】【接口错误提示：】${err.engine.response.msg} code=${err.engine.response.code}`);
 		Tips.loaded();
 		if(err){
 			return "请求失败";

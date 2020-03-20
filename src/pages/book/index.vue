@@ -103,6 +103,22 @@ export default {
 				}
 			]
 		};
+	},
+	onLoad() {
+		this.queryBook();
+	},
+	methods:{
+		// 获取图书列表
+		queryBook() {
+			let data = {
+				page: 1,
+				size: 10
+			};
+			this.$http.queryBook(data).then(res => {
+				console.log(res);
+				
+			})
+		}
 	}
 };
 </script>
