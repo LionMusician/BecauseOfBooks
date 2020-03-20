@@ -49,6 +49,7 @@ let baseWebpackConfig = {
             'vue': 'mpvue',
             '@': resolve('src'),
             '@vant': resolve('static/vant'),
+            '@components': resolve('src/components'),
             '@images': resolve('static/images')
         },
         symlinks: false,
