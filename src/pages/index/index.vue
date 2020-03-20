@@ -14,7 +14,10 @@
 		</van-row>
 		<swiper :autoplay="true" :indicator-dots="true">
 			<swiper-item>
-				<img src="../../../static/images/home/logo.png" alt>
+				<img
+					src="https://hbimg.huabanimg.com/226173f0f4dad9c5d732501d3f2fc93fab52d7cdbfb0-YjmhvE_fw658"
+					alt
+				>
 			</swiper-item>
 			<swiper-item>
 				<img src="../../../static/images/home/logo.png" alt>
@@ -34,6 +37,9 @@ export default {
 	data() {
 		return {
 			shopName: 0,
+			bannerList: [
+				"https://hbimg.huabanimg.com/226173f0f4dad9c5d732501d3f2fc93fab52d7cdbfb0-YjmhvE_fw658"
+			],
 			shopOptions: [
 				{ text: "全部商品", value: 0 },
 				{ text: "新款商品", value: 1 },
