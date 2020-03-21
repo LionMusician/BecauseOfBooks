@@ -3,6 +3,7 @@
         "pages/index/main",
         "pages/index/bookRecom/main",
         "pages/index/readGuide/main",
+        "pages/index/readRank/main",
 
         "pages/book/main",
         "pages/course/main",

@@ -166,6 +166,7 @@ export default {
 					wx.navigateTo("/pages/index/readGuide/main");
 					break;
 				case "2":
+					wx.navigateTo("/pages/index/readRank/main");
 					break;
 				case "3":
 					break;
