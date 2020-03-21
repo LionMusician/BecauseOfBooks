@@ -4,6 +4,7 @@
         "pages/index/bookRecom/main",
         "pages/index/readGuide/main",
         "pages/index/readRank/main",
+        "pages/index/familyAct/main",
 
         "pages/book/main",
         "pages/course/main",

@@ -169,6 +169,7 @@ export default {
 					wx.navigateTo("/pages/index/readRank/main");
 					break;
 				case "3":
+					wx.navigateTo("/pages/index/familyAct/main");
 					break;
 			}
 		}
