@@ -222,4 +222,12 @@ export default class wxApi {
         })
     }
 
+
+    /**
+     * 获取系统信息
+     */
+    static getSystemInfoSync() {
+        return wx.getSystemInfoSync()
+    }
+
 }
