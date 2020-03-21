@@ -1,5 +1,5 @@
 <template>
-	<div class="main">
+	<div class="main" @click="bookClick">
 		<div class="left">
 			<img class="logo" :src="book.img" alt>
 		</div>
@@ -15,7 +15,7 @@
 						<i class="iconfont iconshoucang"></i>
 						<p>收藏</p>
 					</div>
-					<div class="add">
+					<div :class="book.count ? 'add' : 'add disabled'">
 						<i class="iconfont icontianjia1"></i>
 						<p>添加</p>
 					</div>
@@ -32,7 +32,13 @@ export default {
 			type: Object,
 			default: {}
 		}
-	}
+	},
+    methods: {
+        // 点击图书
+        bookClick() {
+            this.$emit('bookClick', this.book);
+        }
+    }
 };
 </script>
 
@@ -85,34 +91,30 @@ export default {
 	}
 	.bottom {
 		@include fj;
-		margin-top: 30rpx;
+		margin-top: 10rpx;
 		.read-count {
 			@include sc($--text-nm, $--color-secondary);
 		}
 		.btns {
 			@include fj;
+            @include sc($--text-xxs, $--color-text);
 			.collect {
 				@include fc;
-				padding: 0 20rpx;
+				padding: 20rpx;
 				.iconfont {
-					font-size: $--text-xl;
-					color: $--color-primary;
-				}
-				p {
-					font-size: $--text-xxs;
-					color: $--color-text;
+                    @include sc($--text-xl, $--color-primary);
 				}
 			}
 			.add {
-				@include fc;
+                @include fc;
 				.iconfont {
-					font-size: $--text-xl;
-					color: $--color-primary;
+                    @include sc($--text-xl, $--color-primary);
 				}
-				p {
-					font-size: $--text-xxs;
-					color: $--color-text;
-				}
+                &.disabled {
+                    .iconfont {
+                        color: $--color-gray-c;
+                    }
+                }
 			}
 		}
 	}

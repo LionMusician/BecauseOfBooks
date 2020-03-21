@@ -1,42 +1,19 @@
 <template>
 	<div class="container">
-		<div class="top">
-			<search placeholder="图书搜索"></search>
-			<div class="menus">
-				<van-dropdown-menu active-color="#8CC223">
-					<van-dropdown-item
-						v-for="(item, index) in menuList"
-						:key="index"
-						:value="item.value"
-						:options="item.options"
-					></van-dropdown-item>
-				</van-dropdown-menu>
-			</div>
-		</div>
-		<div class="main">
-			<scroll-view :scroll-y="listScroll" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
-				<ul>
-					<li v-for="(item, index) in bookList" :key="index">
-						<book-item :book="item" @bookClick="bookClick"></book-item>
-					</li>
-				</ul>
-			</scroll-view>
-		</div>
-		<cart-btn></cart-btn>
+		<!-- 头部 -->
+		<header-view title="图书详情"></header-view>
 	</div>
 </template>
 
 <script>
 import search from "@components/search.vue";
-import bookItem from "@components/bookItem.vue";
-import cartBtn from "@components/cartBtn.vue";
-import wx from "@/utils/wx-api";
+import headerView from "@components/headerView.vue";
 export default {
-	components: { search, bookItem, cartBtn },
+	components: {
+		headerView
+	},
 	data() {
 		return {
-			listScroll: true, // 允许列表滚动
-			scrollHeight: 0,
 			menuList: [
 				{
 					value: 0,
@@ -116,32 +93,10 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
-		// this.queryBook();
+		
 	},
 	methods:{
-        // 获取窗口大小
-        getWindow() {
-            let windowWidth = wx.getSystemInfoSync().windowWidth;
-            let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 80 -60;
-        },
-		// 获取图书列表
-		queryBook() {
-			let data = {
-				page: 1,
-				size: 10
-			};
-			this.$http.queryBook(data).then(res => {
-				console.log(res);
-				
-			})
-		},
-		// 点击图书
-		bookClick(book) {
-			console.log(book);
-			wx.navigateTo(`bookDetail/main?${book.id}`);
-		}
+		
 	}
 };
 </script>

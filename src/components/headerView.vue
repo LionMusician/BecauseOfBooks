@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import wx from "@/utils/wx-api";
 export default {
 	props: {
 		title: {
@@ -19,7 +20,8 @@ export default {
 	},
 	methods: {
 		back() {
-			this.$emit("back");
+			// this.$emit("back");
+			wx.navigateBack();
 		}
 	}
 };
