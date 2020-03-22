@@ -32,9 +32,15 @@
 				</li>
 				<li class="video">
 					<p class="title">绘本视频</p>
+					<video-play></video-play>
 				</li>
 				<li class="evalute">
 					<p class="title">绘本评价</p>
+					<ul>
+						<li v-for="(item, index) in book.evaluateList" :key="index">
+							<evaluate-item :evaluate="item"></evaluate-item>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</div>
@@ -43,11 +49,15 @@
 
 <script>
 import radioPlay from "@components/radioPlay.vue";
+import videoPlay from "@components/videoPlay.vue";
 import headerView from "@components/headerView.vue";
+import evaluateItem from "@components/evaluateItem.vue";
 export default {
 	components: {
 		headerView,
-		radioPlay
+		radioPlay,
+		videoPlay,
+		evaluateItem
 	},
 	data() {
 		return {
@@ -57,7 +67,24 @@ export default {
 				name: "小猫头鹰",
 				tags: ["3-6岁", "亲情友情"],
 				readNum: 8000,
-				count: 100
+				count: 100,
+				evaluateList: [
+					{
+						icon: '',
+						type: 'text',
+						value: '是非成败转头空，青山依旧在，惯看秋月春风，一壶浊酒喜相逢。',
+					},
+					{
+						icon: '',
+						type: 'radio',
+						url: ''
+					},
+					{
+						icon: '',
+						type: 'text',
+						value: '是非成败转头空，青山依旧在，惯看秋月春风，一壶浊酒喜相逢。',
+					},
+				]
 			},
 			funcList: [
 				{
