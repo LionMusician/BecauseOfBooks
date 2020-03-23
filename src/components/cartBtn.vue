@@ -6,6 +6,7 @@
             @touchstart="btnMoveStart"
             @touchmove="btnMove"
             @touchend="btnMoveEnd">
+            <i class="iconfont iconshubao-"></i>
             <div class="sup">{{num}}</div>
         </div>
     </div>
@@ -35,12 +36,12 @@ export default {
         getWindow() {
             let windowWidth = wx.getSystemInfoSync().windowWidth;
             let windowHeight = wx.getSystemInfoSync().windowHeight;
-            this.btnTop = windowHeight - 60 - this.btnWidth + 'px';
+            this.btnTop = windowHeight - 140 - this.btnWidth + 'px';
             this.btnLeft = windowWidth - 20 - this.btnWidth + 'px';
         },
         // 按钮点击
         btnClick() {
-
+            this.$emit('cartBtnClick');
         },
         // 滑动开始
         btnMoveStart(e) {
@@ -66,11 +67,19 @@ export default {
         background: $--color-primary;
         position: fixed;
         z-index: 1000;
+        @include fj(center);
+        .iconfont {
+            @include sc(90rpx, $--color-gray-6);
+        }
         .sup {
             position: absolute;
-            top: 50rpx;
+            top: 70rpx;
             right: 20rpx;
-            @include sc($--text-lg, $--color-white);
+            @include sc($--text-nm, $--color-white);
+            @include hh(30rpx);
+            border-radius: 15rpx;
+            padding: 0 10rpx;
+            background: $--color-secondary;
         }
     }
 }
