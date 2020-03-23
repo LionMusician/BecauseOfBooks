@@ -3,19 +3,21 @@
 		<!-- 头部 -->
 		<header-view title="阅读指导"></header-view>
 		<!-- 列表 -->
-		<div class="readListDiv">
-			<div class="readListView" v-for="(item, index) in readList" :key="index">
-				<div class="left">
-					<div class="imgDiv">
-						<img :src="item.img" alt>
+		<scroll-view :scroll-y="readList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+			<div class="readListDiv">
+				<div class="readListView" v-for="(item, index) in readList" :key="index">
+					<div class="left">
+						<div class="imgDiv">
+							<img :src="item.img" alt>
+						</div>
+					</div>
+					<div class="right">
+						<p class="title">【{{item.title}}】</p>
+						<div class="content">{{item.content}}</div>
 					</div>
 				</div>
-				<div class="right">
-					<p class="title">【{{item.title}}】</p>
-					<div class="content">{{item.content}}</div>
-				</div>
 			</div>
-		</div>
+		</scroll-view>
 	</div>
 </template>
 
@@ -25,6 +27,7 @@ export default {
 	name: "",
 	data() {
 		return {
+			scrollHeight: 0,
 			readList: [
 				{
 					title: "慢鱼妈妈带你逛童书展",
@@ -70,6 +73,17 @@ export default {
 				}
 			]
 		};
+	},
+	onLoad() {
+		this.getWindow();
+	},
+	methods: {
+		// 获取窗口大小
+		getWindow() {
+			let windowWidth = wx.getSystemInfoSync().windowWidth;
+			let windowHeight = wx.getSystemInfoSync().windowHeight;
+			this.scrollHeight = windowHeight / (windowWidth / 750) - 66;
+		}
 	},
 	components: {
 		headerView

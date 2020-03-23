@@ -60,7 +60,7 @@
 		<!-- 绘本推荐 -->
 		<van-row class="titleRow">
 			<van-col span="12" class="left">绘本推荐</van-col>
-			<van-col span="12" class="right">更多</van-col>
+			<van-col span="12" class="right" @click="navigate(0)">更多</van-col>
 		</van-row>
 		<van-row class="bookDiv" :gutter="20">
 			<van-col span="12" v-for="(item, index) in bookList" :key="index">

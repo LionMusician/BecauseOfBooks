@@ -7,21 +7,23 @@
 			<search placeholder="图书搜索"></search>
 		</div>
 		<!-- 图书列表 -->
-		<div class="bookList">
-			<div v-for="(item, index) in booksList" :key="index" class="bookItem">
-				<div class="imgDiv">
-					<img :src="item.img" alt>
-				</div>
-				<p class="title">{{item.title}}</p>
-				<div class="labelDiv">
-					<span class="tag" v-for="(label, l) in item.label" :key="l">{{label}}</span>
-				</div>
-				<div class="content">
-					<span class="colorLabel">推荐理由：</span>
-					<span class="text">{{item.content}}</span>
+		<scroll-view :scroll-y="booksList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+			<div class="bookList">
+				<div v-for="(item, index) in booksList" :key="index" class="bookItem">
+					<div class="imgDiv">
+						<img :src="item.img" alt>
+					</div>
+					<p class="title">{{item.title}}</p>
+					<div class="labelDiv">
+						<span class="tag" v-for="(label, l) in item.label" :key="l">{{label}}</span>
+					</div>
+					<div class="content">
+						<span class="colorLabel">推荐理由：</span>
+						<span class="text">{{item.content}}</span>
+					</div>
 				</div>
 			</div>
-		</div>
+		</scroll-view>
 	</div>
 </template>
 
@@ -32,6 +34,7 @@ export default {
 	name: "",
 	data() {
 		return {
+			scrollHeight: 0,
 			booksList: [
 				{
 					title: "走开, 绿色怪物",
@@ -67,6 +70,18 @@ export default {
 				}
 			]
 		};
+	},
+	onLoad() {
+		this.getWindow();
+	},
+	methods: {
+		// 获取窗口大小
+		getWindow() {
+			let windowWidth = wx.getSystemInfoSync().windowWidth;
+			let windowHeight = wx.getSystemInfoSync().windowHeight;
+			this.scrollHeight =
+				windowHeight / (windowWidth / 750) - 120 - 66 - 60;
+		}
 	},
 	components: {
 		headerView,

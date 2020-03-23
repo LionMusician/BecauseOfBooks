@@ -5,6 +5,8 @@
         "pages/index/readGuide/main",
         "pages/index/readRank/main",
         "pages/index/familyAct/main",
+        "pages/index/shopCar/main",
+        "pages/index/confirmOrder/main",
 
         "pages/book/main",
         "pages/book/bookDetail/main",
