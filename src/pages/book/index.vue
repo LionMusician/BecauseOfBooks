@@ -139,7 +139,6 @@ export default {
 		},
 		// 点击图书
 		bookClick(book) {
-			console.log(book);
 			wx.navigateTo(`bookDetail/main?${book.id}`);
 		}
 	}
@@ -147,9 +146,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main {
-	.book-list {
-		padding: 0 30rpx;
-	}
-}
 </style>
