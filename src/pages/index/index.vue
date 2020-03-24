@@ -12,7 +12,7 @@
 				</van-dropdown-menu>
 			</van-col>
 		</van-row>
-		<swiper :autoplay="true" :indicator-dots="true">
+		<swiper :autoplay="true" :indicator-dots="true" v-if="bannerList && bannerList.length">
 			<swiper-item v-for="(item, index) in bannerList" :key="index">
 				<div class="bannerItem">
 					<img :src="item" alt>
@@ -77,7 +77,6 @@
 import wx from "@/utils/wx-api";
 import utils from "@/utils/utils";
 import CONFIG from "@/config";
-import { mapState, mapMutations } from "vuex";
 import { TEST, MASTER_KEY } from "@/store/mutation-type";
 import search from "@components/search.vue";
 
@@ -93,10 +92,7 @@ export default {
 				{ text: "活动商品", value: 2 }
 			],
 			// banner数据
-			bannerList: [
-				"https://hbimg.huabanimg.com/226173f0f4dad9c5d732501d3f2fc93fab52d7cdbfb0-YjmhvE_fw658",
-				"https://hbimg.huabanimg.com/45a56d4598f00bab44c921f42c669034d45159a929351-WWwjYO_fw658"
-			],
+			bannerList: [],
 			// 首页导航
 			navList: [
 				{
@@ -151,12 +147,51 @@ export default {
 			]
 		};
 	},
-	computed: {
-		...mapState(["test", "master_key"])
+	computed: {},
+	onLoad() {
+		// 获取阅读馆列表
+		this.queryReadingHall();
+		// banner数据
+		this.queryBanner();
+		// 精选热点
+		this.queryHotspot();
+		// 绘本推荐列表
+		this.queryBookRecommend();
 	},
-	onLoad() {},
 	methods: {
-		...mapMutations([TEST, MASTER_KEY]),
+		// 获取阅读馆列表
+		queryReadingHall() {
+			this.$http.queryReadingHall().then(res => {
+				let data = res.data.data.readingHallVOS;
+				let arr = [];
+				data.forEach((item, index) => {
+					let obj = {
+						text: item.name,
+						value: index
+					};
+					arr.push(obj);
+				});
+				this.shopOptions = arr;
+			});
+		},
+		// 获取banner数据
+		queryBanner() {
+			this.$http.queryBanner().then(res => {
+				this.bannerList = res.data.data.bannerVOS;
+			});
+		},
+		// 精选热点
+		queryHotspot() {
+			this.$http.queryHotspot().then(res => {
+				this.hotList = res.data.data.hotspotVOS;
+			});
+		},
+		// 获取绘本推荐列表
+		queryBookRecommend() {
+			this.$http.queryBookRecommend().then(res => {
+				this.bookList = res.data.data.bookVOS;
+			});
+		},
 		navigate(index) {
 			switch (String(index)) {
 				case "0":
@@ -199,6 +234,7 @@ export default {
 		}
 		.dropdownMenu {
 			@include fj(flex-start);
+			width: 400rpx !important;
 			height: 50rpx;
 			font-size: $--text-sm;
 		}
@@ -298,6 +334,14 @@ export default {
 			padding-bottom: 40rpx;
 			font-size: $--text-lg;
 		}
+	}
+}
+</style>
+
+<style lang="scss">
+.dropdownMenu {
+	.van-dropdown-menu__item {
+		max-width: 400rpx !important;
 	}
 }
 </style>

@@ -195,6 +195,8 @@ export default {
 	},
 	onLoad() {
 		this.getWindow();
+		// 查询活动列表
+		this.queryActivity();
 	},
 	methods: {
 		// 获取窗口大小
@@ -203,6 +205,12 @@ export default {
 			let windowHeight = wx.getSystemInfoSync().windowHeight;
 			this.scrollHeight =
 				windowHeight / (windowWidth / 750) - 120 - 66 - 60;
+		},
+		// 查询活动列表
+		queryActivity() {
+			this.$http.queryActivity().then(res => {
+				this.activityList = res.data.data.readGuideVOS;
+			});
 		},
 		/**
 		 * 点击tab筛选

@@ -29,8 +29,22 @@
 				</div>
 			</div>
 			<div class="starDiv" id="steps">
-				<van-steps :steps="steps" inactive-color="#fff" active-icon="star" :active="active"/>
+				<van-steps
+					:steps="steps"
+					inactive-color="#fff"
+					active-color="#3F8F4D"
+					active-icon="star"
+					:active="active"
+				/>
 			</div>
+		</div>
+		<div class="loginDiv">
+			<van-row>
+				<van-col :span="20">登录手机号，同步全渠道订单和优惠券</van-col>
+				<van-col :span="4">
+					<van-button type="primary">登录</van-button>
+				</van-col>
+			</van-row>
 		</div>
 	</div>
 </template>

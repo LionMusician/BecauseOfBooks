@@ -76,6 +76,8 @@ export default {
 	},
 	onLoad() {
 		this.getWindow();
+		// 查询阅读指导列表
+		this.queryReadGuide();
 	},
 	methods: {
 		// 获取窗口大小
@@ -83,6 +85,12 @@ export default {
 			let windowWidth = wx.getSystemInfoSync().windowWidth;
 			let windowHeight = wx.getSystemInfoSync().windowHeight;
 			this.scrollHeight = windowHeight / (windowWidth / 750) - 66;
+		},
+		// 阅读指导数据
+		queryReadGuide() {
+			this.$http.queryReadGuide().then(res => {
+				this.readList = res.data.data.readGuideVOS;
+			});
 		}
 	},
 	components: {
