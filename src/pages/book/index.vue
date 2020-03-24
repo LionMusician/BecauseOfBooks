@@ -117,15 +117,15 @@ export default {
 	},
 	onLoad() {
 		this.getWindow();
-		// this.queryBook();
+		this.queryBook();
 	},
-	methods:{
-        // 获取窗口大小
-        getWindow() {
-            let windowWidth = wx.getSystemInfoSync().windowWidth;
-            let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 80 -60;
-        },
+	methods: {
+		// 获取窗口大小
+		getWindow() {
+			let windowWidth = wx.getSystemInfoSync().windowWidth;
+			let windowHeight = wx.getSystemInfoSync().windowHeight;
+			this.scrollHeight = windowHeight / (windowWidth / 750) - 80 - 60;
+		},
 		// 获取图书列表
 		queryBook() {
 			let data = {
@@ -134,8 +134,7 @@ export default {
 			};
 			this.$http.queryBook(data).then(res => {
 				console.log(res);
-				
-			})
+			});
 		},
 		// 点击图书
 		bookClick(book) {
