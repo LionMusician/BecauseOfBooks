@@ -1,12 +1,12 @@
 <template>
     <div class="main">
-        <ul class="list">
+        <ul class="list" :style="'min-height:' + minheight + 'rpx;max-height:' + maxheight + 'rpx'">
             <li v-for="(item, index) in cartList" :key="index">
                 <p class="name">{{item.name}}</p>
-                <i class="iconfont iconxia"></i>
+                <van-icon name="delete" size="36rpx" color="#999999" />
             </li>
         </ul>
-        <div class="btn" @click="btnComfirm">确认</div>
+        <div v-if="btnShow" class="btn" @click="btnComfirm">确认</div>
     </div>
 </template>
 <script>
@@ -34,6 +34,18 @@ export default {
                     name: '小猫头鹰'
                 },
             ]
+        },
+        btnShow: {
+            type: Boolean,
+            default: true
+        },
+        minheight: {
+            type: Number,
+            default: 200
+        },
+        maxheight: {
+            type: Number,
+            default: 340
         }
     },
     data() {
@@ -51,17 +63,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
-    @include fc(flex-end);
+    // position: fixed;
+    // top: 0;
+    // left: 0;
+    // right: 0;
+    // bottom: 0;
+    // z-index: 100;
+    // @include fc(flex-end);
     .list {
         @include wh(750rpx, auto);
-        min-height: 200rpx;
-        max-height: 340rpx;
         overflow-y: scroll;
         background: $--color-gray-de;
         padding: 20rpx 50rpx 0;

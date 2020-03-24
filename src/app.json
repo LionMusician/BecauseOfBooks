@@ -10,6 +10,7 @@
 
         "pages/book/main",
         "pages/book/bookDetail/main",
+        "pages/book/confirmAppoint/main",
         "pages/course/main",
         "pages/user/main"
 
@@ -47,5 +48,8 @@
                 "selectedIconPath": "static/images/index/tab_4_active.png"
             }
         ]
+    },
+    "usingComponents": {
+        "van-icon": "/static/vant/icon/index"
     }
 }

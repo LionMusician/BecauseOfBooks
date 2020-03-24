@@ -23,7 +23,9 @@
 			</scroll-view>
 		</div>
 		<cart-btn @btnClick="cartBtnClick"></cart-btn>
-		<cart-cover v-if="cartCoverShow" @cartListBtnClick="cartListBtnClick"></cart-cover>
+		<van-popup :show="cartCoverShow" @close="cartBtnClick" position="bottom">
+			<cart-cover @cartListBtnClick="cartListBtnClick"></cart-cover>
+		</van-popup>
 	</div>
 </template>
 
