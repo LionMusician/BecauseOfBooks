@@ -53,7 +53,7 @@ export default {
 		getWindow() {
 			let windowWidth = wx.getSystemInfoSync().windowWidth;
 			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.btnTop = windowHeight - 60 - this.btnWidth + "px";
+			this.btnTop = windowHeight - 120 - this.btnWidth + "px";
 			this.btnLeft = windowWidth - 20 - this.btnWidth + "px";
 		},
 		// 按钮点击
@@ -62,7 +62,7 @@ export default {
 		},
 		// 滑动开始
 		btnMoveStart(e) {
-			console.log("滑动开始", e.clientX, e.clientY);
+			// console.log("滑动开始", e.clientX, e.clientY);
 		},
 		// 滑动
 		btnMove(e) {
@@ -71,7 +71,7 @@ export default {
 		},
 		// 滑动结束
 		btnMoveEnd(e) {
-			console.log("滑动结束", e);
+			// console.log("滑动结束", e);
 		}
 	}
 };

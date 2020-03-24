@@ -22,7 +22,7 @@
 				</ul>
 			</scroll-view>
 		</div>
-		<cart-btn @cartBtnClick="cartBtnClick"></cart-btn>
+		<cart-btn @btnClick="cartBtnClick"></cart-btn>
 		<cart-cover v-if="cartCoverShow" @cartListBtnClick="cartListBtnClick"></cart-cover>
 	</div>
 </template>
