@@ -22,7 +22,8 @@
 				</ul>
 			</scroll-view>
 		</div>
-		<cart-btn></cart-btn>
+		<cart-btn @btnClick="cartBtnClick"></cart-btn>
+		<cart-cover v-if="cartCoverShow" @cartListBtnClick="cartListBtnClick"></cart-cover>
 	</div>
 </template>
 
@@ -30,13 +31,15 @@
 import search from "@components/search.vue";
 import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
+import cartCover from "@components/cartCover.vue";
 import wx from "@/utils/wx-api";
 export default {
-	components: { search, bookItem, cartBtn },
+	components: { search, bookItem, cartBtn, cartCover },
 	data() {
 		return {
 			listScroll: true, // 允许列表滚动
 			scrollHeight: 0,
+			cartCoverShow: false, // 默认不显示购物车
 			menuList: [
 				{
 					value: 0,
@@ -139,6 +142,14 @@ export default {
 		// 点击图书
 		bookClick(book) {
 			wx.navigateTo(`bookDetail/main?${book.id}`);
+		},
+		// 点击购物车
+		cartBtnClick() {
+			this.cartCoverShow = !this.cartCoverShow;
+		},
+		// 购物车确认
+		cartListBtnClick() {
+			wx.navigateTo(`confirmAppoint/main`);
 		}
 	}
 };
