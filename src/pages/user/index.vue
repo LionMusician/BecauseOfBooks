@@ -39,12 +39,10 @@
 			</div>
 		</div>
 		<div class="loginDiv">
-			<van-row>
-				<van-col :span="20">登录手机号，同步全渠道订单和优惠券</van-col>
-				<van-col :span="4">
-					<van-button type="primary">登录</van-button>
-				</van-col>
-			</van-row>
+			<div class="left">登录手机号，同步全渠道订单和优惠券</div>
+			<div class="right">
+				<van-button type="primary" size="small">登录</van-button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -160,6 +158,15 @@ export default {
 			.col {
 				text-align: center;
 			}
+		}
+	}
+	.loginDiv {
+		@include fj();
+		padding: 20rpx;
+		.left {
+			font-size: $--text-nm;
+		}
+		.right {
 		}
 	}
 }
