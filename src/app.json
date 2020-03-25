@@ -11,8 +11,12 @@
         "pages/book/main",
         "pages/book/bookDetail/main",
         "pages/book/confirmAppoint/main",
+
         "pages/course/main",
-        "pages/user/main"
+
+        "pages/user/main",
+        "pages/user/userInfo/main",
+        "pages/user/coupon/main"
 
     ],
     "window": {

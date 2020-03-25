@@ -12,10 +12,16 @@
 				</van-dropdown-menu>
 			</van-col>
 		</van-row>
-		<swiper :autoplay="true" :indicator-dots="true" v-if="bannerList && bannerList.length">
+		<swiper
+			:autoplay="true"
+			:indicator-dots="true"
+			circular
+			src="https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
+			v-if="bannerList && bannerList.length"
+		>
 			<swiper-item v-for="(item, index) in bannerList" :key="index">
 				<div class="bannerItem">
-					<img :src="item" alt>
+					<img :src="item.picture" alt>
 				</div>
 			</swiper-item>
 		</swiper>
@@ -47,11 +53,11 @@
 			<van-row v-for="(item, index) in hotList" :key="index">
 				<van-col span="14">
 					<p class="title">【{{item.title}}】</p>
-					<div class="content">{{item.content}}</div>
+					<div class="content">{{item.introduction}}</div>
 				</van-col>
 				<van-col span="10">
 					<div class="imgDiv">
-						<img :src="item.img" alt>
+						<img :src="item.picture" alt>
 					</div>
 				</van-col>
 			</van-row>
@@ -79,6 +85,7 @@ import utils from "@/utils/utils";
 import CONFIG from "@/config";
 import { TEST, MASTER_KEY } from "@/store/mutation-type";
 import search from "@components/search.vue";
+import { mapActions } from "vuex";
 
 export default {
 	components: { search },
@@ -86,11 +93,7 @@ export default {
 		return {
 			shopName: 0,
 			// 门店数据
-			shopOptions: [
-				{ text: "全部商品", value: 0 },
-				{ text: "新款商品", value: 1 },
-				{ text: "活动商品", value: 2 }
-			],
+			shopOptions: [],
 			// banner数据
 			bannerList: [],
 			// 首页导航
@@ -113,38 +116,9 @@ export default {
 				}
 			],
 			// 精选热点 数据
-			hotList: [
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/e58469d48c46f897816252764b2d724f94706dbd120a4f-PQqVyS_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				}
-			],
+			hotList: [],
 			// 绘本推荐数据
-			bookList: [
-				{
-					title: "走开, 绿色怪物",
-					img:
-						"https://hbimg.huabanimg.com/39dc3a60af1dd81eaa05b18003ddcde7784194967134f-bixOvN_fw658"
-				},
-				{
-					title: "小猫头鹰",
-					img:
-						"https://hbimg.huabanimg.com/7caeaccf8eb19c66a00daed938c9d8bc9a4d655c5d470-Y1VD6b_fw658"
-				},
-				{
-					title: "金猪送福",
-					img:
-						"https://hbimg.huabanimg.com/cb524e32bb824bbd175abfd7d3f2e255aa843b795e1b1-kqgnIt_fw658"
-				},
-				{
-					title: "金猪来啦",
-					img:
-						"https://hbimg.huabanimg.com/66cc2965a74411e7fb457bb8aa8d47104ed4d47b720f0-RPcSGl_fw658"
-				}
-			]
+			bookList: []
 		};
 	},
 	computed: {},
@@ -159,6 +133,7 @@ export default {
 		this.queryBookRecommend();
 	},
 	methods: {
+		...mapActions(["setShopId"]),
 		// 获取阅读馆列表
 		queryReadingHall() {
 			this.$http.queryReadingHall().then(res => {
@@ -167,10 +142,12 @@ export default {
 				data.forEach((item, index) => {
 					let obj = {
 						text: item.name,
-						value: index
+						value: item.id
 					};
 					arr.push(obj);
 				});
+				this.shopName = arr[0].value;
+				this.setShopId(arr[0].value);
 				this.shopOptions = arr;
 			});
 		},

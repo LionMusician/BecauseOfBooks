@@ -39,9 +39,30 @@ export default {
             method: 'post'
         });
     },
+    /**
+     * 分类列表
+     * type:  1-图书， 2-活动， 3-课程
+     */
+    queryCategory: (data) => {
+        return fly.request('/becausebooks-app/common/queryCategory', data, {
+            method: 'post'
+        });
+    },
     // 查询活动列表 
     queryActivity: (data) => {
         return fly.request('/becausebooks-app/home/queryActivity', data, {
+            method: 'post'
+        });
+    },
+    // 加入购物车 
+    addShoppingCart: (data) => {
+        return fly.request('/becausebooks-app/home/addShoppingCart', data, {
+            method: 'post'
+        });
+    },
+    // 查询购物车 
+    queryShoppingCart: (data) => {
+        return fly.request('/becausebooks-app/home/queryShoppingCart', data, {
             method: 'post'
         });
     },

@@ -20,12 +20,12 @@
 							></van-checkbox>
 						</div>
 						<div class="imgDiv">
-							<img :src="item.img" alt>
+							<img :src="item.activityVO.frontCover" alt>
 						</div>
 						<div class="infoDiv">
-							<p class="title">{{item.title}}</p>
-							<p class="other">时间：{{item.time}}</p>
-							<p class="other">地址：{{item.address}}</p>
+							<p class="title">{{item.activityVO.name}}</p>
+							<p class="other">时间：{{item.activityVO.startDate}} - {{item.activityVO.startDate}}</p>
+							<p class="other">地址：{{item.activityVO.address}}</p>
 							<div class="priceDiv">
 								<div>
 									<van-row class="row">
@@ -33,7 +33,7 @@
 										<van-col>
 											<van-stepper
 												integer
-												:value="item.num"
+												:value="item.adultNum"
 												@change="stepperChange($event,item)"
 												input-class="inputClass"
 												plus-class="plus-minus"
@@ -46,7 +46,7 @@
 										<van-col>
 											<van-stepper
 												integer
-												:value="item.num"
+												:value="item.childNum"
 												@change="stepperChange($event,item)"
 												input-class="inputClass"
 												plus-class="plus-minus"
@@ -107,39 +107,13 @@ export default {
 			allChecked: false,
 			dialogShow: false,
 			scrollHeight: 0,
-			carList: [
-				{
-					title:
-						"慢鱼妈妈带你慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展逛童书展",
-					num: 5,
-					id: "1",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "5",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				}
-			]
+			carList: []
 		};
 	},
 	onLoad() {
 		this.getWindow();
+		// 查询购物车
+		this.queryShoppingCart();
 	},
 	methods: {
 		// 获取窗口大小
@@ -147,6 +121,18 @@ export default {
 			let windowWidth = wx.getSystemInfoSync().windowWidth;
 			let windowHeight = wx.getSystemInfoSync().windowHeight;
 			this.scrollHeight = windowHeight / (windowWidth / 750) - 100 - 60;
+		},
+		/**
+		 * 查询购物车
+		 **/
+		queryShoppingCart() {
+			this.$http.queryShoppingCart().then(res => {
+				let data = res.data.data.shoppingCartVOS;
+				data.map(item => {
+					item.checked = false;
+				});
+				this.carList = data;
+			});
 		},
 		/**
 		 * 去结算

@@ -44,10 +44,51 @@
 				<van-button type="primary" size="small">登录</van-button>
 			</div>
 		</div>
+		<div class="orderList">
+			<div class="orderDiv">
+				<div class="top">
+					<div class="left">我的订单</div>
+					<div class="right">
+						<span>查看全部订单</span>
+						<van-icon name="arrow"/>
+					</div>
+				</div>
+				<div class="bottom">
+					<div class="bottomItem">
+						<i class="iconfont iconqianbao"></i>
+						<span>待付款</span>
+					</div>
+					<div class="bottomItem">
+						<i class="iconfont iconlaijieyue"></i>
+						<span>借阅中</span>
+					</div>
+					<div class="bottomItem">
+						<i class="iconfont iconxieziban"></i>
+						<span>待学习</span>
+					</div>
+					<div class="bottomItem">
+						<i class="iconfont icondingdan"></i>
+						<span>待取阅</span>
+					</div>
+				</div>
+			</div>
+			<div class="listDiv">
+				<ul>
+					<li class="listItem" v-for="(item, index) in cellArr" :key="index" @click="listClick(item)">
+						<div class="left">{{item.label}}</div>
+						<div class="right">
+							<van-icon name="arrow"/>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
+import { userCellList } from "@/utils/state.js";
+import wx from "@/utils/wx-api";
 export default {
 	components: {},
 	data() {
@@ -66,14 +107,47 @@ export default {
 				{
 					desc: "v4"
 				}
-			]
+			],
+			cellArr: userCellList
 		};
+	},
+	methods: {
+		// 我的页面点击行
+		listClick(item) {
+			switch (item.value) {
+				case 1: // 我的收藏
+					break;
+				case 2: // 我的活动
+					break;
+				case 3: // 课程预约
+					break;
+				case 4: // 书籍借阅
+					break;
+				case 5: // 个人信息
+					wx.navigateTo("/pages/user/userInfo/main");
+					break;
+				case 6: // 我的卡券
+					wx.navigateTo("/pages/user/coupon/main");
+					break;
+				case 7: // 我的积分
+					break;
+				case 8: // 我的评论
+					break;
+				case 9: // 问卷调查
+					break;
+			}
+			console.log(item);
+		}
 	}
 };
 </script>
 
 <style lang="scss" scoped>
 .container {
+	height: 100vh;
+	overflow-y: scroll;
+	padding-bottom: 20rpx;
+	background: $--color-bg;
 	.infoDiv {
 		padding: 0 30rpx;
 		background: $--color-primary;
@@ -163,10 +237,63 @@ export default {
 	.loginDiv {
 		@include fj();
 		padding: 20rpx;
+		background: $--color-white;
 		.left {
-			font-size: $--text-nm;
+			font-size: $--text-l;
 		}
-		.right {
+	}
+	.orderList {
+		padding: 20rpx;
+
+		.orderDiv {
+			padding: 20rpx;
+			background: $--color-white;
+			border-radius: 12rpx;
+			.top {
+				@include fj();
+				padding-bottom: 20rpx;
+				border-bottom: 1px solid $--color-gray-de;
+				.right {
+					@include fj();
+					font-size: $--text-l;
+					color: $--color-text;
+				}
+			}
+			.bottom {
+				@include fj();
+				margin-top: 10rpx;
+				.bottomItem {
+					@include fc(center);
+					padding: 20rpx 40rpx;
+					.iconfont {
+						font-size: 70rpx;
+						color: $--color-primary;
+					}
+					span {
+						font-size: $--text-nm;
+					}
+				}
+			}
+		}
+		.listDiv {
+			margin-top: 20rpx;
+			border-radius: 12rpx;
+			padding: 0 20rpx;
+			background: $--color-white;
+			.listItem {
+				@include fj();
+				padding: 20rpx;
+				border-bottom: 2px solid $--color-bg;
+				.left {
+					font-size: $--text-l;
+				}
+				.right {
+					color: $--color-text;
+				}
+			}
+			.listItem:last-child {
+				border-bottom: none;
+			}
 		}
 	}
 }

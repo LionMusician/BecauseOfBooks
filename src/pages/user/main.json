@@ -4,7 +4,8 @@
         "van-col": "/static/vant/col/index",
         "van-icon": "/static/vant/icon/index",
         "van-steps": "/static/vant/steps/index",
-        "van-button": "/static/vant/button/index"
-    },
-    "disableScroll": true
+        "van-button": "/static/vant/button/index",
+        "van-cell": "/static/vant/cell/index",
+        "van-cell-group": "/static/vant/cell-group/index"
+    }
 }

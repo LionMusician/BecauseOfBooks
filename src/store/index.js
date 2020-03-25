@@ -15,6 +15,7 @@ Vue.use(Vuex)
 const state = {
     test: 0,
     master_key: "",
+    shopId: null
 }
 
 export default new Vuex.Store({
@@ -27,7 +28,7 @@ export default new Vuex.Store({
             storage: {
                 getItem: key => wx.getStorageSync(key),
                 setItem: (key, value) => wx.setStorageSync(key, value),
-                removeItem: (key) => { }
+                removeItem: (key) => {}
             }
         })
     ]

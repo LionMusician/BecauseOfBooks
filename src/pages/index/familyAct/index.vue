@@ -7,7 +7,7 @@
 			<search placeholder="图书搜索"></search>
 		</div>
 		<!-- 筛选 -->
-		<div class="tabView">
+		<div class="tabView" v-if="tabList && tabList.length">
 			<div class="tabTop">
 				<div class="left">
 					<van-row>
@@ -52,13 +52,13 @@
 			<div class="activityView">
 				<div class="activityItem" v-for="(item, index) in activityList" :key="index">
 					<div class="imgDiv">
-						<img :src="item.img" alt>
+						<img :src="item.frontCover" alt>
 					</div>
 					<div class="infoDiv">
 						<div class="titleDiv">
 							<div class="left">
-								<p class="title">【{{item.title}}】</p>
-								<p class="num">限制人数: {{item.num}}</p>
+								<p class="title">【{{item.name}}】</p>
+								<p class="num">限制人数: {{item.totalNum}}</p>
 							</div>
 							<div class="right" @click="addCar(item)">
 								<i class="iconfont icongouwuche rotateY"></i>
@@ -67,12 +67,12 @@
 						</div>
 						<div class="timeDiv">
 							<div class="left">
-								<p>时间：{{item.time}}</p>
+								<p>时间：{{item.startDate}} - {{item.startDate}}</p>
 								<p>地址：{{item.address}}</p>
 							</div>
 							<div class="right">
 								<span class="oldAmt">&yen;{{item.oldAmt}}</span>
-								<span class="amt">&yen;{{item.amt}}</span>
+								<span class="amt">&yen;{{item.adultPrice}}</span>
 							</div>
 						</div>
 					</div>
@@ -87,6 +87,8 @@ import headerView from "@components/headerView.vue";
 import search from "@components/search.vue";
 import cartBtn from "@components/cartBtn.vue";
 import wx from "@/utils/wx-api";
+import { mapGetters } from "vuex";
+
 export default {
 	name: "",
 	data() {
@@ -101,102 +103,26 @@ export default {
 				{ value: 3, label: "讲座" },
 				{ value: 4, label: "讲座" }
 			],
-			moreList: [
-				{ value: 5, label: "博物馆" },
-				{ value: 6, label: "美术馆" },
-				{ value: 7, label: "讲座" },
-				{ value: 8, label: "讲座" }
-			],
-			activityList: [
-				{
-					title:
-						"慢鱼妈妈带你慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展逛童书展",
-					num: 5,
-					id: "1",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "2",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "3",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "4",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "5",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "6",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				}
-			]
+			moreList: [],
+			activityList: []
 		};
 	},
 	computed: {
+		...mapGetters(["shopId"]),
 		carNum() {
-			let num = 0;
-			this.carList.forEach(item => {
-				num += item.carNum;
-			});
-			return num;
+			return this.carList.length;
 		}
 	},
 	onLoad() {
 		this.getWindow();
+		// 查询购物车
+		this.queryShoppingCart();
+		// 查询分类列表
+		this.queryCategory();
 		// 查询活动列表
 		this.queryActivity();
+
+		console.log("this.shopId", this.shopId);
 	},
 	methods: {
 		// 获取窗口大小
@@ -206,10 +132,22 @@ export default {
 			this.scrollHeight =
 				windowHeight / (windowWidth / 750) - 120 - 66 - 60;
 		},
+		//  查询分类列表
+		queryCategory() {
+			let parmas = {
+				type: 2
+			};
+			this.$http.queryCategory(parmas).then(res => {
+				this.tabList = res.data.data.categoryVOListMap;
+			});
+		},
 		// 查询活动列表
 		queryActivity() {
-			this.$http.queryActivity().then(res => {
-				this.activityList = res.data.data.readGuideVOS;
+			let parmas = {
+				readingHallId: this.shopId
+			};
+			this.$http.queryActivity(parmas).then(res => {
+				this.activityList = res.data.data.activityVOS;
 			});
 		},
 		/**
@@ -219,19 +157,23 @@ export default {
 			this.active = val;
 		},
 		/**
+		 * 查询购物车
+		 **/
+		queryShoppingCart() {
+			this.$http.queryShoppingCart().then(res => {
+				this.carList = res.data.data.shoppingCartVOS;
+			});
+		},
+		/**
 		 * 加入购物车
 		 */
 		addCar(item) {
-			if (!item.carNum) {
-				item.carNum++;
-				this.carList.push(item);
-			} else {
-				this.carList.forEach(element => {
-					if (element.id === item.id) {
-						element.carNum++;
-					}
-				});
-			}
+			let parmas = {
+				activityId: item.id
+			};
+			this.$http.addShoppingCart(parmas).then(res => {
+				this.queryShoppingCart();
+			});
 		},
 		/**
 		 * 去购物车
