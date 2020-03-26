@@ -1,12 +1,11 @@
 <template>
     <div class="container">
-		<!-- 头部 -->
-		<header-view title="图书详情"></header-view>
+        <!-- 头部 -->
+        <header-view title="图书详情"></header-view>
         <ul>
             <li>
                 <div class="title">已选图书</div>
-			    <cart-cover :btnShow="false" :maxheight="1000000"></cart-cover>
-                
+                <cart-cover :btnShow="false" :maxheight="1000000"></cart-cover>
             </li>
             <li>
                 <div class="title">取书详情</div>
@@ -15,31 +14,78 @@
                         <li>
                             <p class="form-label">取书日期 {{dateNow}}</p>
                             <p class="prompt">自预约之日起，图书仅保留3天，请及时领取图书。</p>
-                            <van-radio-group>
-                                <van-radio v-for="(item, index) in dateList" :key="index">{{item}}</van-radio>
+                            <van-radio-group class="radio-group" :value="dateSelect" @change="dateChange">
+                                <van-radio
+                                    v-for="(item, index) in dateList"
+                                    :key="index"
+                                    checked-color="#628718"
+                                    :name="item.id"
+                                >{{item.label}}</van-radio>
+                            </van-radio-group>
+                        </li>
+                        <li>
+                            <p class="form-label">取书时间</p>
+                            <van-radio-group class="radio-group time" :value="timeSelect" @change="timeChange">
+                                <van-radio
+                                    v-for="(item, index) in timeList"
+                                    :key="index"
+                                    checked-color="#628718"
+                                    :name="item.id"
+                                >{{item.label}}</van-radio>
+                            </van-radio-group>
+                        </li>
+                        <li>
+                            <p class="form-label">取书方式</p>
+                            <van-radio-group class="radio-group type" :value="typeSelect" @change="typeChange">
+                                <van-radio
+                                    v-for="(item, index) in typeList"
+                                    :key="index"
+                                    checked-color="#628718"
+                                    :name="item.id"
+                                >{{item.label}}</van-radio>
                             </van-radio-group>
                         </li>
                     </ul>
                 </div>
             </li>
         </ul>
+        <div class="bottom">
+            <van-button type="primary" size="normal" color="#98C145" block>确认预约</van-button>
+        </div>
     </div>
 </template>
 <script>
 import cartCover from "@components/cartCover.vue";
 import headerView from "@components/headerView.vue";
-import utils from "@/utils/utils.js"
+import utils from "@/utils/utils.js";
 export default {
-	components: {
-		headerView,
+    components: {
+        headerView,
         cartCover
-	},
+    },
     data() {
         return {
-            timeNow: '',
-            dateNow: '',
-            dateList: []
-        }
+            timeNow: "",
+            dateNow: "",
+            dateList: [],
+            dateSelect: 0,
+            timeSelect: 0,
+            typeSelect: 0,
+            timeList: [{
+                id: 0,
+                label: "10:00-12:00"
+            }, {
+                id: 1,
+                label: "13:00-16:00"
+            }],
+            typeList: [{
+                id: 0,
+                label: "快递"
+            }, {
+                id: 1,
+                label: "自取"
+            }]
+        };
     },
     onLoad() {
         this.getDateNow();
@@ -48,35 +94,51 @@ export default {
         // 获取当前日期
         getDateNow() {
             let time = utils.mklog();
-            if(~~time.slice(11, 13) > 16) {
-                time = utils.getNextDate(time, 1) 
+            if (~~time.slice(11, 13) > 16) {
+                time = utils.getNextDate(time, 1);
             }
             this.timeNow = time;
             this.dateNow = `${time.slice(0, 4)}年${time.slice(5, 7)}月`;
             let day1 = time.slice(0, 10),
                 day2 = utils.getNextDate(time, 1),
                 day3 = utils.getNextDate(time, 2);
-            if(day1.slice(5, 7) != day2.slice(5, 7)) {
-                day2 = `${day2.slice(5, 7)}月${day2.slice(8, 10)}日`
-            }else {
-                day2 = `${day2.slice(8, 10)}日`
+            if (day1.slice(5, 7) != day2.slice(5, 7)) {
+                day2 = `${day2.slice(5, 7)}月${day2.slice(8, 10)}日`;
+            } else {
+                day2 = `${day2.slice(8, 10)}日`;
             }
-            if(day1.slice(5, 7) != day3.slice(5, 7)) {
-                day3 = `${day3.slice(5, 7)}月${day3.slice(8, 10)}日`
-            }else {
-                day3 = `${day3.slice(8, 10)}日`
+            if (day1.slice(5, 7) != day3.slice(5, 7)) {
+                day3 = `${day3.slice(5, 7)}月${day3.slice(8, 10)}日`;
+            } else {
+                day3 = `${day3.slice(8, 10)}日`;
             }
             day1 = `${time.slice(8, 10)}日`;
-            this.dateList = [
-                day1,
-                day2,
-                day3
-            ]
+            this.dateList = [{
+                id: 0,
+                label: day1
+            }, {
+                id: 1,
+                label: day2
+            }, {
+                id: 2,
+                label: day3
+            }];
             console.log(this.dateList);
-            
-        }
-    },
-}
+        },
+        // 选择取书日期
+        dateChange(e) {
+            this.dateSelect = e.mp.detail;
+        },
+        // 选择取书时间
+        timeChange(e) {
+            this.timeSelect = e.mp.detail;
+        },
+        // 选择取书方式
+        typeChange(e) {
+            this.typeSelect = e.mp.detail;
+        },
+    }
+};
 </script>
 <style lang="scss" scoped>
 .container {
@@ -87,6 +149,33 @@ export default {
         background: $--color-primary;
         @include sc($--text-lg, $--color-dark);
         font-weight: 700;
+    }
+    .take-form {
+        @include sc($--text-lg, $--color-dark);
+        padding: 10rpx 50rpx;
+        .form-label {
+            @include hh(60rpx);
+        }
+        .prompt {
+            @include sc($--text-sm, $--color-danger);
+            @include hh(40rpx);
+        }
+        .radio-group {
+            padding: 10rpx 0;
+            @include fj;
+            &.time {
+                width: 540rpx;
+            }
+            &.type {
+                width: 430rpx;
+            }
+        }
+    }
+    .bottom {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
     }
 }
 </style>
