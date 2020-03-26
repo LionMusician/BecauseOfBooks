@@ -1,0 +1,36 @@
+<template>
+    <div class="main">
+        <div class="bottom">
+            <van-button
+                type="primary"
+                size="normal"
+                color="#98C145"
+                block
+                @click="newAddress"
+            >新增地址</van-button>
+        </div>
+    </div>
+</template>
+<script>
+import wx from "@/utils/wx-api";
+export default {
+    onLoad() {
+        wx.setNavigationBarTitle('收货地址');
+    },
+    methods: {
+        newAddress() {
+            wx.navigateTo(`../editAddress/main`)
+        }
+    },
+};
+</script>
+<style lang="scss" scoped>
+.main {
+    .bottom {
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+}
+</style>

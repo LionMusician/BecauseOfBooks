@@ -14,7 +14,11 @@
                         <li>
                             <p class="form-label">取书日期 {{dateNow}}</p>
                             <p class="prompt">自预约之日起，图书仅保留3天，请及时领取图书。</p>
-                            <van-radio-group class="radio-group" :value="dateSelect" @change="dateChange">
+                            <van-radio-group
+                                class="radio-group"
+                                :value="dateSelect"
+                                @change="dateChange"
+                            >
                                 <van-radio
                                     v-for="(item, index) in dateList"
                                     :key="index"
@@ -25,7 +29,11 @@
                         </li>
                         <li>
                             <p class="form-label">取书时间</p>
-                            <van-radio-group class="radio-group time" :value="timeSelect" @change="timeChange">
+                            <van-radio-group
+                                class="radio-group time"
+                                :value="timeSelect"
+                                @change="timeChange"
+                            >
                                 <van-radio
                                     v-for="(item, index) in timeList"
                                     :key="index"
@@ -36,7 +44,11 @@
                         </li>
                         <li>
                             <p class="form-label">取书方式</p>
-                            <van-radio-group class="radio-group type" :value="typeSelect" @change="typeChange">
+                            <van-radio-group
+                                class="radio-group type"
+                                :value="typeSelect"
+                                @change="typeChange"
+                            >
                                 <van-radio
                                     v-for="(item, index) in typeList"
                                     :key="index"
@@ -50,7 +62,7 @@
             </li>
         </ul>
         <div class="bottom">
-            <van-button type="primary" size="normal" color="#98C145" block>确认预约</van-button>
+            <van-button type="primary" size="normal" color="#98C145" block @click="selectAddress">确认预约</van-button>
         </div>
     </div>
 </template>
@@ -58,6 +70,7 @@
 import cartCover from "@components/cartCover.vue";
 import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils.js";
+import wx from "@/utils/wx-api";
 export default {
     components: {
         headerView,
@@ -71,20 +84,26 @@ export default {
             dateSelect: 0,
             timeSelect: 0,
             typeSelect: 0,
-            timeList: [{
-                id: 0,
-                label: "10:00-12:00"
-            }, {
-                id: 1,
-                label: "13:00-16:00"
-            }],
-            typeList: [{
-                id: 0,
-                label: "快递"
-            }, {
-                id: 1,
-                label: "自取"
-            }]
+            timeList: [
+                {
+                    id: 0,
+                    label: "10:00-12:00"
+                },
+                {
+                    id: 1,
+                    label: "13:00-16:00"
+                }
+            ],
+            typeList: [
+                {
+                    id: 0,
+                    label: "快递"
+                },
+                {
+                    id: 1,
+                    label: "自取"
+                }
+            ]
         };
     },
     onLoad() {
@@ -113,16 +132,20 @@ export default {
                 day3 = `${day3.slice(8, 10)}日`;
             }
             day1 = `${time.slice(8, 10)}日`;
-            this.dateList = [{
-                id: 0,
-                label: day1
-            }, {
-                id: 1,
-                label: day2
-            }, {
-                id: 2,
-                label: day3
-            }];
+            this.dateList = [
+                {
+                    id: 0,
+                    label: day1
+                },
+                {
+                    id: 1,
+                    label: day2
+                },
+                {
+                    id: 2,
+                    label: day3
+                }
+            ];
             console.log(this.dateList);
         },
         // 选择取书日期
@@ -137,6 +160,10 @@ export default {
         typeChange(e) {
             this.typeSelect = e.mp.detail;
         },
+        // 选择地址
+        selectAddress() {
+            wx.navigateTo(`../addressList/main`);
+        }
     }
 };
 </script>
