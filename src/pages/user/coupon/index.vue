@@ -68,8 +68,9 @@
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(400),
 			current: 0,
 			couponList: [
 				{
@@ -88,20 +89,23 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
+		// 查询卡券
+		this.getMyCardAndVoucher();
 	},
 	methods: {
+		/**
+		 * 查询我的卡券
+		 **/
+		getMyCardAndVoucher() {
+			this.$http.getMyCardAndVoucher().then(res => {
+				console.log(res);
+			});
+		},
 		/**
 		 * 点击优惠券
 		 */
 		couponClick(index) {
 			this.current = index;
-		},
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 400;
 		}
 	}
 };

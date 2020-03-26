@@ -18,6 +18,7 @@
 
         "pages/user/main",
         "pages/user/userInfo/main",
+        "pages/user/favorite/main",
         "pages/user/coupon/main"
 
     ],

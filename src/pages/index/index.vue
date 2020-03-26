@@ -27,7 +27,7 @@
 		</swiper>
 		<!-- 搜索 -->
 		<div class="searchDiv">
-			<search placeholder="图书搜索"></search>
+			<search placeholder="图书搜索" ref="search" @search="init"></search>
 		</div>
 		<!-- 首页导航 -->
 		<van-row class="navView">
@@ -127,13 +127,17 @@ export default {
 		this.queryReadingHall();
 		// banner数据
 		this.queryBanner();
-		// 精选热点
-		this.queryHotspot();
-		// 绘本推荐列表
-		this.queryBookRecommend();
+		this.init();
 	},
 	methods: {
 		...mapActions(["setShopId"]),
+		// 接口
+		init() {
+			// 精选热点
+			this.queryHotspot();
+			// 绘本推荐列表
+			this.queryBookRecommend();
+		},
 		// 获取阅读馆列表
 		queryReadingHall() {
 			this.$http.queryReadingHall().then(res => {
@@ -165,7 +169,10 @@ export default {
 		},
 		// 获取绘本推荐列表
 		queryBookRecommend() {
-			this.$http.queryBookRecommend().then(res => {
+			let parmas = {
+				name: ""
+			};
+			this.$http.queryBookRecommend(parmas).then(res => {
 				this.bookList = res.data.data.bookVOS;
 			});
 		},

@@ -28,8 +28,9 @@ export default {
 	name: "",
 
 	data() {
+		let that = this;
 		return {
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(186),
 			bookList: [
 				{
 					img:
@@ -83,17 +84,10 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		// 阅读排行数据
 		this.queryBorrowSort();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 120 - 66;
-		},
 		// 阅读排行数据
 		queryBorrowSort() {
 			this.$http.queryBorrowSort().then(res => {

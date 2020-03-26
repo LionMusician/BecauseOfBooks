@@ -33,8 +33,9 @@ import search from "@components/search.vue";
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(246),
 			booksList: [
 				{
 					title: "走开, 绿色怪物",
@@ -72,18 +73,10 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		// 绘本推荐接口
 		this.queryBookRecommend();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight =
-				windowHeight / (windowWidth / 750) - 120 - 66 - 60;
-		},
 		// 获取绘本推荐列表
 		queryBookRecommend() {
 			this.$http.queryBookRecommend().then(res => {

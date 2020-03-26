@@ -92,10 +92,11 @@ import { mapGetters } from "vuex";
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
 			active: 1,
 			isMore: false,
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(126),
 			carList: [],
 			tabList: [
 				{ value: 1, label: "博物馆" },
@@ -114,7 +115,6 @@ export default {
 		}
 	},
 	onLoad() {
-		this.getWindow();
 		// 查询购物车
 		this.queryShoppingCart();
 		// 查询分类列表
@@ -125,13 +125,6 @@ export default {
 		console.log("this.shopId", this.shopId);
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight =
-				windowHeight / (windowWidth / 750) - 120 - 66 - 60;
-		},
 		//  查询分类列表
 		queryCategory() {
 			let parmas = {
