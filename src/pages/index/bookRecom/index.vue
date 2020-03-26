@@ -80,7 +80,7 @@ export default {
 		// 获取绘本推荐列表
 		queryBookRecommend() {
 			this.$http.queryBookRecommend().then(res => {
-				this.booksList = res.data.data.bookVOS;
+				this.booksList = res.bookVOS;
 			});
 		}
 	},

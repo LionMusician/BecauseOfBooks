@@ -91,7 +91,7 @@ export default {
 		// 阅读排行数据
 		queryBorrowSort() {
 			this.$http.queryBorrowSort().then(res => {
-				this.bookList = res.data.data.bookVOS;
+				this.bookList = res.bookVOS;
 			});
 		}
 	},

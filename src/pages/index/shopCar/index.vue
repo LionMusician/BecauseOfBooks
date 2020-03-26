@@ -121,7 +121,7 @@ export default {
 		 **/
 		queryShoppingCart() {
 			this.$http.queryShoppingCart().then(res => {
-				let data = res.data.data.shoppingCartVOS;
+				let data = res.shoppingCartVOS;
 				data.map(item => {
 					item.checked = false;
 				});

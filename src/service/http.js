@@ -39,15 +39,14 @@ fly.interceptors.response.use(
 	(res, promise) => {
 		try{
 			Tips.loaded();
-			if (res.data.result_code === "000000") {
-				utils.log(`${utils.mklog()}【M="${res.request.url}"】【接口响应：】${JSON.stringify(res.data)}`);
-				return promise.resolve(res.data);//请求成功之后将返回值返回
+			if (res.data.code === 200) {
+				utils.log(`${utils.mklog()}【M="${res.request.url}"】【接口响应：】${JSON.stringify(res.data.data)}`);
+				return promise.resolve(res.data.data);//请求成功之后将返回值返回
 			}else {
 				utils.error(`${utils.mklog()}【M="${res.request.url}"】【接口错误提示：】msg=${res.data.msg} code=${res.data.code}`);
 			}
 		} catch(err) {
 			Tips.loaded();
-			console.log(err)
 		}
 	},
 	(err) => {

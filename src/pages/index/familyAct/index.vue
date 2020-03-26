@@ -131,7 +131,7 @@ export default {
 				type: 2
 			};
 			this.$http.queryCategory(parmas).then(res => {
-				this.tabList = res.data.data.categoryVOListMap;
+				this.tabList = res.categoryVOListMap;
 			});
 		},
 		// 查询活动列表
@@ -140,7 +140,7 @@ export default {
 				readingHallId: this.shopId
 			};
 			this.$http.queryActivity(parmas).then(res => {
-				this.activityList = res.data.data.activityVOS;
+				this.activityList = res.activityVOS;
 			});
 		},
 		/**
@@ -154,7 +154,7 @@ export default {
 		 **/
 		queryShoppingCart() {
 			this.$http.queryShoppingCart().then(res => {
-				this.carList = res.data.data.shoppingCartVOS;
+				this.carList = res.shoppingCartVOS;
 			});
 		},
 		/**
