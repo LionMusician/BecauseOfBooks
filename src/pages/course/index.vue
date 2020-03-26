@@ -36,7 +36,7 @@
 											<img v-if="t.check" src="../../../static/images/course/check.png" alt>
 											<img v-else src="../../../static/images/course/unCheck.png" alt>
 										</div>
-										<p class="time">{{t.check ? '预约': '取消预约'}}</p>
+										<p class="time" :class="t.check ? 'check' : ''">{{t.check ? '预约': '取消预约'}}</p>
 										<p class="time">{{t.time}}</p>
 									</div>
 								</div>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
 	components: {},
 	data() {
@@ -80,9 +81,52 @@ export default {
 							check: false
 						}
 					]
+				},
+				{
+					tag: "0-2岁",
+					week: "周一",
+					img:
+						"https://hbimg.huabanimg.com/8a0b97f7a0642f595b26c62e8c5fc9eb44254a16b38f7-k9DPBm_fw658",
+					title: "名称称名称",
+					num: 10,
+					times: [
+						{
+							time: "10:00",
+							check: true
+						},
+						{
+							time: "15:00",
+							check: false
+						}
+					]
+				},
+				{
+					tag: "",
+					week: "周一",
+					img:
+						"https://hbimg.huabanimg.com/8a0b97f7a0642f595b26c62e8c5fc9eb44254a16b38f7-k9DPBm_fw658",
+					title: "名称称名称",
+					num: 10,
+					times: [
+						{
+							time: "10:00",
+							check: true
+						},
+						{
+							time: "15:00",
+							check: false
+						}
+					]
 				}
 			]
 		};
+	},
+	computed: {
+		...mapGetters(["shopId"])
+	},
+	onLoad() {
+		// 课程列表
+		this.queryCourse();
 	},
 	methods: {
 		/**
@@ -90,6 +134,19 @@ export default {
 		 */
 		tabClick(item) {
 			this.tabActive = item.value;
+		},
+		/**
+		 * 课程列表
+		 */
+		queryCourse() {
+			let parmas = {
+				readingHallId: this.shopId,
+				queryType: this.tabActive
+			};
+			console.log(this.shopId);
+			this.$http.queryCourse(parmas).then(res => {
+				console.log(res);
+			});
 		}
 	}
 };
@@ -190,6 +247,9 @@ export default {
 									text-align: center;
 									color: $--color-text;
 									font-size: $--text-xs;
+								}
+								.check {
+									color: $--color-secondary;
 								}
 							}
 						}
