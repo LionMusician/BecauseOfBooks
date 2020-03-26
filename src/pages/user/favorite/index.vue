@@ -52,7 +52,7 @@ export default {
 				type: this.active
 			};
 			this.$http.getMyCollection(parmas).then(res => {
-				this.readList = res.data.data.myCollectionVOS;
+				this.readList = res.myCollectionVOS;
 			});
 		},
 		/**

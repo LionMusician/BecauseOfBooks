@@ -141,7 +141,7 @@ export default {
 		// 获取阅读馆列表
 		queryReadingHall() {
 			this.$http.queryReadingHall().then(res => {
-				let data = res.data.data.readingHallVOS;
+				let data = res.readingHallVOS;
 				let arr = [];
 				data.forEach((item, index) => {
 					let obj = {
@@ -158,13 +158,13 @@ export default {
 		// 获取banner数据
 		queryBanner() {
 			this.$http.queryBanner().then(res => {
-				this.bannerList = res.data.data.bannerVOS;
+				this.bannerList = res.bannerVOS;
 			});
 		},
 		// 精选热点
 		queryHotspot() {
 			this.$http.queryHotspot().then(res => {
-				this.hotList = res.data.data.hotspotVOS;
+				this.hotList = res.hotspotVOS;
 			});
 		},
 		// 获取绘本推荐列表
@@ -173,7 +173,7 @@ export default {
 				name: ""
 			};
 			this.$http.queryBookRecommend(parmas).then(res => {
-				this.bookList = res.data.data.bookVOS;
+				this.bookList = res.bookVOS;
 			});
 		},
 		navigate(index) {

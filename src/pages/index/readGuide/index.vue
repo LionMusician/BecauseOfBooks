@@ -83,7 +83,7 @@ export default {
 		// 阅读指导数据
 		queryReadGuide() {
 			this.$http.queryReadGuide().then(res => {
-				this.readList = res.data.data.readGuideVOS;
+				this.readList = res.readGuideVOS;
 			});
 		}
 	},

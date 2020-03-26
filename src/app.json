@@ -11,6 +11,8 @@
         "pages/book/main",
         "pages/book/bookDetail/main",
         "pages/book/confirmAppoint/main",
+        "pages/book/addressList/main",
+        "pages/book/editAddress/main",
 
         "pages/course/main",
 
