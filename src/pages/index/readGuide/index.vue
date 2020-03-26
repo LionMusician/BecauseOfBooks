@@ -26,8 +26,9 @@ import headerView from "@components/headerView.vue";
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(66),
 			readList: [
 				{
 					title: "慢鱼妈妈带你逛童书展",
@@ -75,17 +76,10 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		// 查询阅读指导列表
 		this.queryReadGuide();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 66;
-		},
 		// 阅读指导数据
 		queryReadGuide() {
 			this.$http.queryReadGuide().then(res => {

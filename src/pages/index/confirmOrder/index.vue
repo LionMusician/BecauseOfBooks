@@ -40,8 +40,9 @@ import headerView from "@components/headerView.vue";
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(160),
 			carList: [
 				{
 					title:
@@ -126,16 +127,8 @@ export default {
 			]
 		};
 	},
-	onLoad() {
-		this.getWindow();
-	},
+	onLoad() {},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 100 - 60;
-		},
 		/**
 		 * 去结算
 		 **/

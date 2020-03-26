@@ -34,24 +34,18 @@
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
 			active: "1",
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(66),
 			readList: []
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		// 查询阅读指导列表
 		this.getMyCollection();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 66;
-		},
 		// 阅读指导数据
 		getMyCollection() {
 			let parmas = {

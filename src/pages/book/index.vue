@@ -38,9 +38,10 @@ import wx from "@/utils/wx-api";
 export default {
 	components: { search, bookItem, cartBtn, cartCover },
 	data() {
+		let that = this;
 		return {
 			listScroll: true, // 允许列表滚动
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(140),
 			cartCoverShow: false, // 默认不显示购物车
 			menuList: [
 				{
@@ -121,16 +122,9 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		this.queryBook();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 80 - 60;
-		},
 		// 获取图书列表
 		queryBook() {
 			let data = {

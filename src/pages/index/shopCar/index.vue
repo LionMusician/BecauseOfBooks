@@ -102,26 +102,20 @@ import Notify from "../../../../static/vant/notify/notify.js";
 export default {
 	name: "",
 	data() {
+		let that = this;
 		return {
 			isEdit: false,
 			allChecked: false,
 			dialogShow: false,
-			scrollHeight: 0,
+			scrollHeight: that.getWindowHeight(160),
 			carList: []
 		};
 	},
 	onLoad() {
-		this.getWindow();
 		// 查询购物车
 		this.queryShoppingCart();
 	},
 	methods: {
-		// 获取窗口大小
-		getWindow() {
-			let windowWidth = wx.getSystemInfoSync().windowWidth;
-			let windowHeight = wx.getSystemInfoSync().windowHeight;
-			this.scrollHeight = windowHeight / (windowWidth / 750) - 100 - 60;
-		},
 		/**
 		 * 查询购物车
 		 **/

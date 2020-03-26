@@ -1,6 +1,7 @@
 import Lang from '../utils/Lang';
 import v from '../utils/Validate';
 import tips from '../utils/Tips';
+import wx from "../utils/wx-api";
 const mixins = {
     // 卸载页面
     // onUnload() {
@@ -9,6 +10,12 @@ const mixins = {
     //     }
     // },
     methods: {
+        getWindowHeight(height) {
+            let windowWidth = wx.getSystemInfoSync().windowWidth;
+            let windowHeight = wx.getSystemInfoSync().windowHeight;
+            let scrollHeight = windowHeight / (windowWidth / 750) - height;
+            return scrollHeight;
+        },
         // 校验
         check(rules) {
             for (let rule of rules) {
@@ -45,4 +52,6 @@ const mixins = {
     }
 }
 
-export { mixins }
+export {
+    mixins
+}
