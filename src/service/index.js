@@ -74,4 +74,19 @@ export default {
             method: 'post'
         });
     },
+
+
+    //--------------------------我的--------------------------------
+    // 查询我的卡券 
+    getMyCardAndVoucher: (data) => {
+        return fly.request('/becausebooks-app/own/getMyCardAndVoucher', data, {
+            method: 'post'
+        });
+    },
+    // 查看我的收藏 
+    getMyCollection: (data) => {
+        return fly.request('/becausebooks-app/own/getMyCollection', data, {
+            method: 'post'
+        });
+    },
 }

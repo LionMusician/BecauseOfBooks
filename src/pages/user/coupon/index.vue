@@ -89,8 +89,18 @@ export default {
 	},
 	onLoad() {
 		this.getWindow();
+		// 查询卡券
+		this.getMyCardAndVoucher();
 	},
 	methods: {
+		/**
+		 * 查询我的卡券
+		 **/
+		getMyCardAndVoucher() {
+			this.$http.getMyCardAndVoucher().then(res => {
+				console.log(res);
+			});
+		},
 		/**
 		 * 点击优惠券
 		 */
