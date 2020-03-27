@@ -7,6 +7,7 @@
 				<img src alt>
 			</div>
 			<p class="name">{{book.name}}</p>
+			<p class="name">{{book.name}}</p>
 			<ul class="tag-list">
 				<li class="tag" v-for="item in book.tags" :key="item">{{item}}</li>
 			</ul>
@@ -24,18 +25,11 @@
 				</ul>
 			</div>
 		</van-sticky>
+		<cart-btn :num="carNum" @btnClick="carClick"></cart-btn>
 		<div class="book-detial">
 			<ul>
 				<li class="detail">
 					<p class="title">绘本详情</p>
-				</li>
-				<li class="radio">
-					<p class="title">绘本音频</p>
-					<radio-play></radio-play>
-				</li>
-				<li class="video">
-					<p class="title">绘本视频</p>
-					<video-play></video-play>
 				</li>
 				<li class="evalute">
 					<p class="title">绘本评价</p>
@@ -55,12 +49,14 @@ import radioPlay from "@components/radioPlay.vue";
 import videoPlay from "@components/videoPlay.vue";
 import headerView from "@components/headerView.vue";
 import evaluateItem from "@components/evaluateItem.vue";
+import cartBtn from "@components/cartBtn.vue";
 export default {
 	components: {
 		headerView,
 		radioPlay,
 		videoPlay,
-		evaluateItem
+		evaluateItem,
+		cartBtn
 	},
 	data() {
 		return {
@@ -100,23 +96,30 @@ export default {
 					height: 100
 				},
 				{
-					id: 4,
+					id: 1,
 					pic: "collect.png",
 					name: "收藏",
 					width: 75,
 					height: 100
 				},
 				{
-					id: 3,
+					id: 2,
 					pic: "car.jpg",
 					name: "购买",
 					width: 75,
 					height: 110
 				},
 				{
-					id: 5,
+					id: 3,
 					pic: "search.png",
 					name: "评论",
+					width: 80,
+					height: 70
+				},
+				{
+					id: 4,
+					pic: "search.png",
+					name: "分享",
 					width: 80,
 					height: 70
 				}
@@ -124,7 +127,22 @@ export default {
 		};
 	},
 	onLoad() {},
-	methods: {}
+	methods: {
+		/**
+		 * 查询购物车
+		 **/
+		queryShoppingCart() {
+			this.$http.queryShoppingCart().then(res => {
+				this.carList = res.shoppingCartVOS;
+			});
+		},
+		/**
+		 * 去购物车
+		 **/
+		carClick() {
+			wx.navigateTo("/pages/index/shopCar/main");
+		}
+	}
 };
 </script>
 
