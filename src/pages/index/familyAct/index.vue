@@ -65,7 +65,7 @@
 								<p class="title">【{{item.name}}】</p>
 								<p class="num">限制人数: {{item.totalNum}}</p>
 							</div>
-							<div class="right" @click="addCar(item)">
+							<div class="right" @click.stop="addCar(item)">
 								<i class="iconfont icongouwuche rotateY"></i>
 								<span>购买</span>
 							</div>

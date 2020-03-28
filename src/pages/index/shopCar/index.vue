@@ -28,9 +28,9 @@
 							<p class="other">地址：{{item.activityVO.address}}</p>
 							<div class="priceDiv">
 								<div>
-									<van-row class="row">
-										<van-col>成人：</van-col>
-										<van-col>
+									<div class="row">
+										<div>成人：</div>
+										<div>
 											<van-stepper
 												integer
 												:value="item.adultNum"
@@ -39,11 +39,12 @@
 												plus-class="plus-minus"
 												minus-class="plus-minus"
 											/>
-										</van-col>
-									</van-row>
-									<van-row class="row">
-										<van-col>儿童：</van-col>
-										<van-col>
+										</div>
+										<div class="price">&yen;{{item.activityVO.adultPrice}}</div>
+									</div>
+									<div class="row">
+										<div>儿童：</div>
+										<div>
 											<van-stepper
 												integer
 												:value="item.childNum"
@@ -52,17 +53,17 @@
 												plus-class="plus-minus"
 												minus-class="plus-minus"
 											/>
-										</van-col>
-									</van-row>
+										</div>
+										<div class="price">&yen;{{item.activityVO.childPrice}}</div>
+									</div>
 								</div>
-								<div class="price">&yen;{{item.amt}}</div>
 							</div>
 						</div>
 					</div>
-					<view slot="right" class="swipe-cell-right">删除</view>
+					<view slot="right" class="swipe-cell-right" @click="delCar(item)">删除</view>
 				</van-swipe-cell>
 				<!-- 选择优惠券行 -->
-				<van-cell title="优惠券">
+				<van-cell title="优惠券" v-if="couponList && couponList.length">
 					<div slot="right-icon" class="coupon">
 						<span>
 							<span class="use">已用2张</span>
@@ -91,6 +92,12 @@
 			<van-dialog id="van-dialog"/>
 			<!-- message 提示 -->
 			<van-notify id="van-notify"/>
+			<!-- 选择优惠券 -->
+			<van-action-sheet :show="dialogShow" :round="false" title="选择可用优惠券">
+				<div class="couponDiv">
+					<div v-for="(coupon, index) in couponList" :key="index"></div>
+				</div>
+			</van-action-sheet>
 		</div>
 	</div>
 </template>
@@ -106,14 +113,17 @@ export default {
 		return {
 			isEdit: false,
 			allChecked: false,
-			dialogShow: false,
 			scrollHeight: that.getWindowHeight(160),
-			carList: []
+			carList: [],
+			dialogShow: false, // 优惠券弹框
+			couponList: []
 		};
 	},
 	onLoad() {
 		// 查询购物车
 		this.queryShoppingCart();
+		// 查询优惠券列表
+		this.queryVoucher();
 	},
 	methods: {
 		/**
@@ -129,11 +139,50 @@ export default {
 			});
 		},
 		/**
+		 * 查询优惠券列表
+		 **/
+		queryVoucher() {
+			this.$http.queryVoucher().then(res => {
+				this.couponList = res.userVoucherVOS;
+			});
+		},
+
+		/**
+		 * 删除某个商品
+		 */
+		delCar(item) {
+			Dialog({
+				message: `确认删除商品【${item.activityVO.name}】？`,
+				asyncClose: true,
+				showCancelButton: true
+			})
+				.then(() => {
+					let parmas = {
+						ids: [item.id]
+					};
+					this.deleteShoppingCart(parmas);
+				})
+				.catch(() => {
+					Dialog.close();
+				});
+		},
+		/**
+		 * 删除购物车
+		 **/
+		deleteShoppingCart(parmas) {
+			this.$http.deleteShoppingCart(parmas).then(res => {
+				Notify({
+					type: "success",
+					message: "删除成功"
+				});
+				this.queryShoppingCart();
+				Dialog.close();
+			});
+		},
+		/**
 		 * 去结算
 		 **/
 		onClickButton() {
-			// isEdit true:删除  false:结算
-			console.log("carList", this.carList);
 			if (this.isEdit) {
 				this.delGoods().then(res => {
 					Dialog({
@@ -142,21 +191,16 @@ export default {
 						showCancelButton: true
 					})
 						.then(() => {
-							if (this.allChecked) {
-								this.carList = [];
-								this.$set(this, "carList", []);
-							} else {
-								let arr = this.carList.filter(item => {
-									return !item.checked;
-								});
-								this.$set(this, "carList", arr);
-								// this.carList = arr;
-							}
-							Notify({
-								type: "success",
-								message: "删除成功"
+							let ids = [];
+							this.carList.forEach(item => {
+								if (item.checked) {
+									ids.push(item.id);
+								}
 							});
-							Dialog.close();
+							let parmas = {
+								ids: ids
+							};
+							this.deleteShoppingCart(parmas);
 						})
 						.catch(() => {
 							Dialog.close();
@@ -285,18 +329,16 @@ export default {
 					font-size: $--text-nm;
 				}
 				.priceDiv {
-					@include fj;
 					width: 100%;
 					font-size: $--text-nm;
 					.row {
+						@include fj;
 						line-height: 60rpx;
 					}
 					.price {
-						@include fc(flex-end);
-						height: 120rpx;
 						text-align: right;
-						font-weight: 500;
-						font-size: $--text-xl;
+						padding-left: 10rpx;
+						font-size: $--text-l;
 						color: $--color-danger;
 					}
 				}
@@ -331,6 +373,11 @@ export default {
 			font-size: $--text-nm;
 			margin: 0 10rpx;
 		}
+	}
+	.couponDiv {
+		padding: 20rpx 40rpx;
+		height: auto;
+		max-height: 600rpx;
 	}
 	.submitBar {
 		height: 100rpx;

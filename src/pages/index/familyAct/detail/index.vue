@@ -6,7 +6,21 @@
 			<div class="logo">
 				<img src alt>
 			</div>
-			<p class="name">{{book.name}}</p>
+			<div class="name">{{book.name}}</div>
+			<div class="price">
+				<span class="color">成人：</span>
+				{{book.price}}
+			</div>
+			<div class="price">
+				<span class="color">儿童：</span>
+				{{book.price}}
+			</div>
+			<div class="progress">
+				<div class="color">儿童：</div>
+				<div>
+					<van-progress percentage="50"/>
+				</div>
+			</div>
 			<ul class="tag-list">
 				<li class="tag" v-for="item in book.tags" :key="item">{{item}}</li>
 			</ul>
@@ -24,18 +38,11 @@
 				</ul>
 			</div>
 		</van-sticky>
+		<cart-btn :num="carNum" @btnClick="carClick"></cart-btn>
 		<div class="book-detial">
 			<ul>
 				<li class="detail">
 					<p class="title">绘本详情</p>
-				</li>
-				<li class="radio">
-					<p class="title">绘本音频</p>
-					<radio-play></radio-play>
-				</li>
-				<li class="video">
-					<p class="title">绘本视频</p>
-					<video-play></video-play>
 				</li>
 				<li class="evalute">
 					<p class="title">绘本评价</p>
@@ -55,12 +62,16 @@ import radioPlay from "@components/radioPlay.vue";
 import videoPlay from "@components/videoPlay.vue";
 import headerView from "@components/headerView.vue";
 import evaluateItem from "@components/evaluateItem.vue";
+import cartBtn from "@components/cartBtn.vue";
+import { mapGetters } from "vuex";
+import wx from "@/utils/wx-api";
 export default {
 	components: {
 		headerView,
 		radioPlay,
 		videoPlay,
-		evaluateItem
+		evaluateItem,
+		cartBtn
 	},
 	data() {
 		return {
@@ -100,31 +111,64 @@ export default {
 					height: 100
 				},
 				{
-					id: 4,
+					id: 1,
 					pic: "collect.png",
 					name: "收藏",
 					width: 75,
 					height: 100
 				},
 				{
-					id: 3,
+					id: 2,
 					pic: "car.jpg",
 					name: "购买",
 					width: 75,
 					height: 110
 				},
 				{
-					id: 5,
+					id: 3,
 					pic: "search.png",
 					name: "评论",
 					width: 80,
 					height: 70
+				},
+				{
+					id: 4,
+					pic: "search.png",
+					name: "分享",
+					width: 80,
+					height: 70
 				}
-			]
+			],
+			carList: []
 		};
 	},
-	onLoad() {},
-	methods: {}
+	computed: {
+		...mapGetters(["shopId"]),
+		carNum() {
+			return this.carList.length || 0;
+		}
+	},
+	onLoad() {
+		// 查询购物车
+		this.queryShoppingCart();
+	},
+	methods: {
+		/**
+		 * 查询购物车
+		 **/
+		queryShoppingCart() {
+			this.$http.queryShoppingCart().then(res => {
+				this.carList = res.shoppingCartVOS;
+			});
+		},
+		/**
+		 * 去购物车
+		 **/
+		carClick() {
+			console.log("carClick");
+			wx.navigateTo("/pages/index/shopCar/main");
+		}
+	}
 };
 </script>
 
@@ -132,8 +176,6 @@ export default {
 .container {
 	.cover {
 		position: relative;
-		overflow: hidden;
-		@include wh(100%, 450rpx);
 		border-bottom: 1rpx solid $--color-gray-c;
 		@include fc(center);
 		margin-top: 30rpx;
@@ -147,6 +189,20 @@ export default {
 		.name {
 			@include hh(60rpx);
 			@include sc($--text-xl, $--color-text);
+		}
+		.price {
+			@include sc($--text-lg, $--color-text);
+			.color {
+				color: $--color-danger;
+			}
+		}
+		.progress {
+			@include fj(center);
+			width: 100%;
+			// padding: 0 60rpx 60rpx 60rpx;
+			.color {
+				@include sc($--text-nm, $--color-text);
+			}
 		}
 		.tag-list {
 			@include wh(150rpx, 300rpx);

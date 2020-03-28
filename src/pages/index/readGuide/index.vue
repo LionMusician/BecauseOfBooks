@@ -8,12 +8,12 @@
 				<div class="readListView" v-for="(item, index) in readList" :key="index">
 					<div class="left">
 						<div class="imgDiv">
-							<img :src="item.img" alt>
+							<img :src="item.picture" alt>
 						</div>
 					</div>
 					<div class="right">
 						<p class="title">【{{item.title}}】</p>
-						<div class="content">{{item.content}}</div>
+						<div class="content">{{item.introduction}}</div>
 					</div>
 				</div>
 			</div>

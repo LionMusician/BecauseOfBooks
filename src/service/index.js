@@ -72,6 +72,18 @@ export default {
             method: 'post'
         });
     },
+    // 删除购物车 
+    deleteShoppingCart: (data) => {
+        return fly.request('/becausebooks-app/home/deleteShoppingCart', data, {
+            method: 'post'
+        });
+    },
+    // 查询优惠券列表 
+    queryVoucher: (data) => {
+        return fly.request('/becausebooks-app/home/queryVoucher', data, {
+            method: 'post'
+        });
+    },
 
 
 

@@ -71,9 +71,9 @@
 		<van-row class="bookDiv" :gutter="20">
 			<van-col span="12" v-for="(item, index) in bookList" :key="index">
 				<div class="imgDiv">
-					<img :src="item.img" alt>
+					<img :src="item.frontCover" alt>
 				</div>
-				<p class="title">{{item.title}}</p>
+				<p class="title">{{item.name}}</p>
 			</van-col>
 		</van-row>
 	</div>
