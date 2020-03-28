@@ -54,6 +54,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询活动详情 
+    getActivityDetail: (data) => {
+        return fly.request('/becausebooks-app/home/getActivityDetail', data, {
+            method: 'post'
+        });
+    },
     // 加入购物车 
     addShoppingCart: (data) => {
         return fly.request('/becausebooks-app/home/addShoppingCart', data, {
@@ -71,6 +77,20 @@ export default {
     // 查询图书列表
     queryBook: (data) => {
         return fly.request('/becausebooks-app/book/queryBook', data, {
+            method: 'post'
+        });
+    },
+
+    // --------------------------课程-------------------------------
+    // 课程列表 
+    queryCourse: (data) => {
+        return fly.request('/becausebooks-app/course/queryCourse', data, {
+            method: 'post'
+        });
+    },
+    // 取消、预约课程  
+    orderOrCancelCourse: (data) => {
+        return fly.request('/becausebooks-app/course/orderOrCancelCourse', data, {
             method: 'post'
         });
     },

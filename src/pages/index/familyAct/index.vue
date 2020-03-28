@@ -50,7 +50,12 @@
 			class="book-list"
 		>
 			<div class="activityView">
-				<div class="activityItem" v-for="(item, index) in activityList" :key="index">
+				<div
+					class="activityItem"
+					v-for="(item, index) in activityList"
+					:key="index"
+					@click="activityDetail(item)"
+				>
 					<div class="imgDiv">
 						<img :src="item.frontCover" alt>
 					</div>
@@ -121,8 +126,6 @@ export default {
 		this.queryCategory();
 		// 查询活动列表
 		this.queryActivity();
-
-		console.log("this.shopId", this.shopId);
 	},
 	methods: {
 		//  查询分类列表
@@ -148,6 +151,13 @@ export default {
 		 **/
 		tabClick(val) {
 			this.active = val;
+		},
+		/**
+		 * 查看活动详情
+		 **/
+		activityDetail(item) {
+			console.log(item);
+			wx.navigateTo("/pages/index/familyAct/detail/main");
 		},
 		/**
 		 * 查询购物车
