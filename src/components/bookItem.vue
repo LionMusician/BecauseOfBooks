@@ -13,7 +13,7 @@
                     <p class="read-count">阅读量：{{book.showBorrowNum}}</p>
                     <div class="btns">
                         <div class="collect" @click.stop="collectBook(book)">
-                            <i class="iconfont iconshoucang"></i>
+                            <i :class="book.isCollect ? 'iconfont iconshoucangchenggong' : 'iconfont iconshoucang'"></i>
                             <p>收藏</p>
                         </div>
                         <div
