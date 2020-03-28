@@ -33,7 +33,7 @@
         </div>
         <cart-btn @btnClick="cartBtnClick"></cart-btn>
         <van-popup :show="cartCoverShow" @close="cartBtnClick" position="bottom">
-            <cart-cover @cartListBtnClick="cartListBtnClick"></cart-cover>
+            <cart-cover @cartListBtnClick="cartListBtnClick" @deleteBag="deleteBag" :cartList="bagList"></cart-cover>
         </van-popup>
     </div>
 </template>
@@ -44,6 +44,7 @@ import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import cartCover from "@components/cartCover.vue";
 import wx from "@/utils/wx-api";
+import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 export default {
     components: { search, bookItem, cartBtn, cartCover },
@@ -79,7 +80,8 @@ export default {
                     options: [{ text: "更多分类", value: 0 }]
                 }
             ],
-            bookList: []
+            bookList: [],
+			bagList: [],
         };
     },
     computed: {
@@ -87,9 +89,18 @@ export default {
     },
     onLoad() {
         this.queryBook();
-        this.queryBag();
+		this.queryCategory();
     },
     methods: {
+		// 获取分类列表
+		queryCategory() {
+			let data = {
+				type: 1
+			}
+			this.$http.queryCategory(data).then(res => {
+				
+			})
+		},
         // 获取图书列表
         queryBook() {
             let data = {
@@ -101,28 +112,51 @@ export default {
                 this.bookList = res.bookVOS;
             });
         },
-        // 查询书包
-        queryBag() {
-            let data = {};
-            this.$http.queryBag(data).then(res => {
-                console.log(res);
-            });
-        },
         // 点击图书
         bookClick(book) {
             wx.navigateTo(`bookDetail/main?${book.id}`);
         },
-        // 收藏
+        // 添加收藏
         collectBook(book) {
-            console.log(book);
+            let data = {
+				bizId: book.id,
+				type: 1, // 类型：1-图书，2-活动
+			};
+            this.$http.addCollection(data).then(res => {
+				Tips.success("收藏成功！");
+            });
         },
         // 加入书包
         addBookToBag(book) {
-            console.log(book);
+            let data = {
+				bookId: book.id
+			};
+            this.$http.addBag(data).then(res => {
+				Tips.success("加入书包成功！");
+            });
         },
+		// 从书包删除
+		deleteBag(book) {
+			let data = {
+				ids: [book.id]
+			}
+            this.$http.deleteBag(data).then(res => {
+				this.$http.queryBag().then(res => {
+					this.bagList = res.bookBorrowVOS;
+					Tips.success("删除成功！");
+				});
+            });
+		},
         // 点击购物车
         cartBtnClick() {
-            this.cartCoverShow = !this.cartCoverShow;
+			if(!this.cartCoverShow) {
+				this.$http.queryBag().then(res => {
+					this.bagList = res.bookBorrowVOS;
+					this.cartCoverShow = !this.cartCoverShow;
+				});
+			}else {
+				this.cartCoverShow = !this.cartCoverShow;
+			}
         },
         // 购物车确认
         cartListBtnClick() {

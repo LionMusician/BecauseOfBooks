@@ -2,8 +2,10 @@
     <div class="main">
         <ul class="list" :style="'min-height:' + minheight + 'rpx;max-height:' + maxheight + 'rpx'">
             <li v-for="(item, index) in cartList" :key="index">
-                <p class="name">{{item.name}}</p>
-                <van-icon name="delete" size="36rpx" color="#999999" />
+                <p class="name">{{item.bookName}}</p>
+                <div class="deleteBtn" @click="deleteBag(item)">
+                    <van-icon name="delete" size="36rpx" color="#999999" />
+                </div>
             </li>
         </ul>
         <div v-if="btnShow" class="btn" @click="btnComfirm">确认</div>
@@ -14,26 +16,7 @@ export default {
     props: {
         cartList: {
             type: Array,
-            default: [
-                {
-                    name: '小猫头鹰'
-                },
-                {
-                    name: '小猫头鹰'
-                },
-                {
-                    name: '小猫头鹰'
-                },
-                {
-                    name: '小猫头鹰'
-                },
-                {
-                    name: '小猫头鹰'
-                },
-                {
-                    name: '小猫头鹰'
-                },
-            ]
+            default: []
         },
         btnShow: {
             type: Boolean,
@@ -41,7 +24,7 @@ export default {
         },
         minheight: {
             type: Number,
-            default: 200
+            default: 100
         },
         maxheight: {
             type: Number,
@@ -49,17 +32,19 @@ export default {
         }
     },
     data() {
-        return {
-            
-        }
+        return {};
     },
     methods: {
         // 确认
         btnComfirm() {
-            this.$emit('cartListBtnClick');
+            this.$emit("cartListBtnClick");
+        },
+        // 删除书包
+        deleteBag(item) {
+            this.$emit("deleteBag", item);
         }
-    },
-}
+    }
+};
 </script>
 <style lang="scss" scoped>
 .main {
@@ -81,6 +66,9 @@ export default {
             @include hh(80rpx);
             @include fj;
             border-bottom: 2rpx solid $--color-gray-c;
+            .deleteBtn {
+                padding: 0 30rpx;
+            }
         }
     }
     .btn {
