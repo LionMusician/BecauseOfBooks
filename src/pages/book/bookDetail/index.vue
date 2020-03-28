@@ -4,11 +4,11 @@
 		<header-view title="图书详情"></header-view>
 		<div class="cover">
 			<div class="logo">
-				<img src="" alt="">
+				<img :src="book.frontCover" alt="">
 			</div>
 			<p class="name">{{book.name}}</p>
 			<ul class="tag-list">
-				<li class="tag" v-for="item in book.tags" :key="item">{{item}}</li>
+				<li class="tag" v-for="item in book.labelVOS" :key="item">{{item.name}}</li>
 			</ul>
 		</div>
 		<van-sticky>
@@ -25,22 +25,24 @@
 			<ul>
 				<li class="detail">
 					<p class="title">绘本详情</p>
+					<img :src="book.introduction" alt="">
 				</li>
-				<li class="radio">
+				<li class="radio" v-if="book.audio">
 					<p class="title">绘本音频</p>
 					<radio-play></radio-play>
 				</li>
-				<li class="video">
+				<li class="video" v-if="book.video">
 					<p class="title">绘本视频</p>
 					<video-play></video-play>
 				</li>
 				<li class="evalute">
 					<p class="title">绘本评价</p>
-					<ul>
-						<li v-for="(item, index) in book.evaluateList" :key="index">
+					<ul v-if="book.commentVOS.length">
+						<li v-for="(item, index) in book.commentVOS" :key="index">
 							<evaluate-item :evaluate="item"></evaluate-item>
 						</li>
 					</ul>
+					<p v-else>暂无评价</p>
 				</li>
 			</ul>
 		</div>
@@ -61,6 +63,7 @@ export default {
 	},
 	data() {
 		return {
+			bookId: null,
 			book: {
 				id: 1,
 				img: "",
@@ -133,10 +136,20 @@ export default {
 		};
 	},
 	onLoad() {
-		
+		this.getBookDetail();
 	},
 	methods:{
-		
+		// 查询图书详情
+		getBookDetail() {
+			let id = this.$root.$mp.query.id;
+			this.bookId = id;
+            let data = {
+				id: id
+			};
+            this.$http.getBookDetail(data).then(res => {
+				this.book = res.bookVO;
+            });
+		}
 	}
 };
 </script>
@@ -154,7 +167,6 @@ export default {
 			padding-bottom: 20rpx;
 			img {
 				@include wh(450rpx, 300rpx);
-				background: $--color-primary;
 			}
 		}
 		.name {

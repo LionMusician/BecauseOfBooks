@@ -5,7 +5,7 @@
         <ul>
             <li>
                 <div class="title">已选图书</div>
-                <cart-cover :btnShow="false" :maxheight="1000000"></cart-cover>
+                <cart-cover :btnShow="false" :cartList="bagList" @deleteBag="deleteBag" :maxheight="1000000"></cart-cover>
             </li>
             <li>
                 <div class="title">取书详情</div>
@@ -62,7 +62,13 @@
             </li>
         </ul>
         <div class="bottom">
-            <van-button type="primary" size="normal" color="#98C145" block @click="selectAddress">确认预约</van-button>
+            <van-button
+                type="primary"
+                size="normal"
+                color="#98C145"
+                block
+                @click="returnRemind"
+            >确认预约</van-button>
         </div>
     </div>
 </template>
@@ -103,13 +109,33 @@ export default {
                     id: 1,
                     label: "自取"
                 }
-            ]
+            ],
+            bagList: [], // 书包列表
         };
     },
     onLoad() {
         this.getDateNow();
+        this.queryBag();
     },
     methods: {
+        // 查询书包
+        queryBag() {
+            this.$http.queryBag().then(res => {
+                this.bagList = res.bookBorrowVOS;
+            });
+        },
+		// 从书包删除
+		deleteBag(book) {
+			let data = {
+				ids: [book.id]
+			}
+            this.$http.deleteBag(data).then(res => {
+				this.$http.queryBag().then(res => {
+					this.bagList = res.bookBorrowVOS;
+					Tips.success("删除成功！");
+				});
+            });
+		},
         // 获取当前日期
         getDateNow() {
             let time = utils.mklog();
@@ -146,7 +172,6 @@ export default {
                     label: day3
                 }
             ];
-            console.log(this.dateList);
         },
         // 选择取书日期
         dateChange(e) {
@@ -163,6 +188,22 @@ export default {
         // 选择地址
         selectAddress() {
             wx.navigateTo(`../addressList/main`);
+        },
+        // 查询图书到期归还
+        returnRemind() {
+            this.$http.returnRemind().then(res => {
+                if(res.data.isRemind) {
+                    Tips.toast("请先归还，再借书。");
+                }else {
+                    this.borrowBook();
+                }
+            });
+        },
+        // 预约
+        borrowBook() {
+            let data = {
+                takeDate: ""
+            }
         }
     }
 };

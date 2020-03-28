@@ -98,12 +98,15 @@ export default {
 				type: 1
 			}
 			this.$http.queryCategory(data).then(res => {
+				console.log(res);
 				
 			})
 		},
         // 获取图书列表
-        queryBook() {
+        queryBook(name = '') {
             let data = {
+				categoryIds: [],
+				name: name,
                 readingHallId: this.shopId,
                 page: 1,
                 size: 10
@@ -114,16 +117,20 @@ export default {
         },
         // 点击图书
         bookClick(book) {
-            wx.navigateTo(`bookDetail/main?${book.id}`);
+            wx.navigateTo(`bookDetail/main?id=${book.id}`);
         },
         // 添加收藏
         collectBook(book) {
+			if(book.isCollect) {
+				return Tips.toast("图书已收藏！");
+			}
             let data = {
 				bizId: book.id,
 				type: 1, // 类型：1-图书，2-活动
 			};
             this.$http.addCollection(data).then(res => {
 				Tips.success("收藏成功！");
+        		this.queryBook();
             });
         },
         // 加入书包
