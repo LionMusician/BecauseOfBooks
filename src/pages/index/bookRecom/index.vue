@@ -11,15 +11,15 @@
 			<div class="bookList">
 				<div v-for="(item, index) in booksList" :key="index" class="bookItem">
 					<div class="imgDiv">
-						<img :src="item.img" alt>
+						<img :src="item.frontCover" alt>
 					</div>
-					<p class="title">{{item.title}}</p>
+					<p class="title">{{item.name}}</p>
 					<div class="labelDiv">
-						<span class="tag" v-for="(label, l) in item.label" :key="l">{{label}}</span>
+						<span class="tag" v-for="(label, l) in item.labelVOS" :key="l">{{label.name}}</span>
 					</div>
 					<div class="content">
 						<span class="colorLabel">推荐理由：</span>
-						<span class="text">{{item.content}}</span>
+						<span class="text">{{item.recommendReason}}</span>
 					</div>
 				</div>
 			</div>

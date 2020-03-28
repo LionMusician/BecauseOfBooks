@@ -9,7 +9,8 @@
         "van-swipe-cell": "/static/vant/swipe-cell/index",
         "van-dialog": "/static/vant/dialog/index",
         "van-notify": "/static/vant/notify/index",
-        "van-cell": "/static/vant/cell/index"
+        "van-cell": "/static/vant/cell/index",
+        "van-action-sheet": "/static/vant/action-sheet/index"
     },
     "disableScroll": true
 }

@@ -31,56 +31,7 @@ export default {
 		let that = this;
 		return {
 			scrollHeight: that.getWindowHeight(186),
-			bookList: [
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 8000,
-					count: 0
-				},
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 8000,
-					count: 100
-				},
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 8000,
-					count: 100
-				},
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 8000,
-					count: 100
-				},
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 8000,
-					count: 100
-				},
-				{
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					name: "小猫头鹰",
-					tags: ["3-6岁", "亲情友情"],
-					readNum: 800220,
-					count: 100
-				}
-			]
+			bookList: []
 		};
 	},
 	onLoad() {
@@ -91,8 +42,25 @@ export default {
 		// 阅读排行数据
 		queryBorrowSort() {
 			this.$http.queryBorrowSort().then(res => {
-				this.bookList = res.bookVOS;
+				this.bookList = this.getListData(res.bookVOS);
 			});
+		},
+		getListData(data) {
+			let arr = [];
+			data.forEach(item => {
+				let tag = item.labelVOS.map(tag => {
+					return tag.name;
+				});
+				let obj = {
+					img: item.frontCover,
+					name: item.name,
+					tags: tag,
+					readNum: item.showBorrowNum,
+					count: ""
+				};
+				arr.push(obj);
+			});
+			return arr;
 		}
 	},
 	components: {

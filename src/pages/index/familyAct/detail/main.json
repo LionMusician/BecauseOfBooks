@@ -1,5 +1,6 @@
 {
     "usingComponents": {
-        "van-sticky": "/static/vant/sticky/index"
+        "van-sticky": "/static/vant/sticky/index",
+        "van-progress": "/static/vant/progress/index"
     }
 }

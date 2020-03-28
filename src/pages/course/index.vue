@@ -134,6 +134,7 @@ export default {
 		 */
 		tabClick(item) {
 			this.tabActive = item.value;
+			this.queryCourse();
 		},
 		/**
 		 * 课程列表

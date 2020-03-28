@@ -6,8 +6,21 @@
 			<div class="logo">
 				<img src alt>
 			</div>
-			<p class="name">{{book.name}}</p>
-			<p class="name">{{book.name}}</p>
+			<div class="name">{{book.name}}</div>
+			<div class="price">
+				<span class="color">成人：</span>
+				{{book.price}}
+			</div>
+			<div class="price">
+				<span class="color">儿童：</span>
+				{{book.price}}
+			</div>
+			<div class="progress">
+				<div class="color">儿童：</div>
+				<div>
+					<van-progress percentage="50"/>
+				</div>
+			</div>
 			<ul class="tag-list">
 				<li class="tag" v-for="item in book.tags" :key="item">{{item}}</li>
 			</ul>
@@ -50,6 +63,8 @@ import videoPlay from "@components/videoPlay.vue";
 import headerView from "@components/headerView.vue";
 import evaluateItem from "@components/evaluateItem.vue";
 import cartBtn from "@components/cartBtn.vue";
+import { mapGetters } from "vuex";
+import wx from "@/utils/wx-api";
 export default {
 	components: {
 		headerView,
@@ -123,10 +138,20 @@ export default {
 					width: 80,
 					height: 70
 				}
-			]
+			],
+			carList: []
 		};
 	},
-	onLoad() {},
+	computed: {
+		...mapGetters(["shopId"]),
+		carNum() {
+			return this.carList.length || 0;
+		}
+	},
+	onLoad() {
+		// 查询购物车
+		this.queryShoppingCart();
+	},
 	methods: {
 		/**
 		 * 查询购物车
@@ -140,6 +165,7 @@ export default {
 		 * 去购物车
 		 **/
 		carClick() {
+			console.log("carClick");
 			wx.navigateTo("/pages/index/shopCar/main");
 		}
 	}
@@ -150,8 +176,6 @@ export default {
 .container {
 	.cover {
 		position: relative;
-		overflow: hidden;
-		@include wh(100%, 450rpx);
 		border-bottom: 1rpx solid $--color-gray-c;
 		@include fc(center);
 		margin-top: 30rpx;
@@ -165,6 +189,20 @@ export default {
 		.name {
 			@include hh(60rpx);
 			@include sc($--text-xl, $--color-text);
+		}
+		.price {
+			@include sc($--text-lg, $--color-text);
+			.color {
+				color: $--color-danger;
+			}
+		}
+		.progress {
+			@include fj(center);
+			width: 100%;
+			// padding: 0 60rpx 60rpx 60rpx;
+			.color {
+				@include sc($--text-nm, $--color-text);
+			}
 		}
 		.tag-list {
 			@include wh(150rpx, 300rpx);
