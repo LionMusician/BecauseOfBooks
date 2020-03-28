@@ -16,10 +16,19 @@ import wx from "@/utils/wx-api";
 export default {
     onLoad() {
         wx.setNavigationBarTitle('收货地址');
+        this.getReceiveAddress();
     },
     methods: {
         newAddress() {
             wx.navigateTo(`../editAddress/main`)
+        },
+        // 获取地址列表
+        getReceiveAddress() {
+			let data = {};
+			this.$http.getReceiveAddress(data).then(res => {
+				console.log(res);
+			});
+
         }
     },
 };

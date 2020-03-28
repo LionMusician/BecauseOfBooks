@@ -89,4 +89,33 @@ export default {
             method: 'post'
         });
     },
+    // 收货地址列表 
+    getReceiveAddress: (data) => {
+        return fly.request('/becausebooks-app/own/getReceiveAddress', data, {
+            method: 'post'
+        });
+    },
+    // 添加收货地址
+    addReceiveAddress: (data) => {
+        return fly.request('/becausebooks-app/own/addReceiveAddress', data, {
+            method: 'post'
+        });
+    },
+
+    //--------------------------图书--------------------------------
+    // 查询书包
+    queryBag: (data) => {
+        return fly.request('/becausebooks-app/book/queryBag', data, {
+            method: 'post'
+        });
+    },
+
+
+    //--------------------------公共--------------------------------
+    // 查询区域列表
+    queryArea: (data) => {
+        return fly.request('/becausebooks-app/common/queryArea', data, {
+            method: 'post'
+        });
+    }
 }

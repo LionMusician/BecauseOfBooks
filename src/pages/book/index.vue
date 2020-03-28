@@ -35,6 +35,7 @@ import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import cartCover from "@components/cartCover.vue";
 import wx from "@/utils/wx-api";
+import { mapGetters } from "vuex";
 export default {
 	components: { search, bookItem, cartBtn, cartCover },
 	data() {
@@ -121,17 +122,29 @@ export default {
 			]
 		};
 	},
+	computed: {
+		...mapGetters(["shopId"])
+	},
 	onLoad() {
 		this.queryBook();
+		this.queryBag();
 	},
 	methods: {
 		// 获取图书列表
 		queryBook() {
 			let data = {
+				readingHallId: this.shopId,
 				page: 1,
 				size: 10
 			};
 			this.$http.queryBook(data).then(res => {
+				console.log(res);
+			});
+		},
+		// 查询书包
+		queryBag() {
+			let data = {};
+			this.$http.queryBag(data).then(res => {
 				console.log(res);
 			});
 		},
