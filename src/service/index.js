@@ -74,12 +74,6 @@ export default {
     },
 
 
-    // 查询图书列表
-    queryBook: (data) => {
-        return fly.request('/becausebooks-app/book/queryBook', data, {
-            method: 'post'
-        });
-    },
 
     // --------------------------课程-------------------------------
     // 课程列表 
@@ -129,6 +123,42 @@ export default {
             method: 'post'
         });
     },
+    // 添加书包
+    addBag: (data) => {
+        return fly.request('/becausebooks-app/book/addBag', data, {
+            method: 'post'
+        });
+    },
+    // 删除书包
+    deleteBag: (data) => {
+        return fly.request('/becausebooks-app/book/deleteBag', data, {
+            method: 'post'
+        });
+    },
+    // 查询图书列表
+    queryBook: (data) => {
+        return fly.request('/becausebooks-app/book/queryBook', data, {
+            method: 'post'
+        });
+    },
+    // 查询图书详情
+    getBookDetail: (data) => {
+        return fly.request('/becausebooks-app/book/getBookDetail', data, {
+            method: 'post'
+        });
+    },
+    // 预约图书
+    borrowBook: (data) => {
+        return fly.request('/becausebooks-app/book/borrowBook', data, {
+            method: 'post'
+        });
+    },
+    // 到期归还提醒
+    returnRemind: (data) => {
+        return fly.request('/becausebooks-app/book/returnRemind', data, {
+            method: 'post'
+        });
+    },
 
 
     //--------------------------公共--------------------------------
@@ -137,5 +167,29 @@ export default {
         return fly.request('/becausebooks-app/common/queryArea', data, {
             method: 'post'
         });
-    }
+    },
+    // 添加收藏
+    addCollection: (data) => {
+        return fly.request('/becausebooks-app/common/addCollection', data, {
+            method: 'post'
+        });
+    },
+    // 删除收藏
+    deleteCollection: (data) => {
+        return fly.request('/becausebooks-app/common/deleteCollection', data, {
+            method: 'post'
+        });
+    },
+    // 添加评论
+    addComment: (data) => {
+        return fly.request('/becausebooks-app/common/addComment', data, {
+            method: 'post'
+        });
+    },
+    // 删除评论
+    deleteComment: (data) => {
+        return fly.request('/becausebooks-app/common/deleteComment', data, {
+            method: 'post'
+        });
+    },
 }
