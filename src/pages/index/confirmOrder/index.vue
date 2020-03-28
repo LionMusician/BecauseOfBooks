@@ -5,26 +5,26 @@
 		<scroll-view :scroll-y="carList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
 			<div class="carView">
 				<div class="carItem" v-for="(item, index) in carList" :key="index">
-					<div class="check">
+					<!-- <div class="check">
 						<van-checkbox
 							checked-color="#009145"
 							:value="item.checked"
 							@change="item.checked = !item.checked"
 						></van-checkbox>
-					</div>
+					</div>-->
 					<div class="infoDiv">
-						<p class="title">【{{item.title}}】</p>
-						<p class="other">出发人数：{{item.num}}人</p>
-						<p class="other">时间：{{item.time}}</p>
+						<p class="title">【{{item.name}}】</p>
+						<p class="other">出发人数：{{item.adultNum + item.childNum}}人</p>
+						<p class="other">时间：{{item.startDate}} - {{item.endDate}}</p>
 						<p class="other">地址：{{item.address}}</p>
-						<div class="price">&yen;{{item.amt}}</div>
+						<div class="price">&yen;{{item.price}}</div>
 					</div>
 				</div>
 			</div>
 		</scroll-view>
 		<div class="submitBar">
 			<van-submit-bar
-				:price="300"
+				:price="totalPrice"
 				button-text="立即下单"
 				:submit="onClickButton"
 				price-class="priceClass"
@@ -37,102 +37,36 @@
 <script>
 import wx from "@/utils/wx-api";
 import headerView from "@components/headerView.vue";
+import utils from "@/utils/utils";
 export default {
 	name: "",
 	data() {
 		let that = this;
 		return {
+			totalPrice: 0,
 			scrollHeight: that.getWindowHeight(160),
-			carList: [
-				{
-					title:
-						"慢鱼妈妈带你慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展逛童书展",
-					num: 5,
-					id: "1",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "2",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "3",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "4",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "5",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					oldAmt: 888,
-					checked: false,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					num: 5,
-					id: "6",
-					carNum: 0,
-					time: "2020-03-21",
-					address: "111111111111111111111111111111",
-					amt: 666,
-					checked: false,
-					oldAmt: 888,
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-				}
-			]
+			carList: []
 		};
 	},
-	onLoad() {},
+	onLoad() {
+		// 查询待支付订单
+		this.getUnPaidOrder();
+	},
 	methods: {
 		/**
 		 * 去结算
 		 **/
-		onClickButton() {}
+		getUnPaidOrder() {
+			this.$http.getUnPaidOrder().then(res => {
+				let data = res.orderItemVOS;
+				data.forEach(item => {
+					item.startDate = utils.mklog(item.startDate);
+					item.endDate = utils.mklog(item.endDate);
+				});
+				this.carList = data || [];
+				this.totalPrice = res.totalPrice * 100;
+			});
+		}
 	},
 	components: {
 		headerView

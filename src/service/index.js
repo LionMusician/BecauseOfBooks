@@ -84,6 +84,18 @@ export default {
             method: 'post'
         });
     },
+    // 下单 
+    confirmOrder: (data) => {
+        return fly.request('/becausebooks-app/home/confirmOrder', data, {
+            method: 'post'
+        });
+    },
+    // 查询待支付订单 
+    getUnPaidOrder: (data) => {
+        return fly.request('/becausebooks-app/home/getUnPaidOrder', data, {
+            method: 'post'
+        });
+    },
 
 
 
