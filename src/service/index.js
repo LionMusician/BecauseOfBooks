@@ -144,7 +144,8 @@ export default {
     // 查询书包
     queryBag: (data) => {
         return fly.request('/becausebooks-app/book/queryBag', data, {
-            method: 'post'
+            method: 'post',
+            silence: true
         });
     },
     // 添加书包

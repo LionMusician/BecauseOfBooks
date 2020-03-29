@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="top">
-            <search placeholder="图书搜索"></search>
+            <search placeholder="图书搜索" @search="queryBook"></search>
             <div class="menus">
                 <van-dropdown-menu active-color="#8CC223">
                     <van-dropdown-item
@@ -9,6 +9,7 @@
                         :key="index"
                         :value="item.value"
                         :options="item.options"
+						@change="(e) => { return selectMenu(e, index) }"
                     ></van-dropdown-item>
                 </van-dropdown-menu>
             </div>
@@ -31,7 +32,7 @@
                 </ul>
             </scroll-view>
         </div>
-        <cart-btn @btnClick="cartBtnClick"></cart-btn>
+        <cart-btn @btnClick="cartBtnClick" type="bag" :num="bagList.length"></cart-btn>
         <van-popup :show="cartCoverShow" @close="cartBtnClick" position="bottom">
             <cart-cover @cartListBtnClick="cartListBtnClick" @deleteBag="deleteBag" :cartList="bagList"></cart-cover>
         </van-popup>
@@ -54,32 +55,7 @@ export default {
             listScroll: true, // 允许列表滚动
             scrollHeight: that.getWindowHeight(140),
             cartCoverShow: false, // 默认不显示购物车
-            menuList: [
-                {
-                    value: 0,
-                    options: [{ text: "推荐", value: 0 }]
-                },
-                {
-                    value: 0,
-                    options: [
-                        { text: "0-3岁", value: 0 },
-                        { text: "3-6岁", value: 1 },
-                        { text: "6-12岁", value: 2 }
-                    ]
-                },
-                {
-                    value: 0,
-                    options: [{ text: "大奖", value: 0 }]
-                },
-                {
-                    value: 0,
-                    options: [{ text: "英文", value: 0 }]
-                },
-                {
-                    value: 0,
-                    options: [{ text: "更多分类", value: 0 }]
-                }
-            ],
+            menuList: [],
             bookList: [],
 			bagList: [],
         };
@@ -88,8 +64,8 @@ export default {
         ...mapGetters(["shopId"])
     },
     onLoad() {
-        this.queryBook();
 		this.queryCategory();
+		this.queryBag()
     },
     methods: {
 		// 获取分类列表
@@ -98,14 +74,46 @@ export default {
 				type: 1
 			}
 			this.$http.queryCategory(data).then(res => {
-				console.log(res);
-				
+				let category = [];
+				res.categoryVOS.forEach((item,index) => {
+					let options = [];
+					options.push({
+						text: item.name,
+						value: item.id
+					})
+					if(item.children) {
+						item.children.forEach(tip => {
+							options.push({
+								text: tip.name,
+								value: tip.id
+							})
+						})
+					}
+					category.push({
+						value: item.id,
+						options
+					})
+				})
+				this.menuList = category;
+        		this.queryBook();
 			})
+		},
+		// 计算分类id列表
+		calccategoryIds() {
+			let ids = this.menuList.map(item => {
+				return item.value
+			})
+			return ids;
+		},
+		// 选择分类
+		selectMenu(e, index) {
+			this.menuList[index].value = e.mp.detail;
+			this.queryBook();
 		},
         // 获取图书列表
         queryBook(name = '') {
             let data = {
-				categoryIds: [],
+				categoryIds: this.calccategoryIds(),
 				name: name,
                 readingHallId: this.shopId,
                 page: 1,
@@ -133,6 +141,15 @@ export default {
         		this.queryBook();
             });
         },
+		// 查询书包
+		queryBag() {
+			this.$http.queryBag().then(res => {
+				if(!res.bookBorrowVOS) {
+					this.cartCoverShow = false;
+				}
+				this.bagList = res.bookBorrowVOS || [];
+			});
+		},
         // 加入书包
         addBookToBag(book) {
             let data = {
@@ -140,6 +157,7 @@ export default {
 			};
             this.$http.addBag(data).then(res => {
 				Tips.success("加入书包成功！");
+				this.queryBag();
             });
         },
 		// 从书包删除
@@ -148,22 +166,16 @@ export default {
 				ids: [book.id]
 			}
             this.$http.deleteBag(data).then(res => {
-				this.$http.queryBag().then(res => {
-					this.bagList = res.bookBorrowVOS;
-					Tips.success("删除成功！");
-				});
+				Tips.success("删除成功！");
+				this.queryBag();
             });
 		},
-        // 点击购物车
+        // 点击书包
         cartBtnClick() {
-			if(!this.cartCoverShow) {
-				this.$http.queryBag().then(res => {
-					this.bagList = res.bookBorrowVOS;
-					this.cartCoverShow = !this.cartCoverShow;
-				});
-			}else {
-				this.cartCoverShow = !this.cartCoverShow;
+			if(!this.bagList.length) {
+				return Tips.toast("书包空空如也，快去添加图书吧！");
 			}
+			this.cartCoverShow = !this.cartCoverShow;
         },
         // 购物车确认
         cartListBtnClick() {

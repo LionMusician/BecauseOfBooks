@@ -8,7 +8,9 @@ const fly = new Fly()
 
 //添加请求拦截器
 fly.interceptors.request.use((request) => {
-	Tips.loading("加载中");
+	if(!request.silence) {
+		Tips.loading("加载中");
+	}
 	request.headers = {
 		"X-Tag": "flyio",
 		'content-type': 'application/json'
@@ -43,6 +45,7 @@ fly.interceptors.response.use(
 				utils.log(`${utils.mklog()}【M="${res.request.url}"】【接口响应：】${JSON.stringify(res.data.data)}`);
 				return promise.resolve(res.data.data);//请求成功之后将返回值返回
 			}else {
+				Tips.toast(res.data.msg);
 				utils.error(`${utils.mklog()}【M="${res.request.url}"】【接口错误提示：】msg=${res.data.msg} code=${res.data.code}`);
 			}
 		} catch(err) {
