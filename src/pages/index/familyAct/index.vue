@@ -4,7 +4,7 @@
 		<header-view title="亲子活动"></header-view>
 		<!-- 搜索 -->
 		<div class="searchDiv">
-			<search placeholder="图书搜索"></search>
+			<search placeholder="图书搜索" @search="search"></search>
 		</div>
 		<!-- 筛选 -->
 		<div class="tabView" v-if="tabList && tabList.length">
@@ -76,8 +76,14 @@
 								<p>地址：{{item.address}}</p>
 							</div>
 							<div class="right">
-								<span class="oldAmt">&yen;{{item.oldAmt}}</span>
-								<span class="amt">&yen;{{item.adultPrice}}</span>
+								<p v-if="item.adultPrice">
+									成人：
+									<span class="amt">&yen;{{item.adultPrice}}</span>
+								</p>
+								<p v-if="item.childPrice">
+									儿童：
+									<span class="amt">&yen;{{item.childPrice}}</span>
+								</p>
 							</div>
 						</div>
 					</div>
@@ -99,6 +105,7 @@ export default {
 	data() {
 		let that = this;
 		return {
+			searchValue: "",
 			active: 1,
 			isMore: false,
 			scrollHeight: that.getWindowHeight(126),
@@ -128,19 +135,24 @@ export default {
 		this.queryActivity();
 	},
 	methods: {
+		search(val) {
+			this.searchValue = val;
+			this.queryActivity();
+		},
 		//  查询分类列表
 		queryCategory() {
 			let parmas = {
 				type: 2
 			};
 			this.$http.queryCategory(parmas).then(res => {
-				this.tabList = res.categoryVOListMap;
+				this.tabList = res.categoryVOS;
 			});
 		},
 		// 查询活动列表
 		queryActivity() {
 			let parmas = {
-				readingHallId: this.shopId
+				readingHallId: this.shopId,
+				name: this.searchValue
 			};
 			this.$http.queryActivity(parmas).then(res => {
 				this.activityList = res.activityVOS;
@@ -157,7 +169,7 @@ export default {
 		 **/
 		activityDetail(item) {
 			console.log(item);
-			wx.navigateTo("/pages/index/familyAct/detail/main");
+			wx.navigateTo(`/pages/index/familyAct/detail/main?id=${item.id}`);
 		},
 		/**
 		 * 查询购物车
@@ -241,7 +253,6 @@ export default {
 			.imgDiv {
 				width: 100%;
 				height: 300rpx;
-				background: yellow;
 				img {
 					width: 100%;
 					height: 300rpx;
@@ -283,18 +294,17 @@ export default {
 						font-size: $--text-nm;
 					}
 					.right {
+						@include fc();
 						text-align: right;
 						width: 200rpx;
-						padding-right: 20rpx;
-						.oldAmt {
-							color: $--color-text;
+						padding-top: 20rpx;
+						p {
 							font-size: $--text-nm;
-							margin-right: 10rpx;
-							text-decoration: line-through;
+							color: $--color-text;
 						}
 						.amt {
 							color: $--color-danger;
-							font-size: $--text-xxl;
+							font-size: $--text-nm;
 						}
 					}
 				}

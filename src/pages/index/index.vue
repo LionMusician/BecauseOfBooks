@@ -92,6 +92,7 @@ export default {
 	data() {
 		return {
 			shopName: 0,
+			searchValue: "",
 			// 门店数据
 			shopOptions: [],
 			// banner数据
@@ -132,7 +133,8 @@ export default {
 	methods: {
 		...mapActions(["setShopId"]),
 		// 接口
-		init() {
+		init(value) {
+			this.searchValue = value;
 			// 精选热点
 			this.queryHotspot();
 			// 绘本推荐列表
@@ -170,7 +172,7 @@ export default {
 		// 获取绘本推荐列表
 		queryBookRecommend() {
 			let parmas = {
-				name: ""
+				name: this.searchValue
 			};
 			this.$http.queryBookRecommend(parmas).then(res => {
 				this.bookList = res.bookVOS;

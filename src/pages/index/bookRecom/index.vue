@@ -4,10 +4,15 @@
 		<header-view title="绘本推荐"></header-view>
 		<!-- 搜索 -->
 		<div class="searchDiv">
-			<search placeholder="图书搜索"></search>
+			<search placeholder="图书搜索" @search="search"></search>
 		</div>
 		<!-- 图书列表 -->
-		<scroll-view :scroll-y="booksList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+		<scroll-view
+			v-if="booksList && booksList.length"
+			:scroll-y="booksList"
+			:style="'height:' + scrollHeight + 'rpx;'"
+			class="book-list"
+		>
 			<div class="bookList">
 				<div v-for="(item, index) in booksList" :key="index" class="bookItem">
 					<div class="imgDiv">
@@ -24,52 +29,22 @@
 				</div>
 			</div>
 		</scroll-view>
+		<no-data v-else></no-data>
 	</div>
 </template>
 
 <script>
 import headerView from "@components/headerView.vue";
+import noData from "@components/noData.vue";
 import search from "@components/search.vue";
 export default {
 	name: "",
 	data() {
 		let that = this;
 		return {
-			scrollHeight: that.getWindowHeight(246),
-			booksList: [
-				{
-					title: "走开, 绿色怪物",
-					label: ["123", "优秀"],
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/39dc3a60af1dd81eaa05b18003ddcde7784194967134f-bixOvN_fw658"
-				},
-				{
-					title: "小猫头鹰",
-					label: ["123", "优秀"],
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/7caeaccf8eb19c66a00daed938c9d8bc9a4d655c5d470-Y1VD6b_fw658"
-				},
-				{
-					title: "金猪送福",
-					label: ["123", "优秀"],
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/cb524e32bb824bbd175abfd7d3f2e255aa843b795e1b1-kqgnIt_fw658"
-				},
-				{
-					title: "金猪来啦",
-					label: ["123", "优秀"],
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/66cc2965a74411e7fb457bb8aa8d47104ed4d47b720f0-RPcSGl_fw658"
-				}
-			]
+			scrollHeight: that.getWindowHeight(160),
+			booksList: [],
+			searchValue: ""
 		};
 	},
 	onLoad() {
@@ -77,16 +52,27 @@ export default {
 		this.queryBookRecommend();
 	},
 	methods: {
+		/**
+		 * 搜索
+		 */
+		search(val) {
+			this.searchValue = val;
+			this.queryBookRecommend();
+		},
 		// 获取绘本推荐列表
 		queryBookRecommend() {
-			this.$http.queryBookRecommend().then(res => {
+			let parmas = {
+				name: this.searchValue
+			};
+			this.$http.queryBookRecommend(parmas).then(res => {
 				this.booksList = res.bookVOS;
 			});
 		}
 	},
 	components: {
 		headerView,
-		search
+		search,
+		noData
 	}
 };
 </script>
