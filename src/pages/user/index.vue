@@ -137,6 +137,9 @@ export default {
 					break;
 				case 9: // 问卷调查
 					break;
+				case 10: // 我的地址
+					wx.navigateTo("/pages/book/addressList/main");
+					break;
 			}
 			console.log(item);
 		}

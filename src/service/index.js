@@ -179,6 +179,12 @@ export default {
             method: 'post'
         });
     },
+    // 取书详情
+    takeBookDetail: (data) => {
+        return fly.request('/becausebooks-app/book/takeBookDetail', data, {
+            method: 'post'
+        });
+    },
     // 到期归还提醒
     returnRemind: (data) => {
         return fly.request('/becausebooks-app/book/returnRemind', data, {

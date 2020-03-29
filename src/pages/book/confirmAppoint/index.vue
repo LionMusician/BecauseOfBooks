@@ -89,15 +89,15 @@ export default {
             dateList: [],
             dateSelect: 0,
             timeSelect: 0,
-            typeSelect: 0,
+            typeSelect: 1,
             timeList: [],
             typeList: [
                 {
-                    id: 0,
+                    id: 1,
                     label: "快递"
                 },
                 {
-                    id: 1,
+                    id: 2,
                     label: "自取"
                 }
             ],
@@ -191,7 +191,7 @@ export default {
         // 查询图书到期归还
         returnRemind() {
             this.$http.returnRemind().then(res => {
-                if(res.data.isRemind) {
+                if(res.isRemind) {
                     Tips.toast("请先归还，再借书。");
                 }else {
                     this.borrowBook();
@@ -201,8 +201,13 @@ export default {
         // 预约
         borrowBook() {
             let data = {
-                takeDate: ""
+                receiveAddressId: '',
+                takeDate: `${this.dateNow}${this.dateList[this.dateSelect].label}`,
+                takeTime: this.timeSelect,
+                takeWay: this.typeSelect
             }
+            console.log(data);
+            
         }
     }
 };
