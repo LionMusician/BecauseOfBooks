@@ -4,21 +4,21 @@
 		<header-view title="活动详情"></header-view>
 		<div class="cover">
 			<div class="logo">
-				<img src alt>
+				<img :src="book.frontCover" alt>
 			</div>
 			<div class="name">{{book.name}}</div>
 			<div class="price">
 				<span class="color">成人：</span>
-				{{book.price}}
+				{{book.adultPrice}}
 			</div>
 			<div class="price">
 				<span class="color">儿童：</span>
-				{{book.price}}
+				{{book.childPrice}}
 			</div>
 			<div class="progress">
-				<div class="color">儿童：</div>
-				<div>
-					<van-progress percentage="50"/>
+				<div class="color">已报名{{book.joinNum}}人</div>
+				<div class="progressItem">
+					<van-progress :percentage="(book.joinNum / book.totalNum) *100" :show-pivot="false"/>
 				</div>
 			</div>
 			<ul class="tag-list">
@@ -28,7 +28,7 @@
 		<van-sticky>
 			<div class="func-list">
 				<ul>
-					<li class="btn" v-for="(item,index) in funcList" :key="index">
+					<li class="btn" v-for="(item,index) in funcList" :key="index" @click="tagsClick(item)">
 						<img
 							:src="'../../../../../../../../../static/images/book/' + item.pic"
 							:style="'width:' + item.width + 'rpx;height:' + item.height + 'rpx;'"
@@ -43,6 +43,9 @@
 			<ul>
 				<li class="detail">
 					<p class="title">绘本详情</p>
+					<div>
+						<img :src="book.introduction" alt>
+					</div>
 				</li>
 				<li class="evalute">
 					<p class="title">绘本评价</p>
@@ -75,33 +78,7 @@ export default {
 	},
 	data() {
 		return {
-			book: {
-				id: 1,
-				img: "",
-				name: "小猫头鹰",
-				tags: ["3-6岁", "亲情友情"],
-				readNum: 8000,
-				count: 100,
-				evaluateList: [
-					{
-						icon: "",
-						type: "text",
-						value:
-							"是非成败转头空，青山依旧在，惯看秋月春风，一壶浊酒喜相逢。"
-					},
-					{
-						icon: "",
-						type: "radio",
-						url: ""
-					},
-					{
-						icon: "",
-						type: "text",
-						value:
-							"是非成败转头空，青山依旧在，惯看秋月春风，一壶浊酒喜相逢。"
-					}
-				]
-			},
+			book: {},
 			funcList: [
 				{
 					id: 0,
@@ -149,10 +126,52 @@ export default {
 		}
 	},
 	onLoad() {
+		// 查询活动详情
+		this.getActivityDetail();
 		// 查询购物车
 		this.queryShoppingCart();
 	},
 	methods: {
+		/**
+		 * 点击操作按钮
+		 */
+		tagsClick(item) {
+			switch (item.id) {
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2: // 购买
+					this.addCar();
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+			}
+		},
+		/**
+		 * 查询活动详情
+		 */
+		getActivityDetail() {
+			let parmas = {
+				id: this.$root.$mp.query.id
+			};
+			this.$http.getActivityDetail(parmas).then(res => {
+				this.book = res.activityVO;
+			});
+		},
+		/**
+		 * 加入购物车
+		 */
+		addCar() {
+			let parmas = {
+				activityId: this.book.id
+			};
+			this.$http.addShoppingCart(parmas).then(res => {
+				this.queryShoppingCart();
+			});
+		},
 		/**
 		 * 查询购物车
 		 **/
@@ -183,7 +202,7 @@ export default {
 			padding-bottom: 20rpx;
 			img {
 				@include wh(450rpx, 300rpx);
-				background: $--color-primary;
+				// background: $--color-primary;
 			}
 		}
 		.name {
@@ -198,10 +217,14 @@ export default {
 		}
 		.progress {
 			@include fj(center);
-			width: 100%;
-			// padding: 0 60rpx 60rpx 60rpx;
+			width: 60%;
+			padding: 20rpx;
 			.color {
+				flex: 1;
 				@include sc($--text-nm, $--color-text);
+			}
+			.progressItem {
+				flex: 2;
 			}
 		}
 		.tag-list {

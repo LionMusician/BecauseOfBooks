@@ -3,7 +3,12 @@
 		<!-- 头部 -->
 		<header-view title="阅读指导"></header-view>
 		<!-- 列表 -->
-		<scroll-view :scroll-y="readList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+		<scroll-view
+			v-if="readList && readList.length"
+			:scroll-y="readList"
+			:style="'height:' + scrollHeight + 'rpx;'"
+			class="book-list"
+		>
 			<div class="readListDiv">
 				<div class="readListView" v-for="(item, index) in readList" :key="index">
 					<div class="left">
@@ -18,61 +23,21 @@
 				</div>
 			</div>
 		</scroll-view>
+		<no-data v-else></no-data>
 	</div>
 </template>
 
 <script>
 import headerView from "@components/headerView.vue";
+import noData from "@components/noData.vue";
+
 export default {
 	name: "",
 	data() {
 		let that = this;
 		return {
 			scrollHeight: that.getWindowHeight(66),
-			readList: [
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛慢鱼妈妈带你逛童书展慢鱼妈妈慢鱼妈妈带你逛童书展慢鱼妈妈慢鱼妈妈带你逛童书展慢鱼妈妈慢鱼妈妈带你逛童书展慢鱼妈妈童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				},
-				{
-					title: "慢鱼妈妈带你逛童书展",
-					img:
-						"https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658",
-					content:
-						"慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展慢鱼妈妈带你逛童书展"
-				}
-			]
+			readList: []
 		};
 	},
 	onLoad() {
@@ -88,7 +53,8 @@ export default {
 		}
 	},
 	components: {
-		headerView
+		headerView,
+		noData
 	}
 };
 </script>
