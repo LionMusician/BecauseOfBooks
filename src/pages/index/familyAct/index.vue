@@ -116,7 +116,7 @@ export default {
 	computed: {
 		...mapGetters(["shopId"]),
 		carNum() {
-			return this.carList.length;
+			return this.carList && this.carList.length;
 		}
 	},
 	onLoad() {

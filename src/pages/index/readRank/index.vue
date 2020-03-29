@@ -42,25 +42,8 @@ export default {
 		// 阅读排行数据
 		queryBorrowSort() {
 			this.$http.queryBorrowSort().then(res => {
-				this.bookList = this.getListData(res.bookVOS);
+				this.bookList = res.bookVOS;
 			});
-		},
-		getListData(data) {
-			let arr = [];
-			data.forEach(item => {
-				let tag = item.labelVOS.map(tag => {
-					return tag.name;
-				});
-				let obj = {
-					img: item.frontCover,
-					name: item.name,
-					tags: tag,
-					readNum: item.showBorrowNum,
-					count: ""
-				};
-				arr.push(obj);
-			});
-			return arr;
 		}
 	},
 	components: {

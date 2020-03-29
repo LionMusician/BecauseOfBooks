@@ -1,104 +1,139 @@
 <template>
-	<div class="container">
-		<!-- 编辑购物车按钮 -->
-		<div class="top" @click="editClick">{{isEdit ? '完成' : '编辑'}}</div>
-		<scroll-view :scroll-y="carList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
-			<div class="carView">
-				<!-- 购物车商品列表 -->
-				<van-swipe-cell
-					:right-width="isEdit ? 0 : 65"
-					v-for="(item, index) in carList"
-					:key="index"
-					:disabled="isEdit"
-				>
-					<div class="carItem">
-						<div class="check">
-							<van-checkbox
-								checked-color="#009145"
-								:value="item.checked"
-								@change="item.checked = !item.checked"
-							></van-checkbox>
-						</div>
-						<div class="imgDiv">
-							<img :src="item.activityVO.frontCover" alt>
-						</div>
-						<div class="infoDiv">
-							<p class="title">{{item.activityVO.name}}</p>
-							<p class="other">时间：{{item.activityVO.startDate}} - {{item.activityVO.startDate}}</p>
-							<p class="other">地址：{{item.activityVO.address}}</p>
-							<div class="priceDiv">
-								<div>
-									<div class="row">
-										<div>成人：</div>
-										<div>
-											<van-stepper
-												integer
-												:value="item.adultNum"
-												@change="stepperChange($event,item)"
-												input-class="inputClass"
-												plus-class="plus-minus"
-												minus-class="plus-minus"
-											/>
+	<div>
+		<div v-if="carList && carList.length" class="container">
+			<!-- 编辑购物车按钮 -->
+			<div class="top" @click="editClick">{{isEdit ? '完成' : '编辑'}}</div>
+			<scroll-view :scroll-y="carList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+				<div class="carView">
+					<!-- 购物车商品列表 -->
+					<van-swipe-cell
+						:right-width="isEdit ? 0 : 65"
+						v-for="(item, index) in carList"
+						:key="index"
+						:disabled="isEdit"
+					>
+						<div class="carItem">
+							<div class="check">
+								<van-checkbox
+									checked-color="#009145"
+									:value="item.checked"
+									@change="item.checked = !item.checked"
+								></van-checkbox>
+							</div>
+							<div class="imgDiv">
+								<img :src="item.activityVO.frontCover" alt>
+							</div>
+							<div class="infoDiv">
+								<p class="title">{{item.activityVO.name}}</p>
+								<p class="other totalNum">限制{{item.activityVO.totalNum}}人</p>
+								<p class="other">时间：{{item.activityVO.startDate}} - {{item.activityVO.startDate}}</p>
+								<p class="other">地址：{{item.activityVO.address}}</p>
+								<div class="priceDiv">
+									<div>
+										<div class="row">
+											<div>成人：</div>
+											<div>
+												<van-stepper
+													integer
+													min="0"
+													:disable-plus="stepperDis"
+													:value="item.adultNum"
+													@change="stepperChange($event,item, 'adultNum')"
+													input-class="inputClass"
+													plus-class="plus-minus"
+													minus-class="plus-minus"
+												/>
+											</div>
+											<div class="price">&yen;{{item.activityVO.adultPrice}}</div>
 										</div>
-										<div class="price">&yen;{{item.activityVO.adultPrice}}</div>
-									</div>
-									<div class="row">
-										<div>儿童：</div>
-										<div>
-											<van-stepper
-												integer
-												:value="item.childNum"
-												@change="stepperChange($event,item)"
-												input-class="inputClass"
-												plus-class="plus-minus"
-												minus-class="plus-minus"
-											/>
+										<div class="row">
+											<div>儿童：</div>
+											<div>
+												<van-stepper
+													integer
+													min="0"
+													:disable-plus="stepperDis"
+													:value="item.childNum"
+													@change="stepperChange($event,item, 'childNum')"
+													input-class="inputClass"
+													plus-class="plus-minus"
+													minus-class="plus-minus"
+												/>
+											</div>
+											<div class="price">&yen;{{item.activityVO.childPrice}}</div>
 										</div>
-										<div class="price">&yen;{{item.activityVO.childPrice}}</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<view slot="right" class="swipe-cell-right" @click="delCar(item)">删除</view>
-				</van-swipe-cell>
-				<!-- 选择优惠券行 -->
-				<van-cell title="优惠券" v-if="couponList && couponList.length">
-					<div slot="right-icon" class="coupon">
-						<span>
-							<span class="use">已用2张</span>
-							<span class="num">-&yen;50</span>
-						</span>
-						<van-icon name="arrow"/>
-					</div>
-				</van-cell>
-			</div>
-		</scroll-view>
-		<div class="submitBar">
-			<!-- 购物车结算、删除行 -->
-			<van-submit-bar
-				:price="isEdit ? null : 300"
-				:button-text="isEdit ? '删除' : '结算'"
-				@submit="onClickButton"
-				price-class="priceClass"
-				button-class="buttonClass"
-			>
-				<van-tag type="primary" class="bottomCheckbox">
-					<van-checkbox checked-color="#009145" :value="allChecked" @change="onChange">全选</van-checkbox>
-				</van-tag>
-				<div slot="price">123</div>
-			</van-submit-bar>
-			<!-- 删除商品弹框 -->
-			<van-dialog id="van-dialog"/>
-			<!-- message 提示 -->
-			<van-notify id="van-notify"/>
-			<!-- 选择优惠券 -->
-			<van-action-sheet :show="dialogShow" :round="false" title="选择可用优惠券">
-				<div class="couponDiv">
-					<div v-for="(coupon, index) in couponList" :key="index"></div>
+						<view slot="right" class="swipe-cell-right" @click="delCar(item)">删除</view>
+					</van-swipe-cell>
+					<!-- 选择优惠券行 -->
+					<van-cell title="优惠券" v-if="couponList && couponList.length" @click="selectCoupon">
+						<div slot="right-icon" class="coupon">
+							<span v-if="useCoupon && useCoupon.length">
+								<span class="use">已用{{useCoupon.length}}张</span>
+								<span class="num">-&yen;{{useCouponAmt}}</span>
+							</span>
+							<span v-else>选择优惠券</span>
+							<van-icon name="arrow"/>
+						</div>
+					</van-cell>
 				</div>
-			</van-action-sheet>
+			</scroll-view>
+			<div class="submitBar">
+				<!-- 购物车结算、删除行 -->
+				<van-submit-bar
+					:price="isEdit ? null : payPrice"
+					:button-text="isEdit ? '删除' : '结算'"
+					@submit="onClickButton"
+					price-class="priceClass"
+					button-class="buttonClass"
+				>
+					<van-tag type="primary" class="bottomCheckbox">
+						<van-checkbox checked-color="#009145" :value="allChecked" @change="onChange">全选</van-checkbox>
+					</van-tag>
+					<div slot="price">123</div>
+				</van-submit-bar>
+				<!-- 删除商品弹框 -->
+				<van-dialog id="van-dialog"/>
+				<!-- message 提示 -->
+				<van-notify id="van-notify"/>
+				<!-- 选择优惠券 -->
+				<van-action-sheet
+					:close-on-click-overlay="false"
+					:show="dialogShow"
+					cancel-text="确认"
+					:round="false"
+					title="选择可用优惠券"
+					@close="dialogShow = false"
+					@cancel="couponChange"
+				>
+					<div class="couponDiv">
+						<div class="couponItem" v-for="(coupon, index) in couponList" :key="index">
+							<div class="left">
+								<p class="price">&yen;{{coupon.type === 1 ? coupon.reducePrice : coupon.price}}</p>
+								<p class="tips" v-if="coupon.type === 1">满{{coupon.reachPrice}}元使用</p>
+							</div>
+							<div class="center">
+								<p class="name">{{coupon.name}}</p>
+								<p class="tips">{{coupon.typeDesc}}</p>
+								<p class="time">{{coupon.startTime}} - {{coupon.endTime}}</p>
+							</div>
+							<div class="right">
+								<van-checkbox
+									checked-color="#009145"
+									:value="coupon.check"
+									:disabled="coupon.disabled"
+									@change="coupon.check = !coupon.check"
+								></van-checkbox>
+							</div>
+						</div>
+					</div>
+				</van-action-sheet>
+			</div>
 		</div>
+		<div v-else>暂无数据</div>
 	</div>
 </template>
 
@@ -106,17 +141,24 @@
 import wx from "@/utils/wx-api";
 import Dialog from "../../../../static/vant/dialog/dialog.js";
 import Notify from "../../../../static/vant/notify/notify.js";
+import utils from "@/utils/utils";
 export default {
 	name: "",
 	data() {
 		let that = this;
 		return {
+			stepperDis: false,
 			isEdit: false,
 			allChecked: false,
 			scrollHeight: that.getWindowHeight(160),
 			carList: [],
 			dialogShow: false, // 优惠券弹框
-			couponList: []
+			couponList: [],
+			useCoupon: [], // 选择的优惠券
+			useCouponAmt: 0, // 优惠券优惠金额
+			totalPrice: 0, // 购物车无优惠总金额
+			shoppingCartVOS: [], // 下单参数 -- 购物车集合
+			userVoucherVOS: [] // 下单参数 -- 用户券
 		};
 	},
 	onLoad() {
@@ -125,6 +167,61 @@ export default {
 		// 查询优惠券列表
 		this.queryVoucher();
 	},
+	computed: {
+		// 实付金额
+		payPrice() {
+			let data = this.carList;
+			let num = 0;
+			this.useCouponAmt = 0;
+			this.totalPrice = 0; // 购物车无优惠总金额
+			this.shoppingCartVOS = []; // 下单参数 -- 购物车集合
+			this.userVoucherVOS = []; // 下单参数 -- 用户券
+			data.forEach(item => {
+				if (item.checked) {
+					// 计算金额
+					let adultPrice =
+						Number(item.adultNum) *
+						Number(item.activityVO.adultPrice); // 成人价格
+					let childPrice =
+						Number(item.childNum) *
+						Number(item.activityVO.childPrice); // 儿童价格
+					let totalPrice = Number(adultPrice) + Number(childPrice);
+					num += totalPrice;
+					this.totalPrice += totalPrice;
+					// 整理下单用购物车参数
+					let obj = {
+						id: item.id,
+						adultNum: item.adultNum,
+						childNum: item.childNum,
+						price: totalPrice,
+						activityVO: {
+							id: item.activityVO.id
+						}
+					};
+					this.shoppingCartVOS.push(obj);
+				}
+			});
+			if (this.useCoupon && this.useCoupon.length) {
+				this.useCoupon.forEach(item => {
+					// 计算金额
+					if (item.type === 1) {
+						num -= item.reducePrice;
+						this.useCouponAmt += Number(item.reducePrice);
+					} else {
+						num -= item.price;
+						this.useCouponAmt += Number(item.price);
+					}
+					// 整理下单用的优惠券数据
+					this.userVoucherVOS.push({ voucherId: item.voucherId });
+				});
+			}
+			num = num * 100;
+			if (num < 0) {
+				num = 0;
+			}
+			return num;
+		}
+	},
 	methods: {
 		/**
 		 * 查询购物车
@@ -132,7 +229,7 @@ export default {
 		queryShoppingCart() {
 			this.$http.queryShoppingCart().then(res => {
 				let data = res.shoppingCartVOS;
-				data.map(item => {
+				data.forEach(item => {
 					item.checked = false;
 				});
 				this.carList = data;
@@ -143,10 +240,26 @@ export default {
 		 **/
 		queryVoucher() {
 			this.$http.queryVoucher().then(res => {
-				this.couponList = res.userVoucherVOS;
+				let data = res.userVoucherVOS;
+				data.forEach(item => {
+					item.startTime = utils.mklog(item.startTime);
+					item.endTime = utils.mklog(item.endTime);
+					item.check = false;
+					item.disabled = false;
+					if (item.type === 1 && this.totalPrice < item.reachPrice) {
+						item.disabled = true;
+					}
+					if (this.useCoupon && this.useCoupon.length) {
+						this.useCoupon.forEach(use => {
+							if (item.voucherId === use.voucherId) {
+								item.check = true;
+							}
+						});
+					}
+				});
+				this.couponList = data;
 			});
 		},
-
 		/**
 		 * 删除某个商品
 		 */
@@ -207,8 +320,70 @@ export default {
 						});
 				});
 			} else {
-				wx.navigateTo("/pages/index/confirmOrder/main");
+				let arr = 0;
+				this.carList.forEach(item => {
+					if (item.checked) {
+						arr++;
+					}
+				});
+				if (!arr) {
+					Notify({
+						type: "warning",
+						message: "请选择商品"
+					});
+					return false;
+				}
+				this.confirmOrder();
 			}
+		},
+		/**
+		 * 去结算
+		 */
+		confirmOrder() {
+			let parmas = {
+				shoppingCartVOS: this.shoppingCartVOS,
+				payPrice: this.payPrice / 100,
+				totalPrice: this.totalPrice,
+				userVoucherVOS: this.userVoucherVOS
+			};
+			this.$http.confirmOrder(parmas).then(res => {
+				wx.navigateTo("/pages/index/confirmOrder/main");
+			});
+		},
+		/**
+		 * 选择优惠券
+		 */
+		couponChange() {
+			let arr = [];
+			this.useCoupon = [];
+			this.couponList.forEach(item => {
+				if (item.check) {
+					arr.push(item);
+				}
+			});
+			// this.useCoupon = arr;
+			this.$set(this, "useCoupon", arr);
+			this.dialogShow = false;
+		},
+		/***
+		 * 点击选择优惠券
+		 */
+		selectCoupon() {
+			let arr = 0;
+			this.carList.forEach(item => {
+				if (item.checked) {
+					arr++;
+				}
+			});
+			if (!arr) {
+				Notify({
+					type: "warning",
+					message: "请选择商品"
+				});
+				return false;
+			}
+			this.queryVoucher();
+			this.dialogShow = true;
 		},
 		/**
 		 * 删除商品
@@ -263,14 +438,18 @@ export default {
 			});
 		},
 		/**
-		 * 删除弹框 点击确认
-		 */
-		onConfirm() {},
-		/**
 		 * 计步器改变
 		 **/
-		stepperChange(e, item) {
-			item.num = e.mp.detail;
+		stepperChange(e, item, type) {
+			this.stepperDis = false;
+			item[type] = e.mp.detail;
+			if (item.activityVO.totalNum) {
+				let total = Number(item.adultNum) + Number(item.childNum);
+				if (total === item.activityVO.totalNum) {
+					this.stepperDis = true;
+					return false;
+				}
+			}
 		}
 	}
 };
@@ -328,6 +507,10 @@ export default {
 					color: $--color-gray-6;
 					font-size: $--text-nm;
 				}
+				.totalNum {
+					color: $--color-secondary;
+					font-size: $--text-sm;
+				}
 				.priceDiv {
 					width: 100%;
 					font-size: $--text-nm;
@@ -378,6 +561,43 @@ export default {
 		padding: 20rpx 40rpx;
 		height: auto;
 		max-height: 600rpx;
+		.couponItem {
+			@include fj();
+			padding: 20rpx;
+			border-radius: 6px;
+			border: 1px solid $--color-gray-de;
+			margin-bottom: 40rpx;
+			.left {
+				@include fc(center);
+				width: 160rpx;
+				.price {
+					font-size: $--text-xl;
+					color: $--color-danger;
+				}
+				.tips {
+					font-size: $--text-sm;
+					color: $--color-secondary;
+				}
+			}
+			.center {
+				@include fc(flex-start);
+				align-items: flex-start;
+				padding-left: 20rpx;
+				flex: 1;
+				.name {
+					font-size: $--text-xl;
+				}
+				.tips,
+				.time {
+					font-size: $--text-sm;
+					color: $--color-text;
+				}
+			}
+			.right {
+				width: 80rpx;
+				@include fc(center);
+			}
+		}
 	}
 	.submitBar {
 		height: 100rpx;
