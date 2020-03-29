@@ -36,24 +36,36 @@
 						<div class="infoDiv">
 							<div class="info">
 								<p class="title">{{item.title}}</p>
-								<p class="danger">剩余{{item.num}}名</p>
+								<!-- <p class="danger">剩余{{item.num}}名</p>
 								<div class="progress">
 									<van-progress :show-pivot="false" color="#98C145" percentage="50"/>
-								</div>
+								</div>-->
 							</div>
 							<div class="other">
 								<div class="timeItem" v-for="(t, i) in item.times" :key="i">
-									<div class="imgDiv">
-										<img v-if="t.check" src="../../../static/images/course/check.png" alt>
-										<img v-else src="../../../static/images/course/unCheck.png" alt>
+									<div class="imgDiv" @click="orderOrCancelCourse(t)">
+										<img v-if="t.check" src="../../../static/images/course/unCheck.png" alt>
+										<img v-else src="../../../static/images/course/check.png" alt>
 									</div>
-									<p class="time" :class="t.check ? 'check' : ''">{{t.check ? '预约': '取消预约'}}</p>
+									<p class="time" :class="t.check ? '' : 'check'">{{t.check ? '取消预约': '预约'}}</p>
 									<p class="time">{{t.time}}</p>
+									<div class="progress">
+										<van-progress
+											:show-pivot="false"
+											color="#98C145"
+											:percentage="(t.remainNum/t.totalNum)*100"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<van-toast id="van-toast"/>
 					<!-- </div> -->
+				</div>
+				<div class="noData" v-if="!courseList || !courseList.length">
+					<van-icon class="icon" name="smile-comment"/>
+					<p>暂无数据</p>
 				</div>
 			</scroll-view>
 		</div>
@@ -62,6 +74,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Toast from "../../../static/vant/toast/toast.js";
 export default {
 	components: {},
 	data() {
@@ -76,19 +89,7 @@ export default {
 			],
 			ageList: [],
 			ageActive: "",
-			courseList: [
-				{
-					title: "123",
-					week: "周一",
-					num: 10,
-					times: [
-						{ time: "12:00", check: false },
-						{ time: "12:00", check: false }
-					],
-					img:
-						"https://hbimg.huabanimg.com/7a84471a88a6042fcc4e7e0b95f776db6fc5ddd2843e5-WlopRi_fw658"
-				}
-			]
+			courseList: []
 		};
 	},
 	computed: {
@@ -99,6 +100,19 @@ export default {
 		this.queryCategory();
 	},
 	methods: {
+		/**
+		 * 预约、取消课程
+		 */
+		orderOrCancelCourse(item) {
+			let parmas = {
+				courseScheduleId: item.id,
+				status: item.check ? 1 : 2
+			};
+			this.$http.orderOrCancelCourse(parmas).then(res => {
+				Toast.success(item.check ? "预约成功" : "取消预约成功");
+				this.queryCourse();
+			});
+		},
 		/**
 		 * 查询分类列表
 		 */
@@ -136,8 +150,8 @@ export default {
 				categoryIds: [this.ageActive]
 			};
 			this.$http.queryCourse(parmas).then(res => {
-				console.log(res);
-				this.getData(res.courseVOS);
+				this.courseList = this.getData(res.courseVOS);
+				console.log(this.courseList);
 			});
 		},
 		/**
@@ -154,13 +168,34 @@ export default {
 				6: "五",
 				7: "六"
 			};
-			data.forEach(item => {
-				let obj = {
-					frontCover: item.frontCover,
-					name: item.name,
-					week: "周" + weekObj[item.week]
-				};
-			});
+			if (data && data.length) {
+				data.forEach(item => {
+					let obj = {
+						img: item.frontCover,
+						title: item.name,
+						week: "周" + weekObj[item.weekday],
+						times: []
+					};
+					if (
+						item.courseScheduleVOS &&
+						item.courseScheduleVOS.length
+					) {
+						item.courseScheduleVOS.forEach(time => {
+							let t = {
+								id: time.id,
+								startTime: time.startTime,
+								remainNum: time.remainNum,
+								totalNum: time.totalNum,
+								usedNum: time.usedNum,
+								check: false
+							};
+							obj.times.push(t);
+						});
+					}
+					arr.push(obj);
+				});
+			}
+			return arr;
 		}
 	}
 };
@@ -231,6 +266,7 @@ export default {
 						padding-left: 20rpx;
 						font-size: $--text-nm;
 						height: 120rpx;
+						line-height: 120rpx;
 						.title {
 							@include ellipsis2;
 							font-size: $--text-l;
@@ -240,14 +276,11 @@ export default {
 							font-size: $--text-nm;
 							padding-bottom: 10rpx;
 						}
-						.progress {
-							text-align: left;
-							padding-right: 40rpx;
-						}
 					}
 					.other {
 						@include fj();
 						flex: 1;
+						padding: 0 6rpx;
 						.timeItem {
 							flex: 1;
 							.imgDiv {
@@ -270,8 +303,23 @@ export default {
 								color: $--color-secondary;
 							}
 						}
+						.progress {
+							padding: 4rpx;
+						}
 					}
 				}
+			}
+		}
+		.noData {
+			text-align: center;
+			margin-top: 20%;
+			.icon {
+				color: $--color-gray-c;
+				font-size: 80rpx;
+				margin-bottom: 20rpx;
+			}
+			p {
+				color: $--color-gray-c;
 			}
 		}
 	}
