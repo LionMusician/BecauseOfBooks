@@ -38,8 +38,8 @@
                                     v-for="(item, index) in timeList"
                                     :key="index"
                                     checked-color="#628718"
-                                    :name="item.id"
-                                >{{item.label}}</van-radio>
+                                    :name="item.code"
+                                >{{item.desc}}</van-radio>
                             </van-radio-group>
                         </li>
                         <li>
@@ -90,16 +90,7 @@ export default {
             dateSelect: 0,
             timeSelect: 0,
             typeSelect: 0,
-            timeList: [
-                {
-                    id: 0,
-                    label: "10:00-12:00"
-                },
-                {
-                    id: 1,
-                    label: "13:00-16:00"
-                }
-            ],
+            timeList: [],
             typeList: [
                 {
                     id: 0,
@@ -116,6 +107,7 @@ export default {
     onLoad() {
         this.getDateNow();
         this.queryBag();
+        this.takeBookDetail();
     },
     methods: {
         // 查询书包
@@ -172,6 +164,13 @@ export default {
                     label: day3
                 }
             ];
+        },
+        // 查询取书时间
+        takeBookDetail() {
+            this.$http.takeBookDetail().then(res => {
+                this.timeList = res.takeTimes;
+                this.timeSelect = res.takeTimes[0].code;
+            });
         },
         // 选择取书日期
         dateChange(e) {

@@ -130,7 +130,8 @@ export default {
     // 收货地址列表 
     getReceiveAddress: (data) => {
         return fly.request('/becausebooks-app/own/getReceiveAddress', data, {
-            method: 'post'
+            method: 'post',
+            silence: true
         });
     },
     // 添加收货地址
