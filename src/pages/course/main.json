@@ -1,6 +1,7 @@
 {
     "usingComponents": {
-        "van-progress": "/static/vant/progress/index"
+        "van-progress": "/static/vant/progress/index",
+        "van-toast": "/static/vant/toast/index"
     },
     "disableScroll": true
 }
