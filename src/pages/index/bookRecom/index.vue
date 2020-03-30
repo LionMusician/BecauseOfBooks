@@ -16,7 +16,7 @@
 			<div class="bookList">
 				<div v-for="(item, index) in booksList" :key="index" class="bookItem">
 					<div class="imgDiv">
-						<img :src="item.frontCover" alt>
+						<img :src="item.frontCover" @click="bookClick(item)" alt>
 					</div>
 					<p class="title">{{item.name}}</p>
 					<div class="labelDiv">
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import wx from "@/utils/wx-api";
 import headerView from "@components/headerView.vue";
 import noData from "@components/noData.vue";
 import search from "@components/search.vue";
@@ -52,6 +53,11 @@ export default {
 		this.queryBookRecommend();
 	},
 	methods: {
+		// 点击图书
+		bookClick(book) {
+			console.log(book);
+			wx.navigateTo(`/pages/book/bookDetail/main?id=${book.id}`);
+		},
 		/**
 		 * 搜索
 		 */

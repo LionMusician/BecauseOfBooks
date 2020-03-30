@@ -238,10 +238,13 @@ export default {
 	}
 	.loginDiv {
 		@include fj();
+		height: 100rpx;
 		padding: 20rpx;
 		background: $--color-white;
 		.left {
 			font-size: $--text-l;
+			height: 100rpx;
+			line-height: 100rpx;
 		}
 	}
 	.orderList {
