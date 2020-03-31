@@ -3,12 +3,12 @@
 		<div class="tab">
 			<div class="tabItem" :class="active === '1' ? 'tabItemActive' : ''" @click="tabClick('1')">
 				<span>书籍</span>
-				<span @click="editList('1')">编辑</span>
+				<!-- <span @click="editList('1')">编辑</span> -->
 			</div>
 			<div class="content"></div>
-			<div class="tabItem" :class="active === '2' ? 'tabItemActive' : ''" @click="tabClick('1')">
+			<div class="tabItem" :class="active === '2' ? 'tabItemActive' : ''" @click="tabClick('2')">
 				<span>活动</span>
-				<span @click="editList('1')">编辑</span>
+				<!-- <span @click="editList('1')">编辑</span> -->
 			</div>
 		</div>
 		<!-- 列表 -->
