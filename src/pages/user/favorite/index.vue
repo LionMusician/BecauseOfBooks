@@ -11,26 +11,49 @@
 				<!-- <span @click="editList('1')">编辑</span> -->
 			</div>
 		</div>
+		<!-- 删除商品弹框 -->
+		<van-dialog id="van-dialog"/>
+		<!-- message 提示 -->
+		<van-notify id="van-notify"/>
 		<!-- 列表 -->
-		<scroll-view :scroll-y="readList" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+		<scroll-view
+			v-if="readList && readList.length"
+			:scroll-y="readList"
+			:style="'height:' + scrollHeight + 'rpx;'"
+			class="book-list"
+		>
 			<div class="readListDiv">
-				<div class="readListView" v-for="(item, index) in readList" :key="index">
-					<div class="left">
-						<div class="imgDiv">
-							<img :src="item.img" alt>
+				<van-swipe-cell :right-width="65" v-for="(item, index) in readList" :key="index">
+					<div class="readListView">
+						<div class="left">
+							<div class="imgDiv">
+								<img :src="item.frontCover" alt>
+							</div>
+						</div>
+						<div class="right">
+							<p class="title">{{item.name}}</p>
+							<div v-if="active === '1'">
+								<div class="content">库存：{{item.remainStock}}</div>
+							</div>
+							<div v-else>
+								<div class="content">时间：{{item.startDate}} - {{item.endDate}}</div>
+								<div class="content">地址：{{item.address}}</div>
+							</div>
 						</div>
 					</div>
-					<div class="right">
-						<p class="title">{{item.title}}</p>
-						<div class="content">{{item.content}}</div>
-					</div>
-				</div>
+					<view slot="right" class="swipe-cell-right" @click="delItem(item)">删除</view>
+				</van-swipe-cell>
 			</div>
 		</scroll-view>
+		<no-data v-else></no-data>
 	</div>
 </template>
 
 <script>
+import utils from "@/utils/utils";
+import noData from "@components/noData.vue";
+import Dialog from "../../../../static/vant/dialog/dialog.js";
+import Notify from "../../../../static/vant/notify/notify.js";
 export default {
 	name: "",
 	data() {
@@ -42,6 +65,7 @@ export default {
 		};
 	},
 	onLoad() {
+		this.active = this.$root.$mp.query.type;
 		// 查询阅读指导列表
 		this.getMyCollection();
 	},
@@ -49,9 +73,17 @@ export default {
 		// 阅读指导数据
 		getMyCollection() {
 			let parmas = {
-				type: this.active
+				type: Number(this.active)
 			};
 			this.$http.getMyCollection(parmas).then(res => {
+				res.myCollectionVOS.forEach(item => {
+					if (item.startDate) {
+						item.startDate = utils.mklog(item.startDate);
+					}
+					if (item.endDate) {
+						item.endDate = utils.mklog(item.endDate);
+					}
+				});
 				this.readList = res.myCollectionVOS;
 			});
 		},
@@ -63,10 +95,47 @@ export default {
 			this.getMyCollection();
 		},
 		/**
+		 * 删除
+		 */
+		delItem(item) {
+			console.log(item);
+			Dialog({
+				message: `确认删除收藏${
+					this.active === "1" ? "书籍" : "活动"
+				}【${item.name}】？`,
+				asyncClose: true,
+				showCancelButton: true
+			})
+				.then(() => {
+					let parmas = {
+						ids: [item.id]
+					};
+					this.deleteCollection(parmas);
+				})
+				.catch(() => {
+					Dialog.close();
+				});
+		},
+		/**
+		 * 删除收藏
+		 */
+		deleteCollection(parmas) {
+			this.$http.deleteCollection(parmas).then(res => {
+				Notify({
+					type: "success",
+					message: "删除成功"
+				});
+				Dialog.close();
+				this.getMyCollection();
+			});
+		},
+		/**
 		 * 编辑收藏
 		 **/
-
 		editList() {}
+	},
+	components: {
+		noData
 	}
 };
 </script>
@@ -100,6 +169,15 @@ export default {
 	}
 	.readListDiv {
 		padding: 30rpx 0;
+		.swipe-cell-right {
+			position: absolute;
+			top: 0;
+			@include fj(center);
+			height: 100%;
+			width: 65px;
+			color: $--color-white;
+			background: $--color-danger;
+		}
 	}
 	.readListView {
 		@include fj();

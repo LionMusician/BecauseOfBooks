@@ -116,10 +116,10 @@ export default {
 		listClick(item) {
 			switch (item.value) {
 				case 1: // 我的收藏
-					wx.navigateTo("/pages/user/favorite/main");
+					wx.navigateTo("/pages/user/favorite/main?type=1");
 					break;
 				case 2: // 我的活动
-					wx.navigateTo("/pages/user/favorite/main");
+					wx.navigateTo("/pages/user/favorite/main?type=2");
 					break;
 				case 3: // 课程预约
 					break;
