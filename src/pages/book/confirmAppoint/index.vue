@@ -2,6 +2,9 @@
     <div class="container">
         <!-- 头部 -->
         <header-view title="图书详情"></header-view>
+        <scroll-view
+                :scroll-y="listScroll"
+                :style="'height:' + scrollHeight + 'rpx;'">
         <ul>
             <li>
                 <div class="title">已选图书</div>
@@ -61,6 +64,8 @@
                 </div>
             </li>
         </ul>
+
+        </scroll-view>
         <div class="bottom">
             <van-button
                 type="primary"
@@ -83,7 +88,10 @@ export default {
         cartCover
     },
     data() {
+        let that = this;
         return {
+            listScroll: true, // 允许列表滚动
+            scrollHeight: that.getWindowHeight(160),
             timeNow: "",
             dateNow: "",
             dateList: [],

@@ -46,6 +46,7 @@ fly.interceptors.response.use(
 				return promise.resolve(res.data.data);//请求成功之后将返回值返回
 			}else {
 				Tips.toast(res.data.msg);
+				return promise.reject(res.data);
 				utils.error(`${utils.mklog()}【M="${res.request.url}"】【接口错误提示：】msg=${res.data.msg} code=${res.data.code}`);
 			}
 		} catch(err) {
