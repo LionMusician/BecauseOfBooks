@@ -116,10 +116,10 @@ export default {
 		listClick(item) {
 			switch (item.value) {
 				case 1: // 我的收藏
-					wx.navigateTo("/pages/user/favorite/main");
+					wx.navigateTo("/pages/user/favorite/main?type=1");
 					break;
 				case 2: // 我的活动
-					wx.navigateTo("/pages/user/favorite/main");
+					wx.navigateTo("/pages/user/favorite/main?type=2");
 					break;
 				case 3: // 课程预约
 					break;
@@ -241,10 +241,13 @@ export default {
 	}
 	.loginDiv {
 		@include fj();
+		height: 100rpx;
 		padding: 20rpx;
 		background: $--color-white;
 		.left {
 			font-size: $--text-l;
+			height: 100rpx;
+			line-height: 100rpx;
 		}
 	}
 	.orderList {

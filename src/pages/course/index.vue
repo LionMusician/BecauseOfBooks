@@ -106,10 +106,10 @@ export default {
 		orderOrCancelCourse(item) {
 			let parmas = {
 				courseScheduleId: item.id,
-				status: item.check ? 1 : 2
+				status: item.check ? 2 : 1
 			};
 			this.$http.orderOrCancelCourse(parmas).then(res => {
-				Toast.success(item.check ? "预约成功" : "取消预约成功");
+				Toast.success(item.check ? "取消预约成功" : "预约成功");
 				this.queryCourse();
 			});
 		},
@@ -151,7 +151,6 @@ export default {
 			};
 			this.$http.queryCourse(parmas).then(res => {
 				this.courseList = this.getData(res.courseVOS);
-				console.log(this.courseList);
 			});
 		},
 		/**
@@ -187,7 +186,7 @@ export default {
 								remainNum: time.remainNum,
 								totalNum: time.totalNum,
 								usedNum: time.usedNum,
-								check: false
+								check: time.isOrder
 							};
 							obj.times.push(t);
 						});

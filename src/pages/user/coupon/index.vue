@@ -7,18 +7,22 @@
 					next-margin="50px"
 					:display-multiple-items="1"
 					:current="current"
-					v-if="couponList && couponList.length"
+					v-if="cardList && cardList.length"
 				>
-					<swiper-item v-for="(item, index) in couponList" :key="index">
-						<div class="bannerItem">
-							<div class="coupon" @click="couponClick(index)">
+					<swiper-item v-for="(item, index) in cardList" :key="index">
+						<div class="bannerItem" :style="'backgroound: url(' + item.frontCover + ')'">
+							<div class="coupon" @click="cardClick(index)">
 								<div class="top">
-									<span>借阅卡</span>
-									<span>编码：89757</span>
+									<span>{{item.typeDesc}}</span>
+									<span>编码：{{item.code}}</span>
 								</div>
 								<div class="bottom">
-									<span>123</span>
-									<span>升级该等级</span>
+									<div class="imgDiv">
+										<img :src="item.qrCode" alt>
+									</div>
+									<div>
+										<p>升级该等级</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -26,66 +30,43 @@
 				</swiper>
 			</div>
 		</div>
-		<scroll-view :scroll-y="true" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
-			<div class="title">借阅卡权益说明</div>
-			<div class="Des">可借阅书册5册，每次借阅2周</div>
+		<div>
+			<div class="title">{{activeCard.typeDesc}}权益说明</div>
+			<div class="Des">
+				<p>有效期：{{activeCard.startDate}} - {{activeCard.endDate}}</p>
+				<p
+					v-if="activeCard.type === 1"
+				>可借阅书册{{activeCard.borrowBookNum}}册，每次借阅{{activeCard.borrowDays}}天</p>
+				<p
+					v-else-if="activeCard.type === 3"
+				>可参与活动{{activeCard.activityNum}}次，剩余参与{{activeCard.remainActivityNum}}次</p>
+			</div>
 			<div class="title">优惠券</div>
 			<div class="couponItem">
-				<div class="couponCss">
+				<div class="couponCss" v-for="(item, index) in couponList" :key="index">
 					<div class="couponContent">
-						<div class="text">优惠券</div>
+						<div class="text">{{item.typeDesc}}</div>
 						<div class="line"></div>
-						<div class="text">满100减10</div>
-					</div>
-				</div>
-				<div class="couponCss">
-					<div class="couponContent">
-						<div class="text">优惠券</div>
-						<div class="line"></div>
-						<div class="text">满100减10</div>
-					</div>
-				</div>
-				<div class="couponCss">
-					<div class="couponContent">
-						<div class="text">优惠券</div>
-						<div class="line"></div>
-						<div class="text">满100减10</div>
-					</div>
-				</div>
-				<div class="couponCss">
-					<div class="couponContent">
-						<div class="text">优惠券</div>
-						<div class="line"></div>
-						<div class="text">满100减10</div>
+						<div class="text" v-if="item.type === 1">满{{item.reachPrice}}元减{{item.reducePrice}}元</div>
+						<div class="text" v-else>{{item.price}}元代金券</div>
 					</div>
 				</div>
 			</div>
-		</scroll-view>
+		</div>
 	</div>
 </template>
 
 <script>
+import utils from "@/utils/utils";
 export default {
 	name: "",
 	data() {
 		let that = this;
 		return {
-			scrollHeight: that.getWindowHeight(400),
 			current: 0,
-			couponList: [
-				{
-					picture:
-						"https://hbimg.huabanimg.com/37ac68db9658969eecf8d4dc41b0997d0d4eb90b74e72-Bqna73_fw658"
-				},
-				{
-					picture:
-						"https://hbimg.huabanimg.com/4e1461fdf7279ac99b6efabf37b10acadc8b15b521671f-KrBRm6_fw658"
-				},
-				{
-					picture:
-						"https://hbimg.huabanimg.com/446b6154ac78d43051e9d85a8e65be7ed3fb4439a4562-SpS0mO_fw658"
-				}
-			]
+			cardList: [],
+			activeCard: {},
+			couponList: []
 		};
 	},
 	onLoad() {
@@ -98,14 +79,23 @@ export default {
 		 **/
 		getMyCardAndVoucher() {
 			this.$http.getMyCardAndVoucher().then(res => {
-				console.log(res);
+				if (res.userCardVOS && res.userCardVOS.length) {
+					res.userCardVOS.forEach(item => {
+						item.startDate = utils.mklog(item.startDate);
+						item.endDate = utils.mklog(item.endDate);
+					});
+				}
+				this.cardList = res.userCardVOS;
+				this.activeCard = this.cardList[0];
+				this.couponList = res.userVoucherVOS;
 			});
 		},
 		/**
 		 * 点击优惠券
 		 */
-		couponClick(index) {
+		cardClick(index) {
 			this.current = index;
+			this.activeCard = this.cardList[index];
 		}
 	}
 };
@@ -145,6 +135,15 @@ export default {
 					.bottom {
 						@include fj();
 						width: 100%;
+						.imgDiv {
+							width: 80rpx;
+							height: 80rpx;
+							overflow: hidden;
+							img {
+								width: 80rpx;
+								height: 80rpx;
+							}
+						}
 					}
 				}
 			}
@@ -170,7 +169,7 @@ export default {
 	.Des {
 		text-align: center;
 		margin-top: 30rpx;
-		font-size: $--text-lg;
+		font-size: $--text-l;
 	}
 	.couponItem {
 		text-align: center;

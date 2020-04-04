@@ -10,10 +10,7 @@
 					<div class="left">头像</div>
 					<div class="right">
 						<div class="imgDiv">
-							<img
-								src="https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
-								alt
-							>
+							<img :src="userInfo.headImage" alt>
 						</div>
 						<van-icon class="icon" name="arrow"/>
 					</div>
@@ -21,28 +18,28 @@
 				<li class="liItem">
 					<div class="left">姓名</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.name || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
 				<li class="liItem">
 					<div class="left">手机号</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.phone || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
 				<li class="liItem">
 					<div class="left">地区</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.address || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
 				<li class="liItem">
 					<div class="left">微信号</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.wechatNo || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
@@ -61,7 +58,7 @@
 				<li class="liItem">
 					<div class="left">姓名</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.childName || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
@@ -75,14 +72,14 @@
 				<li class="liItem">
 					<div class="left">性别</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.childSex || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
 				<li class="liItem">
 					<div class="left">生日</div>
 					<div class="right">
-						<span class="value">请填写</span>
+						<span class="value">{{userInfo.childBirthday || '请填写'}}</span>
 						<van-icon class="icon" name="arrow"/>
 					</div>
 				</li>
@@ -93,10 +90,37 @@
 
 <script>
 import headerView from "@components/headerView.vue";
+import utils from "@/utils/utils";
 export default {
 	name: "",
 	data() {
-		return {};
+		return {
+			userInfo: {}
+		};
+	},
+	onLoad() {
+		// 获取个人信息
+		this.getUserInfo();
+	},
+	methods: {
+		// 获取个人信息
+		getUserInfo() {
+			this.$http.getUserInfo().then(res => {
+				res.userVO.childSex = res.userVO.childSex === 1 ? "男" : "女";
+				res.userVO.address =
+					res.userVO.provinceName ||
+					"" + " " + res.userVO.cityName ||
+					"" + " " + res.userVO.countyName ||
+					"";
+				if (res.userVO.childBirthday) {
+					res.userVO.childBirthday = utils
+						.mklog(res.userVO.childBirthday)
+						.split(" ")[0];
+				}
+
+				this.userInfo = res.userVO;
+			});
+		}
 	},
 	components: {
 		headerView
@@ -107,6 +131,7 @@ export default {
 <style lang="scss" scoped>
 .container {
 	height: 100vh;
+	padding-bottom: 40rpx;
 	background: $--color-bg;
 	.content {
 		.title {

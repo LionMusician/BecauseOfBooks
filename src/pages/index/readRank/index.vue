@@ -64,7 +64,7 @@ export default {
 		},
 		// 点击图书
 		bookClick(book) {
-			wx.navigateTo(`bookDetail/main?id=${book.id}`);
+			wx.navigateTo(`/pages/book/bookDetail/main?id=${book.id}`);
 		},
 		// 添加收藏
 		collectBook(book) {

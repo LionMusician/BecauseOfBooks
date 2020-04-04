@@ -69,7 +69,7 @@
 			<van-col span="12" class="right" @click="navigate(0)">更多</van-col>
 		</van-row>
 		<van-row class="bookDiv" :gutter="20">
-			<van-col span="12" v-for="(item, index) in bookList" :key="index">
+			<van-col span="12" v-for="(item, index) in bookList" :key="index" @click="bookClick(item)">
 				<div class="imgDiv">
 					<img :src="item.frontCover" alt>
 				</div>
@@ -139,6 +139,10 @@ export default {
 			this.queryHotspot();
 			// 绘本推荐列表
 			this.queryBookRecommend();
+		},
+		// 点击图书
+		bookClick(book) {
+			wx.navigateTo(`/pages/book/bookDetail/main?id=${book.id}`);
 		},
 		// 获取阅读馆列表
 		queryReadingHall() {

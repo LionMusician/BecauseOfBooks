@@ -140,6 +140,18 @@ export default {
             method: 'post'
         });
     },
+    // 查询个人信息 
+    getUserInfo: (data) => {
+        return fly.request('/becausebooks-app/own/getUserInfo', data, {
+            method: 'post'
+        });
+    },
+    // 查询我的成长 
+    getMyGrowUp: (data) => {
+        return fly.request('/becausebooks-app/own/getMyGrowUp', data, {
+            method: 'post'
+        });
+    },
 
     //--------------------------图书--------------------------------
     // 查询书包
