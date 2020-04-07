@@ -62,10 +62,12 @@
 </template>
 <script>
 import wx from "@/utils/wx-api";
+import Tips from "@/utils/Tips";
 export default {
     data() {
         return {
             newAddr: {
+                id: "",
                 name: "",
                 phone: "",
                 area: "",
@@ -98,8 +100,28 @@ export default {
     },
     onLoad() {
         wx.setNavigationBarTitle("编辑收货地址");
+        this.getReceiveAddressById();
+    },
+    onUnload() {
+        Object.assign(this.$data, this.$options.data());
     },
     methods: {
+        // 编辑获取地址信息
+        getReceiveAddressById() {
+            let id = this.$root.$mp.query.id;
+            if (id) {
+                let params = {
+                    id: id
+                };
+                this.$http.getReceiveAddressById(params).then(res => {
+                    let addr = { ...res.receiveAddressVO };
+                    addr.area = `${addr.provinceName} ${addr.cityName} ${
+                        addr.countyName
+                    }`;
+                    this.newAddr = addr;
+                });
+            }
+        },
         // 输入框
         input(e, key) {
             this.$set(this.newAddr, key, e.mp.detail);
@@ -188,7 +210,10 @@ export default {
                 receiveAddressVO: addr
             };
             this.$http.addReceiveAddress(params).then(res => {
-                console.log(res);
+                Tips.success('保存成功！');
+                setTimeout(() => {
+                    wx.navigateBack();
+                }, 500);
             });
         }
     }

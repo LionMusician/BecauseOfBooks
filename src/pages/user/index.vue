@@ -122,8 +122,10 @@ export default {
 					wx.navigateTo("/pages/user/favorite/main?type=2");
 					break;
 				case 3: // 课程预约
+					wx.navigateTo("/pages/user/courseBooking/main");
 					break;
 				case 4: // 书籍借阅
+            		wx.navigateTo(`/pages/user/courseInfo/main?`);
 					break;
 				case 5: // 个人信息
 					wx.navigateTo("/pages/user/userInfo/main");
@@ -132,10 +134,13 @@ export default {
 					wx.navigateTo("/pages/user/coupon/main");
 					break;
 				case 7: // 我的积分
+					wx.navigateTo("/pages/user/minutes/main");
 					break;
 				case 8: // 我的评论
+					wx.navigateTo("/pages/user/comments/main");
 					break;
 				case 9: // 问卷调查
+					wx.navigateTo("/pages/user/invest/main");
 					break;
 				case 10: // 我的地址
 					wx.navigateTo("/pages/book/addressList/main");

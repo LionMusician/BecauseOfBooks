@@ -24,6 +24,7 @@
 <script>
 import noData from "@components/noData.vue";
 import wx from "@/utils/wx-api";
+import Tips from "@/utils/Tips";
 export default {
     data() {
         return {
@@ -54,10 +55,9 @@ export default {
         },
         // 编辑地址
         editAddr(item) {
-            console.log(item);
-            
+            wx.navigateTo(`../editAddress/main?id=${item.id}`);
         },
-        // 编辑地址
+        // 删除地址
         delAddr(item) {
             let data = {
                 ids: [item.id]

@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "van-calendar": "/static/vant/calendar/index"
+    },
+    "disableScroll": true
+}

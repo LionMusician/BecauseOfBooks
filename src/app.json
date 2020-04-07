@@ -20,6 +20,11 @@
         "pages/user/main",
         "pages/user/userInfo/main",
         "pages/user/favorite/main",
+        "pages/user/courseBooking/main",
+        "pages/user/courseInfo/main",
+        "pages/user/minutes/main",
+        "pages/user/comments/main",
+        "pages/user/invest/main",
         "pages/user/coupon/main"
 
     ],

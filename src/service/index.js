@@ -136,7 +136,19 @@ export default {
     },
     // 添加收货地址
     addReceiveAddress: (data) => {
-        return fly.request('/becausebooks-app/own/addReceiveAddress', data, {
+        return fly.request('/becausebooks-app/own/saveOrUpdateReceiveAddress', data, {
+            method: 'post'
+        });
+    },
+    // 删除收货地址
+    deleteReceiveAddress: (data) => {
+        return fly.request('/becausebooks-app/own/deleteReceiveAddress', data, {
+            method: 'post'
+        });
+    },
+    // 根据id查询收货地址
+    getReceiveAddressById: (data) => {
+        return fly.request('/becausebooks-app/own/getReceiveAddressById', data, {
             method: 'post'
         });
     },
@@ -149,6 +161,12 @@ export default {
     // 查询我的成长 
     getMyGrowUp: (data) => {
         return fly.request('/becausebooks-app/own/getMyGrowUp', data, {
+            method: 'post'
+        });
+    },
+    // 查询课程预约 
+    getCourseOrder: (data) => {
+        return fly.request('/becausebooks-app/own/getCourseOrder', data, {
             method: 'post'
         });
     },
