@@ -29,13 +29,21 @@
 				</div>
 			</div>
 			<div class="starDiv" id="steps">
-				<van-steps
-					:steps="steps"
-					inactive-color="#fff"
-					active-color="#3F8F4D"
-					active-icon="star"
-					:active="active"
-				/>
+				<ul class="level">
+					<li v-for="(item, index) in steps" :key="index">{{item.desc}}</li>
+				</ul>
+				<div class="main-sliver">
+					<div class="inner-sliver" :style="'right:-' + 130 + 'rpx'">
+						<div class="left"></div>
+						<div class="right"></div>
+					</div>
+				</div>
+				<div class="minutes-view" :style="'left:' + 190 + 'rpx'">
+					<p>
+						&nbsp;
+						<i class="iconfont iconshoucangchenggong"></i>
+					</p>
+				</div>
 			</div>
 		</div>
 		<div class="loginDiv">
@@ -238,10 +246,41 @@ export default {
 			}
 		}
 		.starDiv {
-			padding: 10rpx 20rpx;
-			.col {
-				text-align: center;
+			position: relative;
+			@include wh(680rpx, 130rpx);
+			margin: 0 auto;
+			.level {
+				@include fj;
+				margin: 20rpx 0;
 			}
+            .main-sliver {
+                @include wh(680rpx, 20rpx);
+                border-radius: 10rpx;
+                background: $--color-gray-c;
+                overflow: hidden;
+                position: relative;
+                .inner-sliver {
+                    @include wh(1160rpx, 20rpx);
+                    border-radius: 10rpx;
+                    position: absolute;
+                    @include fj;
+                    .left {
+                        @include wh(580rpx, 20rpx);
+                        background: $--color-glass;
+                    }
+                    .right {
+                        @include wh(580rpx, 20rpx);
+                        background: $--color-white;
+                    }
+                }
+            }
+            .minutes-view {
+                position: absolute;
+                top: 50rpx;
+                .iconshoucangchenggong {
+                    @include sc($--text-xl, $--color-secondary);
+                }
+            }
 		}
 	}
 	.loginDiv {
