@@ -48,12 +48,12 @@
 										<img v-else src="../../../static/images/course/check.png" alt>
 									</div>
 									<p class="time" :class="t.check ? '' : 'check'">{{t.check ? '取消预约': '预约'}}</p>
-									<p class="time">{{t.time}}</p>
+									<p class="time">{{t.startTime}}</p>
 									<div class="progress">
 										<van-progress
 											:show-pivot="false"
 											color="#98C145"
-											:percentage="(t.remainNum/t.totalNum)*100"
+											:percentage="(t.usedNum/t.totalNum)*100"
 										/>
 									</div>
 								</div>
