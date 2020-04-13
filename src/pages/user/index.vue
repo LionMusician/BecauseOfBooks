@@ -92,7 +92,7 @@
 			</div>
 		</div>
         <van-popup :show="loginInShow" @close="loginInHide" round>
-            <wx-login></wx-login>
+            <wx-login :code="wxCode" @loginInHide="loginInHide"></wx-login>
         </van-popup>
 	</div>
 </template>
@@ -121,13 +121,17 @@ export default {
 				}
 			],
 			cellArr: userCellList,
-			loginInShow: false
+			loginInShow: false,
+			wxCode: '',
 		};
 	},
 	methods: {
 		// 登录
 		getLogin() {
-			this.loginInShow = true;
+			wx.login(r => {
+				this.wxCode = r.code;
+				this.loginInShow = true;
+			})
 		},
 		// 隐藏登录按钮
 		loginInHide() {
