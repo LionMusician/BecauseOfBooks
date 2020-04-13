@@ -30,10 +30,10 @@ const userCellList = [{
         label: "我的评论",
         value: 8
     },
-    {
-        label: "问卷调查",
-        value: 9
-    },
+    // {
+    //     label: "问卷调查",
+    //     value: 9
+    // },
     {
         label: "我的地址",
         value: 10

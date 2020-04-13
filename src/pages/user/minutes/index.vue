@@ -62,8 +62,22 @@ export default {
     },
     onLoad() {
         wx.setNavigationBarTitle("我的积分");
+        this.getMyGrowUp();
     },
-    methods: {}
+    methods: {
+        // 查询我的成长
+        getMyGrowUp() {
+            let params = {};
+            this.$http.getMyGrowUp(params).then(res => {
+                this.year = res.year;
+                let list = [...this.list];
+                list[0].count = res.courseOrderNum;
+                list[1].count = res.bookBorrowNum;
+                list[2].count = res.activityJoinNum;
+                this.list = list;
+            })
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>

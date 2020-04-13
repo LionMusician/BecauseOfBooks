@@ -254,4 +254,19 @@ export default {
             method: 'post'
         });
     },
+
+    //--------------------------微信--------------------------------
+
+    // 微信登录（小程序）
+    xcxLogin: (data) => {
+        return fly.request('/becausebooks-app/weixin/xcxLogin', data, {
+            method: 'post'
+        });
+    },
+    // 小程序支付调用
+    xcxpay: (data) => {
+        return fly.request('/becausebooks-app/weixin/xcxpay', data, {
+            method: 'post'
+        });
+    },
 }

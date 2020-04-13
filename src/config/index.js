@@ -1,5 +1,5 @@
 export default class config {
-    static debug = false;
+    static debug = true;
     static timeout = 2000;
     static baseURL = "http://47.103.39.200:8082"; // 测试
     // static baseURL = "http://tpy.fuioupay.com/"; // 生产

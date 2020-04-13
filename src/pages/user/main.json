@@ -1,5 +1,6 @@
 {
     "usingComponents": {
+        "van-popup": "/static/vant/popup/index",
         "van-row": "/static/vant/row/index",
         "van-col": "/static/vant/col/index",
         "van-icon": "/static/vant/icon/index",

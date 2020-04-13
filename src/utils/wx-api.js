@@ -230,4 +230,11 @@ export default class wxApi {
         return wx.getSystemInfoSync()
     }
 
+    static login(fn) {
+        wx.login({
+            success: res => {
+                fn(res)
+            }
+        })
+    }
 }
