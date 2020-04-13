@@ -15,7 +15,8 @@ Vue.use(Vuex)
 const state = {
     test: 0,
     master_key: "",
-    shopId: null
+    shopId: null,
+    loginInfo: null,
 }
 
 export default new Vuex.Store({

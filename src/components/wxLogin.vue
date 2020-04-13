@@ -5,6 +5,7 @@
 </template>
 <script>
 import wx from "@/utils/wx-api";
+import { mapActions } from "vuex";
 export default {
     props: {
         code: {
@@ -15,6 +16,7 @@ export default {
         return {};
     },
     methods: {
+		...mapActions(["setLoginInfo"]),
         // 登录
         getPhoneNumber(e) {
             let params = {
@@ -23,6 +25,7 @@ export default {
                 wxCode: this.code
             };
             this.$http.xcxLogin(params).then(res => {
+                this.setLoginInfo(res);
                 this.$emit("loginInHide");
             });
         }

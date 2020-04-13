@@ -4,5 +4,11 @@ export default {
         commit
     }, id) {
         commit('SHOP_ID', id);
-    }
+    },
+    // 存登录信息
+    setLoginInfo({
+        commit
+    }, loginInfo) {
+        commit('LOGIN_INFO', loginInfo);
+    },
 };

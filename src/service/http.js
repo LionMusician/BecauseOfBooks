@@ -2,6 +2,7 @@
 import utils from '@/utils/utils'
 import Tips from '@/utils/Tips'
 import Z_CONFIG from '@/config'
+import store from "@/store/index";
 import Fly from 'flyio/dist/npm/wx'
 const fly = new Fly()
 
@@ -11,10 +12,19 @@ fly.interceptors.request.use((request) => {
 	if(!request.silence) {
 		Tips.loading("加载中");
 	}
+	
 	request.headers = {
 		"X-Tag": "flyio",
 		'content-type': 'application/json'
 	};
+
+	let loginInfo = store.getters.loginInfo;
+	if(loginInfo) {
+		request.headers = {
+			...request.headers,
+			'authorization': store.getters.loginInfo.token
+		}
+	}
 	request.parseJson = true;
 
 	let authParams = {
