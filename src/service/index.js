@@ -72,6 +72,12 @@ export default {
             method: 'post'
         });
     },
+    // 更新购物车 
+    updateShoppingCart: (data) => {
+        return fly.request('/becausebooks-app/home/updateShoppingCart', data, {
+            method: 'post'
+        });
+    },
     // 删除购物车 
     deleteShoppingCart: (data) => {
         return fly.request('/becausebooks-app/home/deleteShoppingCart', data, {
@@ -268,5 +274,5 @@ export default {
         return fly.request('/becausebooks-app/weixin/xcxpay', data, {
             method: 'post'
         });
-    },
+    }
 }

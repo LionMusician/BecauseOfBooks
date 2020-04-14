@@ -26,10 +26,26 @@
 			<van-submit-bar
 				:price="totalPrice"
 				button-text="立即下单"
-				:submit="onClickButton"
+				@submit="onClickButton"
 				price-class="priceClass"
 				button-class="buttonClass"
 			></van-submit-bar>
+			<van-action-sheet :show="actionShow" title="付款详情" :round="false">
+				<div class="toPayDiv">
+					<div class="toPayInfo">
+						<div class="priceDiv">
+							&yen;
+							<span>{{totalPriceView}}</span>
+						</div>
+						<div>
+							<van-cell custom-class="cellClass" title="支付方式" value="微信支付"/>
+						</div>
+					</div>
+					<div class="toPayBtn">
+						<van-button color="#98C145" block @click="toPay">确认支付</van-button>
+					</div>
+				</div>
+			</van-action-sheet>
 		</div>
 	</div>
 </template>
@@ -43,10 +59,17 @@ export default {
 	data() {
 		let that = this;
 		return {
+			actionShow: false,
+			orderId: null,
 			totalPrice: 0,
 			scrollHeight: that.getWindowHeight(160),
 			carList: []
 		};
+	},
+	computed: {
+		totalPriceView() {
+			return this.totalPrice.toFixed(2);
+		}
 	},
 	onLoad() {
 		// 查询待支付订单
@@ -54,7 +77,7 @@ export default {
 	},
 	methods: {
 		/**
-		 * 去结算
+		 * 查询待支付订单
 		 **/
 		getUnPaidOrder() {
 			this.$http.getUnPaidOrder().then(res => {
@@ -63,8 +86,31 @@ export default {
 					item.startDate = utils.mklog(item.startDate);
 					item.endDate = utils.mklog(item.endDate);
 				});
+				this.orderId = res.id;
 				this.carList = data || [];
 				this.totalPrice = res.totalPrice * 100;
+			});
+		},
+		/**
+		 * 去支付
+		 */
+		onClickButton() {
+			this.actionShow = true;
+		},
+		/**
+		 * 支付
+		 */
+		toPay() {
+			// 获取code
+			wx.login(r => {
+				let params = {
+					payChannel: 0,
+					orderId: this.orderId,
+					wxCode: r.code
+				};
+				this.$http.xcxpay(params).then(res => {
+					console.log(res);
+				});
 			});
 		}
 	},
@@ -144,6 +190,31 @@ export default {
 		.bottomCheckbox {
 			position: absolute;
 			left: 30rpx;
+		}
+		.toPayDiv {
+			@include fc();
+			width: 100%;
+			height: 400rpx;
+			overflow: hidden;
+			.toPayInfo {
+				width: 100%;
+				flex: 1;
+				padding: 0 40rpx;
+				.priceDiv {
+					padding: 40rpx 0;
+					text-align: center;
+					span {
+						font-size: $--text-xxxl;
+						font-weight: 550;
+					}
+				}
+				.cellClass {
+					border-bottom: 1px solid #ccc;
+				}
+			}
+			.toPayBtn {
+				width: 100%;
+			}
 		}
 	}
 }

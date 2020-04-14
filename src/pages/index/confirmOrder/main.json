@@ -6,7 +6,10 @@
         "van-checkbox": "/static/vant/checkbox/index",
         "van-checkbox-group": "/static/vant/checkbox-group/index",
         "van-stepper": "/static/vant/stepper/index",
-        "van-swipe-cell": "/static/vant/swipe-cell/index"
+        "van-swipe-cell": "/static/vant/swipe-cell/index",
+        "van-action-sheet": "/static/vant/action-sheet/index",
+        "van-button": "/static/vant/button/index",
+        "van-cell": "/static/vant/cell/index"
     },
     "disableScroll": true
 }

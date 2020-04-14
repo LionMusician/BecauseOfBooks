@@ -26,7 +26,7 @@
 							<div class="infoDiv">
 								<p class="title">{{item.activityVO.name}}</p>
 								<p class="other totalNum">限制{{item.activityVO.totalNum}}人</p>
-								<p class="other">时间：{{item.activityVO.startDate}} - {{item.activityVO.startDate}}</p>
+								<p class="other">时间：{{item.activityVO.startDate}} - {{item.activityVO.endDate}}</p>
 								<p class="other">地址：{{item.activityVO.address}}</p>
 								<div class="priceDiv">
 									<div>
@@ -44,7 +44,7 @@
 													minus-class="plus-minus"
 												/>
 											</div>
-											<div class="price">&yen;{{item.activityVO.adultPrice}}</div>
+											<div class="price">&yen;{{item.activityVO.adultPriceAll}}</div>
 										</div>
 										<div class="row">
 											<div>儿童：</div>
@@ -60,7 +60,7 @@
 													minus-class="plus-minus"
 												/>
 											</div>
-											<div class="price">&yen;{{item.activityVO.childPrice}}</div>
+											<div class="price">&yen;{{item.activityVO.childPriceAll}}</div>
 										</div>
 									</div>
 								</div>
@@ -230,6 +230,12 @@ export default {
 			this.$http.queryShoppingCart().then(res => {
 				let data = res.shoppingCartVOS;
 				data.forEach(item => {
+					let activityVO = item.activityVO;
+					activityVO.adultPriceAll =
+						Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
+					activityVO.childPriceAll =
+						Number(item.childNum) *
+						Number(item.activityVO.childPrice); // 儿童价格
 					item.checked = false;
 				});
 				this.carList = data;
@@ -340,11 +346,19 @@ export default {
 		 * 去结算
 		 */
 		confirmOrder() {
+			let shoppingCartIds = this.shoppingCartVOS.map(item => {
+				return item.id;
+			});
+			let voucherIds = this.userVoucherVOS.map(item => {
+				return item.voucherId;
+			});
 			let parmas = {
-				shoppingCartVOS: this.shoppingCartVOS,
-				payPrice: this.payPrice / 100,
-				totalPrice: this.totalPrice,
-				userVoucherVOS: this.userVoucherVOS
+				// shoppingCartVOS: this.shoppingCartVOS,
+				// payPrice: this.payPrice / 100,
+				// totalPrice: this.totalPrice,
+				// userVoucherVOS: this.userVoucherVOS
+				shoppingCartIds: shoppingCartIds,
+				voucherIds: voucherIds
 			};
 			this.$http.confirmOrder(parmas).then(res => {
 				wx.navigateTo("/pages/index/confirmOrder/main");
@@ -443,6 +457,24 @@ export default {
 		stepperChange(e, item, type) {
 			this.stepperDis = false;
 			item[type] = e.mp.detail;
+
+			// 计算成人价格
+			item.activityVO.adultPriceAll =
+				Number(item.adultNum) * Number(item.activityVO.adultPrice);
+
+			// 计算儿童价格
+			item.activityVO.childPriceAll =
+				Number(item.childNum) * Number(item.activityVO.childPrice);
+
+			// 计算总价
+			item.price =
+				Number(item.activityVO.adultPriceAll) +
+				Number(item.activityVO.childPriceAll);
+
+			// 更新购物车
+			this.upDateShopCar(item);
+
+			// 计算是否有人数限制
 			if (item.activityVO.totalNum) {
 				let total = Number(item.adultNum) + Number(item.childNum);
 				if (total === item.activityVO.totalNum) {
@@ -450,6 +482,21 @@ export default {
 					return false;
 				}
 			}
+		},
+		/**
+		 * 更新购物车
+		 */
+		upDateShopCar(item) {
+			let parmas = {
+				shoppingCartVO: {
+					activityVO: item.activityVO,
+					adultNum: item.adultNum,
+					childNum: item.childNum,
+					id: item.id,
+					price: item.price
+				}
+			};
+			this.$http.updateShoppingCart(parmas).then(res => {});
 		}
 	}
 };
