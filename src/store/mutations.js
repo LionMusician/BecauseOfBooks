@@ -4,7 +4,8 @@
 import {
     TEST,
     MASTER_KEY,
-    SHOP_ID
+    SHOP_ID,
+    LOGIN_INFO
 } from './mutation-type'
 
 export default {
@@ -16,5 +17,8 @@ export default {
     },
     [SHOP_ID](state, v) {
         state.shopId = v;
-    }
+    },
+    [LOGIN_INFO](state, v) {
+        state.loginInfo = v;
+    },
 }

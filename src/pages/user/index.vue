@@ -46,7 +46,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="loginDiv">
+		<div v-if="!loginInfo" class="loginDiv">
 			<div class="left">登录手机号，同步全渠道订单和优惠券</div>
 			<div class="right">
 				<van-button type="primary" size="small" @click="getLogin">登录</van-button>
@@ -92,7 +92,7 @@
 			</div>
 		</div>
         <van-popup :show="loginInShow" @close="loginInHide" round>
-            <wx-login></wx-login>
+            <wx-login :code="wxCode" @loginInHide="loginInHide"></wx-login>
         </van-popup>
 	</div>
 </template>
@@ -100,6 +100,7 @@
 <script>
 import wxLogin from "@components/wxLogin.vue";
 import { userCellList } from "@/utils/state.js";
+import { mapGetters } from "vuex";
 import wx from "@/utils/wx-api";
 export default {
 	components: {wxLogin},
@@ -121,13 +122,20 @@ export default {
 				}
 			],
 			cellArr: userCellList,
-			loginInShow: false
+			loginInShow: false,
+			wxCode: '',
 		};
 	},
+    computed: {
+        ...mapGetters(["loginInfo"])
+    },
 	methods: {
 		// 登录
 		getLogin() {
-			this.loginInShow = true;
+			wx.login(r => {
+				this.wxCode = r.code;
+				this.loginInShow = true;
+			})
 		},
 		// 隐藏登录按钮
 		loginInHide() {
