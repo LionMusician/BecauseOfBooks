@@ -101,8 +101,9 @@ export default {
 		 * 支付
 		 */
 		toPay() {
-			// 获取code
 			wx.login(r => {
+				console.log(r);
+				
 				let params = {
 					payChannel: 0,
 					orderId: this.orderId,
@@ -111,7 +112,7 @@ export default {
 				this.$http.xcxpay(params).then(res => {
 					console.log(res);
 				});
-			});
+			})
 		}
 	},
 	components: {

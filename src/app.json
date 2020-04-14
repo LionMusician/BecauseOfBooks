@@ -25,6 +25,7 @@
         "pages/user/minutes/main",
         "pages/user/comments/main",
         "pages/user/invest/main",
+        "pages/user/orderList/main",
         "pages/user/coupon/main"
 
     ],

@@ -54,7 +54,7 @@
 		</div>
 		<div class="orderList">
 			<div class="orderDiv">
-				<div class="top">
+				<div class="top" @click="toOrderList">
 					<div class="left">我的订单</div>
 					<div class="right">
 						<span>查看全部订单</span>
@@ -175,8 +175,11 @@ export default {
 					wx.navigateTo("/pages/book/addressList/main");
 					break;
 			}
-			console.log(item);
-		}
+		},
+		// 跳转到订单列表
+		toOrderList() {
+			wx.navigateTo("/pages/user/orderList/main");
+		} 
 	}
 };
 </script>
