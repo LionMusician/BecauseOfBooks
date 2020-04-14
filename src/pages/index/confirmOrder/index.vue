@@ -68,7 +68,7 @@ export default {
 	},
 	computed: {
 		totalPriceView() {
-			return this.totalPrice.toFixed(2);
+			return (this.totalPrice/100).toFixed(2);
 		}
 	},
 	onLoad() {
