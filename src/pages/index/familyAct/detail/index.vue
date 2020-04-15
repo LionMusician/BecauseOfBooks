@@ -79,7 +79,16 @@ export default {
 	data() {
 		return {
 			book: {},
-			funcList: [
+			carList: []
+		};
+	},
+	computed: {
+		...mapGetters(["shopId"]),
+		carNum() {
+			return this.carList.length || 0;
+		},
+		funcList() {
+			return [
 				{
 					id: 0,
 					pic: "detail.png",
@@ -115,14 +124,7 @@ export default {
 					width: 80,
 					height: 70
 				}
-			],
-			carList: []
-		};
-	},
-	computed: {
-		...mapGetters(["shopId"]),
-		carNum() {
-			return this.carList.length || 0;
+			];
 		}
 	},
 	onLoad() {

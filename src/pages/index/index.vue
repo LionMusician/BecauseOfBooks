@@ -8,10 +8,11 @@
 			</van-col>
 			<van-col span="18">
 				<van-dropdown-menu class="dropdownMenu">
-					<van-dropdown-item v-model="shopName" :options="shopOptions"/>
+					<van-dropdown-item v-model="shopName" :options="shopOptions" @change="changeMenu"/>
 				</van-dropdown-menu>
 			</van-col>
 		</van-row>
+		<!-- <scroll-view :scroll-y="true" :style="'height:' + scrollHeight + 'rpx;'"> -->
 		<swiper
 			:autoplay="true"
 			:indicator-dots="true"
@@ -76,6 +77,7 @@
 				<p class="title">{{item.name}}</p>
 			</van-col>
 		</van-row>
+		<!-- </scroll-view> -->
 	</div>
 </template>
 
@@ -85,12 +87,14 @@ import utils from "@/utils/utils";
 import CONFIG from "@/config";
 import { TEST, MASTER_KEY } from "@/store/mutation-type";
 import search from "@components/search.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
 	components: { search },
 	data() {
+		let that = this;
 		return {
+			scrollHeight: that.getWindowHeight(50),
 			shopName: 0,
 			searchValue: "",
 			// 门店数据
@@ -122,13 +126,18 @@ export default {
 			bookList: []
 		};
 	},
-	computed: {},
+	computed: {
+		...mapGetters(["shopId"])
+	},
 	onLoad() {
 		// 获取阅读馆列表
 		this.queryReadingHall();
 		// banner数据
 		this.queryBanner();
 		this.init();
+	},
+	onShow() {
+		this.shopName = this.shopId;
 	},
 	methods: {
 		...mapActions(["setShopId"]),
@@ -157,9 +166,15 @@ export default {
 					arr.push(obj);
 				});
 				this.shopName = arr[0].value;
-				this.setShopId(arr[0].value);
+				if (!this.shopId) {
+					this.setShopId(arr[0].value);
+				}
 				this.shopOptions = arr;
 			});
+		},
+		// 选择阅读馆列表
+		changeMenu(val) {
+			this.setShopId(val.mp.detail);
 		},
 		// 获取banner数据
 		queryBanner() {
@@ -269,8 +284,8 @@ export default {
 		}
 	}
 	.titleRow {
-		border-top: 1px solid $--color-primary;
-		border-bottom: 1px solid $--color-primary;
+		border-top: 2rpx solid $--color-primary;
+		border-bottom: 2rpx solid $--color-primary;
 		padding: 10rpx 20rpx 10rpx 40rpx;
 		.left {
 			color: $--color-primary;

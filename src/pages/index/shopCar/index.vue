@@ -360,9 +360,14 @@ export default {
 				shoppingCartIds: shoppingCartIds,
 				voucherIds: voucherIds
 			};
-			this.$http.confirmOrder(parmas).then(res => {
-				wx.navigateTo("/pages/index/confirmOrder/main");
-			});
+			this.$http
+				.confirmOrder(parmas)
+				.then(res => {
+					wx.navigateTo("/pages/index/confirmOrder/main");
+				})
+				.catch(() => {
+					wx.navigateTo("/pages/index/confirmOrder/main");
+				});
 		},
 		/**
 		 * 选择优惠券

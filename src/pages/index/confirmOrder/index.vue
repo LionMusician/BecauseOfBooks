@@ -30,7 +30,7 @@
 				price-class="priceClass"
 				button-class="buttonClass"
 			></van-submit-bar>
-			<van-action-sheet :show="actionShow" title="付款详情" :round="false">
+			<van-action-sheet :show="actionShow" title="付款详情" :round="false" @close="close">
 				<div class="toPayDiv">
 					<div class="toPayInfo">
 						<div class="priceDiv">
@@ -68,7 +68,7 @@ export default {
 	},
 	computed: {
 		totalPriceView() {
-			return (this.totalPrice/100).toFixed(2);
+			return (this.totalPrice / 100).toFixed(2);
 		}
 	},
 	onLoad() {
@@ -98,23 +98,29 @@ export default {
 			this.actionShow = true;
 		},
 		/**
+		 * 关闭支付弹框
+		 */
+		close() {
+			this.actionShow = false;
+		},
+		/**
 		 * 支付
 		 */
 		toPay() {
 			wx.login(r => {
 				console.log(r);
-				
+
 				let params = {
 					payChannel: 0,
 					orderId: this.orderId,
 					wxCode: r.code
 				};
-				console.log(JSON.stringify(params));
-				
-				// this.$http.xcxpay(params).then(res => {
-				// 	console.log(res);
-				// });
-			})
+				// console.log(JSON.stringify(params));
+
+				this.$http.xcxpay(params).then(res => {
+					console.log(res);
+				});
+			});
 		}
 	},
 	components: {
