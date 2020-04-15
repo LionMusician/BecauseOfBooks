@@ -11,6 +11,7 @@ export default class utils {
 	 */
 	static mklog(datemillis) {
 		var date = datemillis ? new Date(datemillis) : new Date(); //新建一个事件对象
+		var year = date.getYear() + ''; // 获取年份
 		var month = date.getMonth() + 1; //获取月份
 		var strDate = date.getDate(); //获取日期
 		var sh = date.getHours(); //获取时
@@ -37,7 +38,7 @@ export default class utils {
 		} else if (ms >= 0 & ms <= 9) {
 			ms = '00' + ms;
 		}
-		var currentdate = `20${date.getYear() - 100}-${month}-${strDate} ${sh}:${sm}:${ss}`;
+		var currentdate = `20${year.substring(1,3)}-${month}-${strDate} ${sh}:${sm}:${ss}`;
 		return currentdate;
 	}
 

@@ -1,20 +1,18 @@
 <template>
-	<div class="container">
-		<!-- 头部 -->
-		<header-view title="个人信息"></header-view>
-		<div class="content">
-			<!-- 家长信息 -->
-			<div class="title">家长信息</div>
-			<van-cell-group>
-				<van-cell title="头像">
-					
-				</van-cell>
+    <div class="container">
+        <!-- 头部 -->
+        <header-view title="个人信息"></header-view>
+        <div class="content">
+            <!-- 家长信息 -->
+            <div class="title">家长信息</div>
+            <van-cell-group>
+                <van-cell title="头像"></van-cell>
                 <van-field
                     :value="userInfo.name"
                     clearable
                     label="姓名"
                     placeholder="请填写"
-					input-align="right"
+                    input-align="right"
                     @change="(e)=>{return input(e, 'name')}"
                 />
                 <van-field
@@ -22,7 +20,7 @@
                     clearable
                     type="number"
                     label="手机号"
-					input-align="right"
+                    input-align="right"
                     placeholder="手机号"
                     @change="(e)=>{return input(e, 'phone')}"
                 />
@@ -30,7 +28,7 @@
                     v-if="!smartShow"
                     :value="userInfo.address"
                     label="地区"
-					input-align="right"
+                    input-align="right"
                     placeholder="选择省/市/区"
                     disabled
                     is-link
@@ -41,7 +39,7 @@
                     clearable
                     label="微信号"
                     placeholder="请填写"
-					input-align="right"
+                    input-align="right"
                     @change="(e)=>{return input(e, 'wechatNo')}"
                 />
                 <van-field
@@ -49,27 +47,27 @@
                     clearable
                     label="收货地址"
                     placeholder="请填写"
-					input-align="right"
+                    input-align="right"
                     @change="(e)=>{return input(e, 'wechatNo')}"
                 />
-			</van-cell-group>
+            </van-cell-group>
 
-			<!-- 宝宝信息 -->
-			<div class="title">宝宝信息</div>
-			<van-cell-group>
+            <!-- 宝宝信息 -->
+            <div class="title">宝宝信息</div>
+            <van-cell-group>
                 <van-field
                     :value="userInfo.childName"
                     clearable
                     label="姓名"
                     placeholder="请填写"
-					input-align="right"
+                    input-align="right"
                     @change="(e)=>{return input(e, 'childName')}"
                 />
                 <van-field
                     v-if="!smartShow"
                     :value="userInfo.childSexLabel"
                     label="性别"
-					input-align="right"
+                    input-align="right"
                     placeholder="选择性别"
                     disabled
                     is-link
@@ -80,14 +78,17 @@
                     clearable
                     label="生日"
                     placeholder="请填写"
-					input-align="right"
-                    @change="(e)=>{return input(e, 'childBirthday')}"
+                    input-align="right"
+                    disabled
+                    is-link
+                    @click="showTimePicker"
                 />
-			</van-cell-group>
+            </van-cell-group>
             <div class="submit">
                 <van-button block type="primary" color="#98C145" @click="submitUserInfo">保存</van-button>
             </div>
-		</div>
+        </div>
+        <!-- 选择地区 -->
         <van-popup :show="areaShow" @close="areaHide" position="bottom">
             <van-picker
                 :columns="columns"
@@ -98,15 +99,22 @@
                 show-toolbar
             />
         </van-popup>
+        <!-- 选择性别 -->
         <van-popup :show="genderShow" @close="genderHide" position="bottom">
-            <van-picker
-                :columns="gender"
-                @confirm="selectGender"
-                value-key="label"
-                show-toolbar
+            <van-picker :columns="gender" @confirm="selectGender" value-key="label" show-toolbar />
+        </van-popup>
+        <!-- 选择生日 -->
+        <van-popup :show="timePickerShow" @close="timePickerHide" position="bottom">
+            <van-datetime-picker
+                type="date"
+                :value="currentDate"
+                :min-date="minDate"
+                :max-date="currentDate"
+                :v-else="maxDate"
+                @confirm="birthSelect"
             />
         </van-popup>
-	</div>
+    </div>
 </template>
 
 <script>
@@ -115,10 +123,10 @@ import utils from "@/utils/utils";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
 export default {
-	name: "",
-	data() {
-		return {
-			userInfo: {},
+    name: "",
+    data() {
+        return {
+            userInfo: {},
             areaShow: false,
             pickerLoading: false,
             columns: [
@@ -139,50 +147,58 @@ export default {
             gender: [
                 {
                     value: 1,
-                    label: '男'
+                    label: "男"
                 },
                 {
                     value: 2,
-                    label: '女'
-                },
-            ]
-		};
-	},
-	onLoad() {
-		// 获取个人信息
-		this.getUserInfo();
-	},
-	methods: {
-		// 获取个人信息
-		getUserInfo() {
-			this.$http.getUserInfo().then(res => {
-				res.userVO.childSexLabel = res.userVO.childSex === 1 ? "男" : "女";
-				res.userVO.address =
-					res.userVO.provinceName ||
-					"" + " " + res.userVO.cityName ||
-					"" + " " + res.userVO.countyName ||
-					"";
-				if (res.userVO.childBirthday) {
-					res.userVO.childBirthday = utils
-						.mklog(res.userVO.childBirthday)
-						.split(" ")[0];
-				}
+                    label: "女"
+                }
+            ],
+            timePickerShow: false,
+            currentDate: new Date().getTime(),
+            minDate: new Date("2000-01-01").getTime(),
+            formatter(type, value) {
+                if (type === "year") {
+                    return `${value}年`;
+                } else if (type === "month") {
+                    return `${value}月`;
+                }
+                return value;
+            }
+        };
+    },
+    onLoad() {
+        // 获取个人信息
+        this.getUserInfo();
+    },
+    methods: {
+        // 获取个人信息
+        getUserInfo() {
+            this.$http.getUserInfo().then(res => {
+                res.userVO.childSexLabel =
+                    res.userVO.childSex === 1 ? "男" : "女";
+                res.userVO.address = `${res.userVO.provinceName || ""} ${res
+                    .userVO.cityName || ""} ${res.userVO.countyName || ""}`;
+                if (res.userVO.childBirthday) {
+                    res.userVO.childBirthday = utils
+                        .mklog(res.userVO.childBirthday)
+                        .split(" ")[0];
+                }
 
-				this.userInfo = res.userVO;
-			});
+                this.userInfo = res.userVO;
+            });
         },
         // 保存个人信息
         submitUserInfo() {
-            console.log(this.userInfo);
             let params = {
-                userVO: {...this.userInfo}
-            }
+                userVO: { ...this.userInfo }
+            };
             this.$http.updateUserInfo(params).then(res => {
                 Tips.success("保存成功！");
                 setTimeout(() => {
                     wx.navigateBack();
                 }, 1000);
-            })
+            });
         },
         // 输入框
         input(e, key) {
@@ -246,6 +262,20 @@ export default {
         genderHide() {
             this.genderShow = false;
         },
+        // 打开选择生日
+        showTimePicker() {
+            this.timePickerShow = true;
+        },
+        // 选择生日
+        birthSelect(e) {
+            let detail = e.mp.detail;
+            this.userInfo.childBirthday = utils.mklog(detail).substring(0, 10);
+            this.timePickerHide();
+        },
+        // 关闭选择生日
+        timePickerHide() {
+            this.timePickerShow = false;
+        },
         // 查询地区
         queryArea(type, parentId = "") {
             let params = {
@@ -270,29 +300,29 @@ export default {
                         break;
                 }
             });
-        },
-	},
-	components: {
-		headerView
-	}
+        }
+    },
+    components: {
+        headerView
+    }
 };
 </script>
 
 <style lang="scss" scoped>
 .container {
-	height: 100vh;
-	padding-bottom: 40rpx;
-	background: $--color-bg;
-	.content {
-		.title {
-			font-size: $--text-l;
-			color: $--color-text;
-			padding: 20rpx 40rpx;
-		}
+    height: 100vh;
+    padding-bottom: 40rpx;
+    background: $--color-bg;
+    .content {
+        .title {
+            font-size: $--text-l;
+            color: $--color-text;
+            padding: 20rpx 40rpx;
+        }
         .submit {
             @include wh(690rpx, 100rpx);
             margin: 30rpx auto;
         }
-	}
+    }
 }
 </style>

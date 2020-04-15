@@ -6,6 +6,7 @@
         "van-cell-group": "/static/vant/cell-group/index",
         "van-picker": "/static/vant/picker/index",
         "van-popup": "/static/vant/popup/index",
+        "van-uploader": "/static/vant/uploader/index",
         "van-datetime-picker": "/static/vant/datetime-picker/index"
     }
 }

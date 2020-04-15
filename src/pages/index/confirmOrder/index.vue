@@ -109,11 +109,11 @@ export default {
 					orderId: this.orderId,
 					wxCode: r.code
 				};
-				// console.log(JSON.stringify(params));
+				console.log(JSON.stringify(params));
 				
-				this.$http.xcxpay(params).then(res => {
-					console.log(res);
-				});
+				// this.$http.xcxpay(params).then(res => {
+				// 	console.log(res);
+				// });
 			})
 		}
 	},
