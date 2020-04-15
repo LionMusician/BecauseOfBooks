@@ -164,6 +164,12 @@ export default {
             method: 'post'
         });
     },
+    // 更新个人信息 
+    updateUserInfo: (data) => {
+        return fly.request('/becausebooks-app/own/updateUserInfo', data, {
+            method: 'post'
+        });
+    },
     // 查询我的成长 
     getMyGrowUp: (data) => {
         return fly.request('/becausebooks-app/own/getMyGrowUp', data, {

@@ -57,9 +57,6 @@
 			<!-- 宝宝信息 -->
 			<div class="title">宝宝信息</div>
 			<van-cell-group>
-				<van-cell title="头像">
-					
-				</van-cell>
                 <van-field
                     :value="userInfo.childName"
                     clearable
@@ -70,13 +67,13 @@
                 />
                 <van-field
                     v-if="!smartShow"
-                    :value="userInfo.childSex"
+                    :value="userInfo.childSexLabel"
                     label="性别"
 					input-align="right"
-                    placeholder="选择省/市/区"
+                    placeholder="选择性别"
                     disabled
                     is-link
-                    @click="showAreaPicker"
+                    @click="showGenderPicker"
                 />
                 <van-field
                     :value="userInfo.childBirthday"
@@ -87,6 +84,9 @@
                     @change="(e)=>{return input(e, 'childBirthday')}"
                 />
 			</van-cell-group>
+            <div class="submit">
+                <van-button block type="primary" color="#98C145" @click="submitUserInfo">保存</van-button>
+            </div>
 		</div>
         <van-popup :show="areaShow" @close="areaHide" position="bottom">
             <van-picker
@@ -98,12 +98,22 @@
                 show-toolbar
             />
         </van-popup>
+        <van-popup :show="genderShow" @close="genderHide" position="bottom">
+            <van-picker
+                :columns="gender"
+                @confirm="selectGender"
+                value-key="label"
+                show-toolbar
+            />
+        </van-popup>
 	</div>
 </template>
 
 <script>
 import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils";
+import wx from "@/utils/wx-api";
+import Tips from "@/utils/Tips";
 export default {
 	name: "",
 	data() {
@@ -124,6 +134,17 @@ export default {
                     values: [],
                     className: "area"
                 }
+            ],
+            genderShow: false,
+            gender: [
+                {
+                    value: 1,
+                    label: '男'
+                },
+                {
+                    value: 2,
+                    label: '女'
+                },
             ]
 		};
 	},
@@ -135,7 +156,7 @@ export default {
 		// 获取个人信息
 		getUserInfo() {
 			this.$http.getUserInfo().then(res => {
-				res.userVO.childSex = res.userVO.childSex === 1 ? "男" : "女";
+				res.userVO.childSexLabel = res.userVO.childSex === 1 ? "男" : "女";
 				res.userVO.address =
 					res.userVO.provinceName ||
 					"" + " " + res.userVO.cityName ||
@@ -149,7 +170,20 @@ export default {
 
 				this.userInfo = res.userVO;
 			});
-		},
+        },
+        // 保存个人信息
+        submitUserInfo() {
+            console.log(this.userInfo);
+            let params = {
+                userVO: {...this.userInfo}
+            }
+            this.$http.updateUserInfo(params).then(res => {
+                Tips.success("保存成功！");
+                setTimeout(() => {
+                    wx.navigateBack();
+                }, 1000);
+            })
+        },
         // 输入框
         input(e, key) {
             this.$set(this.userInfo, key, e.mp.detail);
@@ -187,16 +221,31 @@ export default {
                 ...this.userInfo,
                 address: `${detail.value[0].name} ${detail.value[1].name} ${
                     detail.value[2].name
-                }`
+                }`,
+                provinceId: detail.value[0].id,
+                provinceName: detail.value[0].name,
+                cityId: detail.value[1].id,
+                cityName: detail.value[1].name,
+                countyId: detail.value[2].id,
+                countyName: detail.value[2].name
             };
             this.areaHide();
         },
-        // 点击智能识别
-        showSmart() {
-            this.smartShow = true;
+        // 打开选择性别
+        showGenderPicker() {
+            this.genderShow = true;
         },
-        // 智能识别
-        smartAnalysis() {},
+        // 选择性别
+        selectGender(e) {
+            let detail = e.mp.detail;
+            this.userInfo.childSexLabel = detail.value.label;
+            this.userInfo.childSex = detail.value.value;
+            this.genderHide();
+        },
+        // 关闭选择性别
+        genderHide() {
+            this.genderShow = false;
+        },
         // 查询地区
         queryArea(type, parentId = "") {
             let params = {
@@ -240,43 +289,10 @@ export default {
 			color: $--color-text;
 			padding: 20rpx 40rpx;
 		}
-		.ul {
-			padding: 0 20rpx;
-			background: $--color-white;
-			.liItem {
-				@include fj();
-				border-bottom: 1px solid $--color-gray-de;
-				padding: 26rpx 20rpx;
-				.left {
-					font-size: $--text-l;
-				}
-				.right {
-					@include fj();
-					.imgDiv {
-						width: 80rpx;
-						height: 80rpx;
-						border-radius: 80rpx;
-						background: $--color-green;
-						overflow: hidden;
-						img {
-							width: 80rpx;
-							height: 80rpx;
-						}
-					}
-					.icon {
-						font-size: $--text-xl;
-						color: $--color-text;
-					}
-					.value {
-						font-size: $--text-l;
-						color: $--color-text;
-					}
-				}
-			}
-			.liItem:last-child {
-				border-bottom: none;
-			}
-		}
+        .submit {
+            @include wh(690rpx, 100rpx);
+            margin: 30rpx auto;
+        }
 	}
 }
 </style>
