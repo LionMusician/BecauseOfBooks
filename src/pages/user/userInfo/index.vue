@@ -6,7 +6,9 @@
             <!-- 家长信息 -->
             <div class="title">家长信息</div>
             <van-cell-group>
-                <van-cell title="头像"></van-cell>
+                <van-cell title="头像">
+                    <van-uploader slot="right-icon" :file-list="fileList" @afterRead="afterRead" max-count="1"></van-uploader>
+                </van-cell>
                 <van-field
                     :value="userInfo.name"
                     clearable
@@ -126,6 +128,7 @@ export default {
     name: "",
     data() {
         return {
+            fileList: [],
             userInfo: {},
             areaShow: false,
             pickerLoading: false,
@@ -186,6 +189,9 @@ export default {
                 }
 
                 this.userInfo = res.userVO;
+                this.fileList = [{
+                    url: res.userVO.headImage
+                }]
             });
         },
         // 保存个人信息
@@ -199,6 +205,16 @@ export default {
                     wx.navigateBack();
                 }, 1000);
             });
+        },
+        // 选择文件
+        afterRead(e) {
+            let path = e.mp.detail.file.path;
+            wx.uploadFile(path, (res => {
+                this.fileList = [{
+                    url: res.fileUrl
+                }];
+                this.userInfo.headImage = res.fileUrl;
+            }))
         },
         // 输入框
         input(e, key) {

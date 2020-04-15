@@ -11,4 +11,10 @@ export default {
     }, loginInfo) {
         commit('LOGIN_INFO', loginInfo);
     },
+    // 默认地址
+    setDefaultAddr({
+        commit
+    }, defaultAddr) {
+        commit('DEFAULT_ADDR', defaultAddr);
+    },
 };

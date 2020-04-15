@@ -2,6 +2,7 @@
  * 微信相关API（跳转页面等）
  */
 
+import Z_CONFIG from '@/config'
 export default class wxApi {
 
     // 是否正在页面跳转
@@ -234,6 +235,22 @@ export default class wxApi {
         wx.login({
             success: res => {
                 fn(res)
+            }
+        })
+    }
+
+
+    /**
+     * 上传图片
+     */
+    static uploadFile(filePath, fn) {
+        wx.uploadFile({
+            url: `${Z_CONFIG.baseURL}/becausebooks-app/common/uploadFile`,
+            filePath,
+            name: 'file',
+            formData: {},
+            success (res){
+                fn(JSON.parse(res.data).data)
             }
         })
     }

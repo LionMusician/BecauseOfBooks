@@ -5,7 +5,8 @@ import {
     TEST,
     MASTER_KEY,
     SHOP_ID,
-    LOGIN_INFO
+    LOGIN_INFO,
+    DEFAULT_ADDR
 } from './mutation-type'
 
 export default {
@@ -20,5 +21,8 @@ export default {
     },
     [LOGIN_INFO](state, v) {
         state.loginInfo = v;
+    },
+    [DEFAULT_ADDR](state, v) {
+        state.defaultAddr = v;
     },
 }

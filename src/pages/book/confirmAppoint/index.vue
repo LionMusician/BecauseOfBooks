@@ -60,6 +60,13 @@
                                 >{{item.label}}</van-radio>
                             </van-radio-group>
                         </li>
+                        <li v-if="typeSelect === 1">
+                            <p class="form-label">收货地址</p>
+                            <van-cell-group @click="selectAddress">
+                                <van-cell v-if="address" center :title="address.title" :label="address.label" is-link></van-cell>
+                                <van-cell v-else center title="请选择地址" is-link></van-cell>
+                            </van-cell-group>
+                        </li>
                     </ul>
                 </div>
             </li>
@@ -82,6 +89,7 @@ import cartCover from "@components/cartCover.vue";
 import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils.js";
 import wx from "@/utils/wx-api";
+import { mapGetters } from "vuex";
 export default {
     components: {
         headerView,
@@ -110,12 +118,25 @@ export default {
                 }
             ],
             bagList: [], // 书包列表
+            address: null,
         };
     },
     onLoad() {
         this.getDateNow();
         this.queryBag();
         this.takeBookDetail();
+    },
+    onShow() {
+        if(this.defaultAddr === {}) {
+            this.address = null;
+        }else {
+            this.address = {
+                ...this.defaultAddr
+            }
+        }
+    },
+    computed: {
+        ...mapGetters(["defaultAddr"])
     },
     methods: {
         // 查询书包
@@ -194,7 +215,7 @@ export default {
         },
         // 选择地址
         selectAddress() {
-            wx.navigateTo(`../addressList/main`);
+            wx.navigateTo(`../addressList/main?from=appoint`);
         },
         // 查询图书到期归还
         returnRemind() {
@@ -209,13 +230,16 @@ export default {
         // 预约
         borrowBook() {
             let data = {
-                receiveAddressId: '',
+                receiveAddressId: this.address.id,
                 takeDate: `${this.dateNow}${this.dateList[this.dateSelect].label}`,
                 takeTime: this.timeSelect,
                 takeWay: this.typeSelect
             }
+            data.takeDate = `${data.takeDate.substring(0, 4)}-${data.takeDate.substring(5, 7)}-${data.takeDate.substring(8, 10)}`
             console.log(data);
-            
+            this.$http.borrowBook(data).then(res => {
+
+            })
         }
     }
 };

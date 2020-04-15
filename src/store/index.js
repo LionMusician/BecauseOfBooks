@@ -17,6 +17,7 @@ const state = {
     master_key: "",
     shopId: null,
     loginInfo: null,
+    defaultAddr: {},
 }
 
 export default new Vuex.Store({

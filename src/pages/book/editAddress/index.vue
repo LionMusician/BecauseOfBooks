@@ -14,6 +14,7 @@
                     clearable
                     type="number"
                     label="电话"
+                    :maxlength="11"
                     placeholder="收货人手机号"
                     @change="(e)=>{return input(e, 'phone')}"
                 />

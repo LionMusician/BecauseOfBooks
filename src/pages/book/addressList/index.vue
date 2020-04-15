@@ -2,7 +2,7 @@
     <div class="main">
         <van-cell-group v-if="addrList.length">
             <van-swipe-cell v-for="(item, index) in addrList" :key="index" :right-width="100">
-                <van-cell center :title="item.title" :label="item.label">
+                <van-cell center :title="item.title" :label="item.label" @click="selectAddr(item)">
                     <van-icon
                         slot="right-icon"
                         :name="item.isDefault ? 'checked' : ''"
@@ -25,34 +25,59 @@
 import noData from "@components/noData.vue";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
+import { mapActions, mapGetters } from "vuex";
 export default {
     data() {
         return {
-            addrList: []
+			addrList: []
         };
     },
     components: { noData },
     onLoad() {
-        wx.setNavigationBarTitle("收货地址");
+		wx.setNavigationBarTitle("收货地址");
+	},
+	onShow() {
         this.getReceiveAddress();
+	},
+    computed: {
+        ...mapGetters(["defaultAddr"])
     },
     methods: {
+		...mapActions(["setDefaultAddr"]),
         newAddress() {
             wx.navigateTo(`../editAddress/main`);
         },
         // 获取地址列表
         getReceiveAddress() {
-            let data = {};
-            this.$http.getReceiveAddress(data).then(res => {
-                this.addrList = res.receiveAddressVOS.map(item => {
-                    item.title = `${item.name} ${item.phone}`;
-                    item.label = `${item.provinceName}${item.cityName}${
-                        item.countyName
-                    }${item.address}`;
-                    return item;
-                });
+            let params = {};
+            this.$http.getReceiveAddress(params).then(res => {
+                let data = res.receiveAddressVOS;
+                if(data) {
+                    this.addrList = data.map(item => {
+                        item.title = `${item.name} ${item.phone}`;
+                        item.label = `${item.provinceName}${item.cityName}${
+                            item.countyName
+						}${item.address}`;
+						item.isDefault = item.id === this.defaultAddr.id
+                        return item;
+                    });
+                }else {
+					this.setDefaultAddr({});
+				}
             });
-        },
+		},
+		// 选择地址
+		selectAddr(addr) {
+			let from = this.$root.$mp.query.from;
+			if(from === 'appoint') {
+				this.addrList.forEach(item => {
+					item.isDefault = false;
+				})
+				addr.isDefault = true;
+				this.setDefaultAddr(addr);
+				wx.navigateBack();
+			}
+		},
         // 编辑地址
         editAddr(item) {
             wx.navigateTo(`../editAddress/main?id=${item.id}`);

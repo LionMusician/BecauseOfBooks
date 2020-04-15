@@ -182,6 +182,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询我的评论 
+    getMyComment: (data) => {
+        return fly.request('/becausebooks-app/own/getMyComment', data, {
+            method: 'post'
+        });
+    },
 
     //--------------------------图书--------------------------------
     // 查询书包
