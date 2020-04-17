@@ -1,3 +1,9 @@
 {
-    
+    "usingComponents": {
+        "van-card": "/static/vant/card/index",
+        "van-tab": "/static/vant/tab/index",
+        "van-tabs": "/static/vant/tabs/index",
+        "van-button": "/static/vant/button/index",
+        "van-sticky": "/static/vant/sticky/index"
+    }
 }

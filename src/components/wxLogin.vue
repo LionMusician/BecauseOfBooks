@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <p class="prompt">点击授权手机号登录</p>
         <button open-type="getPhoneNumber" class="btn" @getphonenumber="getPhoneNumber">微信登录</button>
     </div>
 </template>
@@ -26,7 +27,7 @@ export default {
             };
             this.$http.xcxLogin(params).then(res => {
                 this.setLoginInfo(res);
-                this.$emit("loginInHide");
+                this.$emit("wxLogin");
             });
         }
     }
@@ -34,9 +35,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-    @include wh(320rpx, 180rpx);
+    @include wh(320rpx, 240rpx);
     @include fj(center);
     border-radius: 20rpx;
+    .prompt {
+        @include hh(100rpx);
+        font-size: $--text-nm;
+    }
     .btn {
         @include wh(180rpx, 60rpx);
         background: $--color-primary;

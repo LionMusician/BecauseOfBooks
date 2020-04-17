@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div class="bottom">
-					<div class="bottomItem">
+					<div class="bottomItem" @click="toOrderList('unPay')">
 						<i class="iconfont iconqianbao"></i>
 						<span>待付款</span>
 					</div>
@@ -91,7 +91,7 @@
 				</ul>
 			</div>
 		</div>
-        <van-popup :show="loginInShow" @close="loginInHide" round>
+        <van-popup :show="loginInShow" @close="loginInHide">
             <wx-login :code="wxCode" @loginInHide="loginInHide"></wx-login>
         </van-popup>
 	</div>
@@ -124,18 +124,26 @@ export default {
 			cellArr: userCellList,
 			loginInShow: false,
 			wxCode: '',
+			userInfo: {}
 		};
 	},
     computed: {
         ...mapGetters(["loginInfo"])
     },
 	methods: {
-		// 登录
+		// 显示登录按钮
 		getLogin() {
 			wx.login(r => {
 				this.wxCode = r.code;
 				this.loginInShow = true;
 			})
+		},
+		// 登录完成
+		wxLogin() {
+            this.$http.getUserInfo().then(res => {
+				this.userInfo = res.userVO;
+				this.loginInHide();
+            });
 		},
 		// 隐藏登录按钮
 		loginInHide() {
@@ -177,8 +185,8 @@ export default {
 			}
 		},
 		// 跳转到订单列表
-		toOrderList() {
-			wx.navigateTo("/pages/user/orderList/main");
+		toOrderList(state = '') {
+			wx.navigateTo(`/pages/user/orderList/main?state=${state}`);
 		} 
 	}
 };

@@ -7,7 +7,7 @@
             <div class="title">家长信息</div>
             <van-cell-group>
                 <van-cell title="头像">
-                    <van-uploader slot="right-icon" :file-list="fileList" @afterRead="afterRead" max-count="1"></van-uploader>
+                    <van-uploader slot="right-icon" :file-list="fileList" @afterRead="afterRead" @delete="deleteFile" max-count="1"></van-uploader>
                 </van-cell>
                 <van-field
                     :value="userInfo.name"
@@ -20,6 +20,7 @@
                 <van-field
                     :value="userInfo.phone"
                     clearable
+                    disabled
                     type="number"
                     label="手机号"
                     input-align="right"
@@ -44,14 +45,14 @@
                     input-align="right"
                     @change="(e)=>{return input(e, 'wechatNo')}"
                 />
-                <van-field
+                <!-- <van-field
                     :value="userInfo.wechatNo"
                     clearable
                     label="收货地址"
                     placeholder="请填写"
                     input-align="right"
                     @change="(e)=>{return input(e, 'wechatNo')}"
-                />
+                /> -->
             </van-cell-group>
 
             <!-- 宝宝信息 -->
@@ -215,6 +216,11 @@ export default {
                 }];
                 this.userInfo.headImage = res.fileUrl;
             }))
+        },
+        // 删除头像
+        deleteFile(e) {
+            this.fileList = [];
+            this.userInfo.headImage = "";
         },
         // 输入框
         input(e, key) {
