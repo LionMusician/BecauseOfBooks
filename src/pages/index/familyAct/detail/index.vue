@@ -66,6 +66,7 @@ import videoPlay from "@components/videoPlay.vue";
 import headerView from "@components/headerView.vue";
 import evaluateItem from "@components/evaluateItem.vue";
 import cartBtn from "@components/cartBtn.vue";
+import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 import wx from "@/utils/wx-api";
 export default {
@@ -85,7 +86,9 @@ export default {
 	computed: {
 		...mapGetters(["shopId"]),
 		carNum() {
-			return this.carList.length || 0;
+			return this.carList && this.carList.length
+				? this.carList.length
+				: 0;
 		},
 		funcList() {
 			return [
@@ -98,7 +101,7 @@ export default {
 				},
 				{
 					id: 1,
-					pic: "collect.png",
+					pic: this.book.isCollect ? "collect.png" : "unCollect.png",
 					name: "收藏",
 					width: 75,
 					height: 100
@@ -142,6 +145,12 @@ export default {
 				case 0:
 					break;
 				case 1:
+					// 收藏
+					if (!this.book.isCollect) {
+						this.collectBook();
+					} else {
+						this.unCollectBook();
+					}
 					break;
 				case 2: // 购买
 					this.addCar();
@@ -161,6 +170,32 @@ export default {
 			};
 			this.$http.getActivityDetail(parmas).then(res => {
 				this.book = res.activityVO;
+			});
+		},
+		// 添加收藏
+		collectBook() {
+			// if (book.isCollect) {
+			// 	return Tips.toast("图书已收藏！");
+			// }
+			let data = {
+				bizId: this.book.id,
+				type: 2 // 类型：1-图书，2-活动
+			};
+			this.$http.addCollection(data).then(res => {
+				Tips.success("收藏成功！");
+				this.getActivityDetail();
+			});
+		},
+		/**
+		 * 删除收藏
+		 */
+		unCollectBook() {
+			let data = {
+				bizId: this.book.id
+			};
+			this.$http.deleteCollection(data).then(res => {
+				Tips.success("取消收藏！");
+				this.getActivityDetail();
 			});
 		},
 		/**
