@@ -29,21 +29,21 @@ import { mapActions, mapGetters } from "vuex";
 export default {
     data() {
         return {
-			addrList: []
+            addrList: []
         };
     },
     components: { noData },
     onLoad() {
-		wx.setNavigationBarTitle("收货地址");
-	},
-	onShow() {
+        wx.setNavigationBarTitle("收货地址");
+    },
+    onShow() {
         this.getReceiveAddress();
-	},
+    },
     computed: {
         ...mapGetters(["defaultAddr"])
     },
     methods: {
-		...mapActions(["setDefaultAddr"]),
+        ...mapActions(["setDefaultAddr"]),
         newAddress() {
             wx.navigateTo(`../editAddress/main`);
         },
@@ -52,32 +52,33 @@ export default {
             let params = {};
             this.$http.getReceiveAddress(params).then(res => {
                 let data = res.receiveAddressVOS;
-                if(data) {
+                if (data) {
                     this.addrList = data.map(item => {
                         item.title = `${item.name} ${item.phone}`;
                         item.label = `${item.provinceName}${item.cityName}${
                             item.countyName
-						}${item.address}`;
-						item.isDefault = item.id === this.defaultAddr.id
+                        }${item.address}`;
+                        item.isDefault = item.id === this.defaultAddr.id;
                         return item;
                     });
-                }else {
-					this.setDefaultAddr({});
-				}
+                } else {
+                    this.addrList = [];
+                    this.setDefaultAddr({});
+                }
             });
-		},
-		// 选择地址
-		selectAddr(addr) {
-			let from = this.$root.$mp.query.from;
-			if(from === 'appoint') {
-				this.addrList.forEach(item => {
-					item.isDefault = false;
-				})
-				addr.isDefault = true;
-				this.setDefaultAddr(addr);
-				wx.navigateBack();
-			}
-		},
+        },
+        // 选择地址
+        selectAddr(addr) {
+            let from = this.$root.$mp.query.from;
+            if (from === "appoint") {
+                this.addrList.forEach(item => {
+                    item.isDefault = false;
+                });
+                addr.isDefault = true;
+                this.setDefaultAddr(addr);
+                wx.navigateBack();
+            }
+        },
         // 编辑地址
         editAddr(item) {
             wx.navigateTo(`../editAddress/main?id=${item.id}`);
@@ -86,12 +87,12 @@ export default {
         delAddr(item) {
             let data = {
                 ids: [item.id]
-            }
+            };
             this.$http.deleteReceiveAddress(data).then(res => {
                 Tips.success("删除成功！");
                 this.getReceiveAddress();
-            })
-        },
+            });
+        }
     }
 };
 </script>

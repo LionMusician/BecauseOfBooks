@@ -228,6 +228,9 @@ export default {
         },
         // 查询图书到期归还
         returnRemind() {
+            if (this.typeSelect === 1 && !this.address) {
+                return Tips.toast("请选择收货地址！");
+            }
             this.$http.returnRemind().then(res => {
                 if (res.isRemind) {
                     Tips.toast("请先归还，再借书。");
