@@ -143,11 +143,15 @@ export default {
 			this.moreList = [];
 			this.$http.queryCategory(parmas).then(res => {
 				if (res.categoryVOS && res.categoryVOS.length) {
-					if (res.categoryVOS.length <= 3) {
+					console.log(
+						"res.categoryVOS.length",
+						res.categoryVOS.length
+					);
+					if (res.categoryVOS[0].children <= 4) {
 						this.tabList = res.categoryVOS[0].children;
 					} else {
 						res.categoryVOS[0].children.forEach((item, index) => {
-							if (index <= 2) {
+							if (index <= 3) {
 								this.tabList.push(item);
 							} else {
 								this.moreList.push(item);
