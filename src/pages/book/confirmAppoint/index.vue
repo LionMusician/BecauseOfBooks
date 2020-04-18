@@ -242,13 +242,15 @@ export default {
         // 预约
         borrowBook() {
             let data = {
-                receiveAddressId: this.address.id,
                 takeDate: `${this.dateNow}${
                     this.dateList[this.dateSelect].label
                 }`,
                 takeTime: this.timeSelect,
                 takeWay: this.typeSelect
             };
+            if (this.typeSelect === 1) {
+                data.receiveAddressId = this.address.id;
+            }
             data.takeDate = `${data.takeDate.substring(
                 0,
                 4

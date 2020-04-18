@@ -8,9 +8,11 @@
                 :name="item.bizId"
             ></van-collapse-item>
         </van-collapse>
+        <no-data v-if="!commentList.length"></no-data>
     </div>
 </template>
 <script>
+import noData from "@components/noData.vue";
 export default {
     data() {
         return {
@@ -18,6 +20,7 @@ export default {
             commentActive: null
         };
     },
+    components: { noData },
     onLoad() {
         this.getMyComment();
     },
@@ -26,7 +29,7 @@ export default {
         getMyComment() {
             let params = {};
             this.$http.getMyComment(params).then(res => {
-                this.commentList = res.myCommentVOS;
+                this.commentList = res.myCommentVOS || [];
             });
         },
         // 点击折叠面板
