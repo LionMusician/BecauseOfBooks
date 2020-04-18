@@ -231,7 +231,8 @@ export default {
     // 查询图书列表
     queryBook: (data) => {
         return fly.request('/becausebooks-app/book/queryBook', data, {
-            method: 'post'
+            method: 'post',
+            silence: true
         });
     },
     // 查询图书详情
