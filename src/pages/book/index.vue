@@ -42,6 +42,10 @@
                 :cartList="bagList"
             ></cart-cover>
         </van-popup>
+        <!-- 登录弹窗 -->
+        <van-popup :show="loginInShow" @close="loginInHide">
+            <wx-login :code="wxCode" @loginInHide="loginInHide"></wx-login>
+        </van-popup>
     </div>
 </template>
 
@@ -51,14 +55,17 @@ import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import cartCover from "@components/cartCover.vue";
 import noData from "@components/noData.vue";
+import wxLogin from "@components/wxLogin.vue";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 export default {
-    components: { search, bookItem, cartBtn, cartCover, noData },
+    components: { search, bookItem, cartBtn, cartCover, noData, wxLogin },
     data() {
         let that = this;
         return {
+            loginInShow: false,
+            wxCode: "",
             listScroll: true, // 允许列表滚动
             scrollHeight: that.getWindowHeight(140),
             cartCoverShow: false, // 默认不显示购物车
@@ -77,6 +84,17 @@ export default {
         this.queryBag();
     },
     methods: {
+        // 显示登录按钮
+        getLogin() {
+            wx.login(r => {
+                this.wxCode = r.code;
+                this.loginInShow = true;
+            });
+        },
+        // 隐藏登录按钮
+        loginInHide() {
+            this.loginInShow = false;
+        },
         // 获取分类列表
         queryCategory() {
             let data = {
@@ -132,10 +150,16 @@ export default {
         },
         // 点击图书
         bookClick(book) {
+            if (!this.judgeLogin()) {
+                return this.getLogin();
+            }
             wx.navigateTo(`bookDetail/main?id=${book.id}`);
         },
         // 添加收藏
         collectBook(book) {
+            if (!this.judgeLogin()) {
+                return this.getLogin();
+            }
             if (book.isCollect) {
                 return Tips.toast("图书已收藏！");
             }
@@ -159,6 +183,9 @@ export default {
         },
         // 加入书包
         addBookToBag(book) {
+            if (!this.judgeLogin()) {
+                return this.getLogin();
+            }
             let data = {
                 bookId: book.id
             };
@@ -179,6 +206,9 @@ export default {
         },
         // 点击书包
         cartBtnClick() {
+            if (!this.judgeLogin()) {
+                return this.getLogin();
+            }
             if (!this.bagList.length) {
                 return Tips.toast("书包空空如也，快去添加图书吧！");
             }

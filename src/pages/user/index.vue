@@ -93,6 +93,7 @@
                 </ul>
             </div>
         </div>
+        <!-- 登录弹窗 -->
         <van-popup :show="loginInShow" @close="loginInHide">
             <wx-login :code="wxCode" @loginInHide="loginInHide"></wx-login>
         </van-popup>
