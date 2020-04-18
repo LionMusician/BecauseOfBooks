@@ -57,7 +57,8 @@ export default {
     // 查询活动详情 
     getActivityDetail: (data) => {
         return fly.request('/becausebooks-app/home/getActivityDetail', data, {
-            method: 'post'
+            method: 'post',
+            silence: true
         });
     },
     // 加入购物车 
