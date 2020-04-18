@@ -8,26 +8,24 @@
         "pages/index/familyAct/detail/main",
         "pages/index/shopCar/main",
         "pages/index/confirmOrder/main",
-
         "pages/book/main",
         "pages/book/bookDetail/main",
         "pages/book/confirmAppoint/main",
         "pages/book/addressList/main",
         "pages/book/editAddress/main",
-
         "pages/course/main",
-
         "pages/user/main",
         "pages/user/userInfo/main",
         "pages/user/favorite/main",
         "pages/user/courseBooking/main",
         "pages/user/courseInfo/main",
+        "pages/user/bookBorrow/main",
         "pages/user/minutes/main",
+        "pages/user/editComment/main",
         "pages/user/comments/main",
         "pages/user/invest/main",
         "pages/user/orderList/main",
         "pages/user/coupon/main"
-
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -37,7 +35,8 @@
     },
     "tabBar": {
         "selectedColor": "#F1961A",
-        "list": [{
+        "list": [
+            {
                 "pagePath": "pages/index/main",
                 "text": "主页",
                 "iconPath": "static/images/index/tab_1.png",

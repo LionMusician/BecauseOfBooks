@@ -22,34 +22,50 @@
                     title="活动名称"
                     desc="描述信息"
                     :thumb="tip.imageURL"
-                    >
+                >
                     <div class="order-price" slot="price">
                         <div class="adult">
                             <p class="name">
-                                <span>成人：&yen; </span>
+                                <span>成人：&yen;</span>
                                 <span class="price">10.89</span>
                             </p>
                             <p class="count">x2</p>
                         </div>
                         <div class="adult">
                             <p class="name">
-                                <span>儿童：&yen; </span>
+                                <span>儿童：&yen;</span>
                                 <span class="price">10.89</span>
                             </p>
                             <p class="count">x2</p>
                         </div>
                     </div>
                     <div class="goods-footer" slot="footer">
-                        <van-button v-if="item.state" color="#1070ff" plain hairline type="primary" round size="small">评价</van-button>
+                        <!-- <van-button
+                            v-if="item.state"
+                            color="#1070ff"
+                            plain
+                            hairline
+                            type="primary"
+                            round
+                            size="small"
+                        >评价</van-button>-->
                     </div>
                 </van-card>
                 <div class="order-footer" slot="footer">
                     <p class="total-price">
-                        <span>总价：&yen; </span>
+                        <span>总价：&yen;</span>
                         <span class="price">21.78</span>
                     </p>
                     <div class="btns">
-                        <van-button v-if="!item.state" color="#FD4346" plain hairline type="primary" round size="small">付款</van-button>
+                        <van-button
+                            v-if="!item.state"
+                            color="#FD4346"
+                            plain
+                            hairline
+                            type="primary"
+                            round
+                            size="small"
+                        >付款</van-button>
                     </div>
                 </div>
             </li>
@@ -61,44 +77,53 @@ export default {
     data() {
         return {
             tabActive: 0,
-            orderList: [{
-                state: 0,
-                goods: [
-                    {
-                        imageURL: 'https://img.yzcdn.cn/vant/cat.jpeg',
-                    },
-                    {
-                        imageURL: 'https://img.yzcdn.cn/vant/cat.jpeg',
-                    },
-                ]
-            },{
-                imageURL: '',
-                state: 1,
-                goods: [
-                    {
-                        imageURL: 'https://img.yzcdn.cn/vant/cat.jpeg',
-                    },
-                    {
-                        imageURL: 'https://img.yzcdn.cn/vant/cat.jpeg',
-                    },
-                    {
-                        imageURL: 'https://img.yzcdn.cn/vant/cat.jpeg',
-                    },
-                ]
-            },]
-        }
+            orderList: [
+                {
+                    state: 0,
+                    goods: [
+                        {
+                            imageURL: "https://img.yzcdn.cn/vant/cat.jpeg"
+                        },
+                        {
+                            imageURL: "https://img.yzcdn.cn/vant/cat.jpeg"
+                        }
+                    ]
+                },
+                {
+                    imageURL: "",
+                    state: 1,
+                    goods: [
+                        {
+                            imageURL: "https://img.yzcdn.cn/vant/cat.jpeg"
+                        },
+                        {
+                            imageURL: "https://img.yzcdn.cn/vant/cat.jpeg"
+                        },
+                        {
+                            imageURL: "https://img.yzcdn.cn/vant/cat.jpeg"
+                        }
+                    ]
+                }
+            ]
+        };
     },
     onLoad() {
         let state = this.$root.$mp.query.state;
-        this.tabActive = state === 'unPay' ? 1 : 0;
+        this.tabActive = ~~state || 0;
+        this.getMyOrder();
     },
     methods: {
+        // 查询我的订单
+        getMyOrder() {
+            let params = {
+                statusList: [this.tabActive]
+            };
+            this.$http.getMyOrder(this.tabActive ? params : {}).then(res => {});
+        },
         // 切换tab
-        tabChange(e) {
-
-        }
-    },
-}
+        tabChange(e) {}
+    }
+};
 </script>
 <style lang="scss" scoped>
 .container {
@@ -109,7 +134,7 @@ export default {
     }
     .order-list {
         padding: 20rpx;
-        .order-item{
+        .order-item {
             overflow: hidden;
             border-radius: 16rpx;
             margin-bottom: 20rpx;

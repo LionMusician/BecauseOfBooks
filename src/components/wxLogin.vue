@@ -17,7 +17,7 @@ export default {
         return {};
     },
     methods: {
-		...mapActions(["setLoginInfo"]),
+        ...mapActions(["setLoginInfo", "setUserInfo"]),
         // 登录
         getPhoneNumber(e) {
             let params = {
@@ -27,7 +27,10 @@ export default {
             };
             this.$http.xcxLogin(params).then(res => {
                 this.setLoginInfo(res);
-                this.$emit("wxLogin");
+                this.$http.getUserInfo().then(r => {
+                    this.setUserInfo(r.userVO);
+                    this.$emit("loginInHide");
+                });
             });
         }
     }

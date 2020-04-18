@@ -17,6 +17,7 @@ const state = {
     master_key: "",
     shopId: null,
     loginInfo: null,
+    userInfo: {},
     defaultAddr: {},
 }
 
@@ -30,7 +31,7 @@ export default new Vuex.Store({
             storage: {
                 getItem: key => wx.getStorageSync(key),
                 setItem: (key, value) => wx.setStorageSync(key, value),
-                removeItem: (key) => {}
+                removeItem: (key) => { }
             }
         })
     ]

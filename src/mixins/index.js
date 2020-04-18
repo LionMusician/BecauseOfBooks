@@ -2,6 +2,7 @@ import Lang from '../utils/Lang';
 import v from '../utils/Validate';
 import tips from '../utils/Tips';
 import wx from "../utils/wx-api";
+import store from "../store/index";
 const mixins = {
     // 卸载页面
     // onUnload() {
@@ -10,6 +11,15 @@ const mixins = {
     //     }
     // },
     methods: {
+        // 判断是否登录
+        judgeLogin() {
+            if (store.getters.loginInfo && JSON.stringify(store.getters.userInfo) !== '{}') {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        // 获取窗口参数
         getWindowHeight(height) {
             let windowWidth = wx.getSystemInfoSync().windowWidth;
             let windowHeight = wx.getSystemInfoSync().windowHeight;

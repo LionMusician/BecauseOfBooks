@@ -182,9 +182,27 @@ export default {
             method: 'post'
         });
     },
+    // 查询书籍借阅 
+    getBookBorrow: (data) => {
+        return fly.request('/becausebooks-app/own/getBookBorrow', data, {
+            method: 'post'
+        });
+    },
     // 查询我的评论 
     getMyComment: (data) => {
         return fly.request('/becausebooks-app/own/getMyComment', data, {
+            method: 'post'
+        });
+    },
+    // 查询我的订单 
+    getMyOrder: (data) => {
+        return fly.request('/becausebooks-app/own/getMyOrder', data, {
+            method: 'post'
+        });
+    },
+    // 查询订单详情 
+    getOrderDetail: (data) => {
+        return fly.request('/becausebooks-app/own/getOrderDetail', data, {
             method: 'post'
         });
     },

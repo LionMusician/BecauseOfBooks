@@ -1,10 +1,10 @@
 <template>
     <div class="main">
         <div class="left">
-            <img src="" alt="">
+            <img :src="evaluate.headImage" alt />
         </div>
         <div class="right">
-            <p v-if="evaluate.type === 'text'" class="text">{{evaluate.value}}</p>
+            <p v-if="evaluate.type === 1" class="text">{{evaluate.text || '暂无评价'}}</p>
             <radio-play v-if="evaluate.type === 'radio'"></radio-play>
         </div>
     </div>
@@ -17,17 +17,17 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    logo: '',
-                    type: 'text',
-                    value: '这是一条评价'
-                }
+                    logo: "",
+                    type: "text",
+                    value: "这是一条评价"
+                };
             }
         }
     },
-	components: {
-		radioPlay
-	},
-}
+    components: {
+        radioPlay
+    }
+};
 </script>
 <style lang="scss" scoped>
 .main {

@@ -1,9 +1,12 @@
 <template>
     <div class="container">
         <van-collapse :value="commentActive" @change="onChange" accordion>
-            <van-collapse-item v-for="(item, index) in commentList" :key="index" :title="item.bizName" :name="item.bizId">
-
-            </van-collapse-item>
+            <van-collapse-item
+                v-for="(item, index) in commentList"
+                :key="index"
+                :title="item.bizName"
+                :name="item.bizId"
+            ></van-collapse-item>
         </van-collapse>
     </div>
 </template>
@@ -13,7 +16,7 @@ export default {
         return {
             commentList: [],
             commentActive: null
-        }
+        };
     },
     onLoad() {
         this.getMyComment();
@@ -21,20 +24,17 @@ export default {
     methods: {
         // 查询我的评论
         getMyComment() {
-            let params = {
-
-            }
+            let params = {};
             this.$http.getMyComment(params).then(res => {
                 this.commentList = res.myCommentVOS;
-            })
+            });
         },
         // 点击折叠面板
         onChange(e) {
             this.commentActive = e.mp.detail;
         }
-    },
-}
+    }
+};
 </script>
 <style lang="scss" scoped>
-
 </style>

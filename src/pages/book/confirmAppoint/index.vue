@@ -2,76 +2,84 @@
     <div class="container">
         <!-- 头部 -->
         <header-view title="图书详情"></header-view>
-        <scroll-view
-                :scroll-y="listScroll"
-                :style="'height:' + scrollHeight + 'rpx;'">
-        <ul>
-            <li>
-                <div class="title">已选图书</div>
-                <cart-cover :btnShow="false" :cartList="bagList" @deleteBag="deleteBag" :maxheight="1000000"></cart-cover>
-            </li>
-            <li>
-                <div class="title">取书详情</div>
-                <div class="take-form">
-                    <ul>
-                        <li>
-                            <p class="form-label">取书日期 {{dateNow}}</p>
-                            <p class="prompt">自预约之日起，图书仅保留3天，请及时领取图书。</p>
-                            <van-radio-group
-                                class="radio-group"
-                                :value="dateSelect"
-                                @change="dateChange"
-                            >
-                                <van-radio
-                                    v-for="(item, index) in dateList"
-                                    :key="index"
-                                    checked-color="#628718"
-                                    :name="item.id"
-                                >{{item.label}}</van-radio>
-                            </van-radio-group>
-                        </li>
-                        <li>
-                            <p class="form-label">取书时间</p>
-                            <van-radio-group
-                                class="radio-group time"
-                                :value="timeSelect"
-                                @change="timeChange"
-                            >
-                                <van-radio
-                                    v-for="(item, index) in timeList"
-                                    :key="index"
-                                    checked-color="#628718"
-                                    :name="item.code"
-                                >{{item.desc}}</van-radio>
-                            </van-radio-group>
-                        </li>
-                        <li>
-                            <p class="form-label">取书方式</p>
-                            <van-radio-group
-                                class="radio-group type"
-                                :value="typeSelect"
-                                @change="typeChange"
-                            >
-                                <van-radio
-                                    v-for="(item, index) in typeList"
-                                    :key="index"
-                                    checked-color="#628718"
-                                    :name="item.id"
-                                >{{item.label}}</van-radio>
-                            </van-radio-group>
-                        </li>
-                        <li v-if="typeSelect === 1">
-                            <p class="form-label">收货地址</p>
-                            <van-cell-group @click="selectAddress">
-                                <van-cell v-if="address" center :title="address.title" :label="address.label" is-link></van-cell>
-                                <van-cell v-else center title="请选择地址" is-link></van-cell>
-                            </van-cell-group>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-
+        <scroll-view :scroll-y="listScroll" :style="'height:' + scrollHeight + 'rpx;'">
+            <ul>
+                <li>
+                    <div class="title">已选图书</div>
+                    <cart-cover
+                        :btnShow="false"
+                        :cartList="bagList"
+                        @deleteBag="deleteBag"
+                        :maxheight="1000000"
+                    ></cart-cover>
+                </li>
+                <li>
+                    <div class="title">取书详情</div>
+                    <div class="take-form">
+                        <ul>
+                            <li>
+                                <p class="form-label">取书日期 {{dateNow}}</p>
+                                <p class="prompt">自预约之日起，图书仅保留3天，请及时领取图书。</p>
+                                <van-radio-group
+                                    class="radio-group"
+                                    :value="dateSelect"
+                                    @change="dateChange"
+                                >
+                                    <van-radio
+                                        v-for="(item, index) in dateList"
+                                        :key="index"
+                                        checked-color="#628718"
+                                        :name="item.id"
+                                    >{{item.label}}</van-radio>
+                                </van-radio-group>
+                            </li>
+                            <li>
+                                <p class="form-label">取书时间</p>
+                                <van-radio-group
+                                    class="radio-group time"
+                                    :value="timeSelect"
+                                    @change="timeChange"
+                                >
+                                    <van-radio
+                                        v-for="(item, index) in timeList"
+                                        :key="index"
+                                        checked-color="#628718"
+                                        :name="item.code"
+                                    >{{item.desc}}</van-radio>
+                                </van-radio-group>
+                            </li>
+                            <li>
+                                <p class="form-label">取书方式</p>
+                                <van-radio-group
+                                    class="radio-group type"
+                                    :value="typeSelect"
+                                    @change="typeChange"
+                                >
+                                    <van-radio
+                                        v-for="(item, index) in typeList"
+                                        :key="index"
+                                        checked-color="#628718"
+                                        :name="item.id"
+                                    >{{item.label}}</van-radio>
+                                </van-radio-group>
+                            </li>
+                            <li v-if="typeSelect === 1">
+                                <p class="form-label">收货地址</p>
+                                <van-cell-group @click="selectAddress">
+                                    <van-cell
+                                        v-if="address"
+                                        center
+                                        :title="address.title"
+                                        :label="address.label"
+                                        is-link
+                                    ></van-cell>
+                                    <van-cell v-else center title="请选择地址" is-link></van-cell>
+                                </van-cell-group>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </scroll-view>
         <div class="bottom">
             <van-button
@@ -89,6 +97,7 @@ import cartCover from "@components/cartCover.vue";
 import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils.js";
 import wx from "@/utils/wx-api";
+import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 export default {
     components: {
@@ -118,7 +127,7 @@ export default {
                 }
             ],
             bagList: [], // 书包列表
-            address: null,
+            address: null
         };
     },
     onLoad() {
@@ -127,12 +136,12 @@ export default {
         this.takeBookDetail();
     },
     onShow() {
-        if(this.defaultAddr === {}) {
+        if (JSON.stringify(this.defaultAddr) === "{}") {
             this.address = null;
-        }else {
+        } else {
             this.address = {
                 ...this.defaultAddr
-            }
+            };
         }
     },
     computed: {
@@ -145,18 +154,18 @@ export default {
                 this.bagList = res.bookBorrowVOS;
             });
         },
-		// 从书包删除
-		deleteBag(book) {
-			let data = {
-				ids: [book.id]
-			}
+        // 从书包删除
+        deleteBag(book) {
+            let data = {
+                ids: [book.id]
+            };
             this.$http.deleteBag(data).then(res => {
-				this.$http.queryBag().then(res => {
-					this.bagList = res.bookBorrowVOS;
-					Tips.success("删除成功！");
-				});
+                this.$http.queryBag().then(res => {
+                    this.bagList = res.bookBorrowVOS;
+                    Tips.success("删除成功！");
+                });
             });
-		},
+        },
         // 获取当前日期
         getDateNow() {
             let time = utils.mklog();
@@ -220,9 +229,9 @@ export default {
         // 查询图书到期归还
         returnRemind() {
             this.$http.returnRemind().then(res => {
-                if(res.isRemind) {
+                if (res.isRemind) {
                     Tips.toast("请先归还，再借书。");
-                }else {
+                } else {
                     this.borrowBook();
                 }
             });
@@ -231,15 +240,25 @@ export default {
         borrowBook() {
             let data = {
                 receiveAddressId: this.address.id,
-                takeDate: `${this.dateNow}${this.dateList[this.dateSelect].label}`,
+                takeDate: `${this.dateNow}${
+                    this.dateList[this.dateSelect].label
+                }`,
                 takeTime: this.timeSelect,
                 takeWay: this.typeSelect
-            }
-            data.takeDate = `${data.takeDate.substring(0, 4)}-${data.takeDate.substring(5, 7)}-${data.takeDate.substring(8, 10)}`
-            console.log(data);
+            };
+            data.takeDate = `${data.takeDate.substring(
+                0,
+                4
+            )}-${data.takeDate.substring(5, 7)}-${data.takeDate.substring(
+                8,
+                10
+            )}`;
             this.$http.borrowBook(data).then(res => {
-
-            })
+                Tips.success("预约成功！");
+                setTimeout(() => {
+                    wx.navigateBack();
+                }, 800);
+            });
         }
     }
 };

@@ -7,7 +7,13 @@
             <div class="title">家长信息</div>
             <van-cell-group>
                 <van-cell title="头像">
-                    <van-uploader slot="right-icon" :file-list="fileList" @afterRead="afterRead" @delete="deleteFile" max-count="1"></van-uploader>
+                    <van-uploader
+                        slot="right-icon"
+                        :file-list="fileList"
+                        @afterRead="afterRead"
+                        @delete="deleteFile"
+                        max-count="1"
+                    ></van-uploader>
                 </van-cell>
                 <van-field
                     :value="userInfo.name"
@@ -52,7 +58,7 @@
                     placeholder="请填写"
                     input-align="right"
                     @change="(e)=>{return input(e, 'wechatNo')}"
-                /> -->
+                />-->
             </van-cell-group>
 
             <!-- 宝宝信息 -->
@@ -190,9 +196,11 @@ export default {
                 }
 
                 this.userInfo = res.userVO;
-                this.fileList = [{
-                    url: res.userVO.headImage
-                }]
+                this.fileList = [
+                    {
+                        url: res.userVO.headImage
+                    }
+                ];
             });
         },
         // 保存个人信息
@@ -210,12 +218,14 @@ export default {
         // 选择文件
         afterRead(e) {
             let path = e.mp.detail.file.path;
-            wx.uploadFile(path, (res => {
-                this.fileList = [{
-                    url: res.fileUrl
-                }];
+            wx.uploadFile(path, res => {
+                this.fileList = [
+                    {
+                        url: res.fileUrl
+                    }
+                ];
                 this.userInfo.headImage = res.fileUrl;
-            }))
+            });
         },
         // 删除头像
         deleteFile(e) {
