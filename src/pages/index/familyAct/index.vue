@@ -15,12 +15,12 @@
 							span="6"
 							v-for="(item, index) in tabList"
 							:key="index"
-							:class="active === item.value ? 'active' : ''"
-							@click="tabClick(item.value)"
-						>{{item.label}}</van-col>
+							:class="active === item.id ? 'active' : ''"
+							@click="tabClick(item.id)"
+						>{{item.name}}</van-col>
 					</van-row>
 				</div>
-				<div class="right" @click="isMore = !isMore">
+				<div class="right" @click="isMore = !isMore" v-if="moreList && moreList.length">
 					{{isMore ? '收起' : '展开'}}
 					<i class="iconfont" :class="isMore ? 'iconw-top' : 'iconxia'"></i>
 				</div>
@@ -33,9 +33,9 @@
 								span="6"
 								v-for="(item, index) in moreList"
 								:key="index"
-								:class="active === item.value ? 'active' : ''"
-								@click="tabClick(item.value)"
-							>{{item.label}}</van-col>
+								:class="active === item.id ? 'active' : ''"
+								@click="tabClick(item.id)"
+							>{{item.name}}</van-col>
 						</van-row>
 					</div>
 					<div class="right"></div>
@@ -106,16 +106,11 @@ export default {
 		let that = this;
 		return {
 			searchValue: "",
-			active: 1,
+			active: null,
 			isMore: false,
 			scrollHeight: that.getWindowHeight(126),
 			carList: [],
-			tabList: [
-				{ value: 1, label: "博物馆" },
-				{ value: 2, label: "美术馆" },
-				{ value: 3, label: "讲座" },
-				{ value: 4, label: "讲座" }
-			],
+			tabList: [],
 			moreList: [],
 			activityList: []
 		};
@@ -144,15 +139,32 @@ export default {
 			let parmas = {
 				type: 2
 			};
+			this.tabList = [];
+			this.moreList = [];
 			this.$http.queryCategory(parmas).then(res => {
-				this.tabList = res.categoryVOS;
+				if (res.categoryVOS && res.categoryVOS.length) {
+					if (res.categoryVOS.length <= 3) {
+						this.tabList = res.categoryVOS[0].children;
+					} else {
+						res.categoryVOS[0].children.forEach((item, index) => {
+							if (index <= 2) {
+								this.tabList.push(item);
+							} else {
+								this.moreList.push(item);
+							}
+						});
+					}
+				} else {
+					this.tabList = [];
+				}
 			});
 		},
 		// 查询活动列表
 		queryActivity() {
 			let parmas = {
 				readingHallId: this.shopId,
-				name: this.searchValue
+				name: this.searchValue,
+				categoryIds: this.active ? [this.active] : []
 			};
 			this.$http.queryActivity(parmas).then(res => {
 				this.activityList = res.activityVOS;
@@ -162,13 +174,17 @@ export default {
 		 * 点击tab筛选
 		 **/
 		tabClick(val) {
-			this.active = val;
+			if (val === this.active) {
+				this.active = null;
+			} else {
+				this.active = val;
+			}
+			this.queryActivity();
 		},
 		/**
 		 * 查看活动详情
 		 **/
 		activityDetail(item) {
-			console.log(item);
 			wx.navigateTo(`/pages/index/familyAct/detail/main?id=${item.id}`);
 		},
 		/**
