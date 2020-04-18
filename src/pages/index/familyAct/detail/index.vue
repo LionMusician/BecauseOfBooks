@@ -1,7 +1,9 @@
 <template>
     <div class="container">
         <!-- 头部 -->
-        <header-view title="活动详情"></header-view>
+        <van-sticky>
+            <header-view title="活动详情"></header-view>
+        </van-sticky>
         <div class="cover">
             <div class="logo">
                 <img :src="book.frontCover" alt />
@@ -49,13 +51,13 @@
         <cart-btn :num="carNum" @btnClick="carClick"></cart-btn>
         <div class="book-detial">
             <ul>
-                <li class="detail">
+                <li id="detail" class="detail">
                     <p class="title">绘本详情</p>
                     <div>
                         <img :src="book.introduction" alt />
                     </div>
                 </li>
-                <li class="evalute">
+                <li id="evalute" class="evalute">
                     <p class="title">绘本评价</p>
                     <ul>
                         <li v-for="(item, index) in book.evaluateList" :key="index">
@@ -76,7 +78,6 @@ import evaluateItem from "@components/evaluateItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
-import wx from "@/utils/wx-api";
 export default {
     components: {
         headerView,
@@ -151,6 +152,7 @@ export default {
         tagsClick(item) {
             switch (item.id) {
                 case 0:
+                    this.goToPoint("detail");
                     break;
                 case 1:
                     // 收藏
@@ -164,10 +166,25 @@ export default {
                     this.addCar();
                     break;
                 case 3:
+                    this.goToPoint("evalute");
                     break;
                 case 4:
                     break;
             }
+        },
+        // 滑动到锚点
+        goToPoint(id) {
+            const query = wx.createSelectorQuery();
+            query.select("#" + id).boundingClientRect();
+            query.selectViewport().scrollOffset();
+            query.exec(function(res) {
+                res[0].top; // #the-id节点的上边界坐标
+                res[1].scrollTop; // 显示区域的竖直滚动位置
+                let distance = res[0].top + res[1].scrollTop - 60;
+                wx.pageScrollTo({
+                    scrollTop: distance
+                });
+            });
         },
         /**
          * 查询活动详情
@@ -230,8 +247,7 @@ export default {
          * 去购物车
          **/
         carClick() {
-            console.log("carClick");
-            wx.navigateTo("/pages/index/shopCar/main");
+            wx.navigateTo({ url: "/pages/index/shopCar/main" });
         }
     }
 };
