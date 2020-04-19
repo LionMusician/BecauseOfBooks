@@ -150,8 +150,10 @@ export default {
             ];
         }
     },
-    onLoad() {
+    onShow() {
         this.getBookDetail();
+    },
+    onLoad() {
         this.queryBag();
     },
     methods: {
@@ -278,7 +280,9 @@ export default {
         },
         // 去评论
         toComment() {
-            wx.navigateTo({ url: `/pages/user/editComment/main` });
+            wx.navigateTo({
+                url: `/pages/user/editComment/main?type=1&id=${this.bookId}`
+            });
         }
     }
 };

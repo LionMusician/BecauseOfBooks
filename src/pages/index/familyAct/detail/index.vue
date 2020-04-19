@@ -60,10 +60,11 @@
                 <li id="evalute" class="evalute">
                     <p class="title">活动评价</p>
                     <ul>
-                        <li v-for="(item, index) in book.evaluateList" :key="index">
+                        <li v-for="(item, index) in book.commentVOS" :key="index">
                             <evaluate-item :evaluate="item"></evaluate-item>
                         </li>
                     </ul>
+                    <p class="to-comment" @click="toComment">去评价 ></p>
                 </li>
             </ul>
         </div>
@@ -139,9 +140,11 @@ export default {
             ];
         }
     },
-    onLoad() {
+    onShow() {
         // 查询活动详情
         this.getActivityDetail();
+    },
+    onLoad() {
         // 查询购物车
         this.queryShoppingCart();
     },
@@ -248,6 +251,12 @@ export default {
          **/
         carClick() {
             wx.navigateTo({ url: "/pages/index/shopCar/main" });
+        },
+        // 去评论
+        toComment() {
+            wx.navigateTo({
+                url: `/pages/user/editComment/main?type=2&id=${this.book.id}`
+            });
         }
     }
 };
@@ -346,6 +355,11 @@ export default {
                 @include sc($--text-lg, $--color-text);
                 text-align: center;
                 border-top: 1rpx solid $--color-gray-c;
+            }
+            .to-comment {
+                @include hh(60rpx);
+                text-align: center;
+                @include sc($--text-lg, $--color-gray-c);
             }
         }
     }

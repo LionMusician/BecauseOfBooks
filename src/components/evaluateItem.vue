@@ -4,7 +4,7 @@
             <img :src="evaluate.headImage" alt />
         </div>
         <div class="right">
-            <p v-if="evaluate.type === 1" class="text">{{evaluate.text || '暂无评价'}}</p>
+            <p class="text">{{evaluate.text || '暂无评价'}}</p>
             <radio-play v-if="evaluate.type === 'radio'"></radio-play>
         </div>
     </div>
