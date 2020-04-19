@@ -52,13 +52,13 @@
         <div class="book-detial">
             <ul>
                 <li id="detail" class="detail">
-                    <p class="title">绘本详情</p>
+                    <p class="title">活动详情</p>
                     <div>
                         <img :src="book.introduction" alt />
                     </div>
                 </li>
                 <li id="evalute" class="evalute">
-                    <p class="title">绘本评价</p>
+                    <p class="title">活动评价</p>
                     <ul>
                         <li v-for="(item, index) in book.evaluateList" :key="index">
                             <evaluate-item :evaluate="item"></evaluate-item>

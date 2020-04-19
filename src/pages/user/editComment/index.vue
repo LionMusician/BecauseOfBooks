@@ -21,9 +21,17 @@
                 placeholder="请输入评价"
                 autosize
             />
+            <div class="comment-image">
+                <van-uploader
+                    :file-list="fileList"
+                    @afterRead="afterRead"
+                    @delete="deleteFile"
+                    max-count="1"
+                ></van-uploader>
+            </div>
         </div>
         <div class="submit">
-            <van-button type="primary" block>发布</van-button>å
+            <van-button type="primary" block>发布</van-button>
         </div>
     </div>
 </template>
@@ -38,12 +46,32 @@ export default {
                 name: "因为书阅读馆"
             },
             comment: {
-                text: ""
-            }
+                text: "",
+                imageUrl: ""
+            },
+            fileList: []
         };
     },
     onLoad() {},
-    methods: {}
+    methods: {
+        // 选择文件
+        afterRead(e) {
+            let path = e.mp.detail.file.path;
+            wx.uploadFile(path, res => {
+                this.fileList = [
+                    {
+                        url: res.fileUrl
+                    }
+                ];
+                this.comment.imageUrl = res.fileUrl;
+            });
+        },
+        // 删除头像
+        deleteFile(e) {
+            this.fileList = [];
+            this.comment.imageUrl = "";
+        }
+    }
 };
 </script>
 <style lang="scss" scoped>

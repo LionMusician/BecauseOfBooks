@@ -4,6 +4,7 @@
         "van-row": "/static/vant/row/index",
         "van-col": "/static/vant/col/index",
         "van-button": "/static/vant/button/index",
+        "van-uploader": "/static/vant/uploader/index",
         "van-field": "/static/vant/field/index"
     },
     "disableScroll": true

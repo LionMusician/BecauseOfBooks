@@ -54,6 +54,7 @@
                         </li>
                     </ul>
                     <p v-else>暂无评价</p>
+                    <p class="to-comment" @click="toComment">去评价 ></p>
                 </li>
             </ul>
         </div>
@@ -273,7 +274,11 @@ export default {
         },
         // 购物车确认
         cartListBtnClick() {
-            wx.navigateTo(`confirmAppoint/main`);
+            wx.navigateTo({ url: `confirmAppoint/main` });
+        },
+        // 去评论
+        toComment() {
+            wx.navigateTo({ url: `/pages/user/editComment/main` });
         }
     }
 };
@@ -355,6 +360,11 @@ export default {
                 @include sc($--text-lg, $--color-text);
                 text-align: center;
                 border-top: 1rpx solid $--color-gray-c;
+            }
+            .to-comment {
+                @include hh(60rpx);
+                text-align: center;
+                @include sc($--text-lg, $--color-gray-c);
             }
         }
     }
