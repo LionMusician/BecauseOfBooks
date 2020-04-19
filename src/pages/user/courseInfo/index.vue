@@ -44,7 +44,7 @@
                 </p>
             </van-col>
         </van-row>
-        <div class="btn" @click="btnComfirm">确认</div>
+        <!-- <div class="btn" @click="btnComfirm">确认</div> -->
     </div>
 </template>
 <script>
@@ -70,7 +70,7 @@ export default {
                         .slice(0, 10)
                         .replace(/\-/g, ".");
                     item.endDate = item.startTime
-                        .slice(0, 10)
+                        .slice(11, 16)
                         .replace(/\-/g, ".");
                     return item;
                 });

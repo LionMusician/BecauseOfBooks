@@ -30,12 +30,15 @@
                     <li v-for="(item, index) in steps" :key="index">{{item.desc}}</li>
                 </ul>
                 <div class="main-sliver">
-                    <div class="inner-sliver" :style="'right:-' + 130 + 'rpx'">
+                    <div
+                        class="inner-sliver"
+                        :style="'right:-' + (userInfo.stage - 1) * 230 + 'rpx'"
+                    >
                         <div class="left"></div>
                         <div class="right"></div>
                     </div>
                 </div>
-                <div class="minutes-view" :style="'left:' + 190 + 'rpx'">
+                <div class="minutes-view" :style="'left:' + (userInfo.stage - 1) * 225 + 'rpx'">
                     <p>
                         &nbsp;
                         <i class="iconfont iconshoucangchenggong"></i>
@@ -314,23 +317,25 @@ export default {
                 overflow: hidden;
                 position: relative;
                 .inner-sliver {
-                    @include wh(1160rpx, 20rpx);
+                    @include wh(1360rpx, 20rpx);
                     border-radius: 10rpx;
                     position: absolute;
                     @include fj;
                     .left {
-                        @include wh(580rpx, 20rpx);
+                        @include wh(680rpx, 20rpx);
                         background: $--color-glass;
                     }
                     .right {
-                        @include wh(580rpx, 20rpx);
+                        @include wh(680rpx, 20rpx);
                         background: $--color-white;
                     }
                 }
             }
             .minutes-view {
+                display: inline-block;
                 position: absolute;
                 top: 50rpx;
+                transform: translateX(-30rpx);
                 .iconshoucangchenggong {
                     @include sc($--text-xl, $--color-secondary);
                 }

@@ -131,6 +131,7 @@ import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
+import { mapActions } from "vuex";
 export default {
     name: "",
     data() {
@@ -182,9 +183,11 @@ export default {
         this.getUserInfo();
     },
     methods: {
+        ...mapActions(["setUserInfo"]),
         // 获取个人信息
         getUserInfo() {
             this.$http.getUserInfo().then(res => {
+                this.setUserInfo(res.userVO);
                 res.userVO.childSexLabel =
                     res.userVO.childSex === 1 ? "男" : "女";
                 res.userVO.address = `${res.userVO.provinceName || ""} ${res
@@ -206,13 +209,17 @@ export default {
         // 保存个人信息
         submitUserInfo() {
             let params = {
-                userVO: { ...this.userInfo }
+                userVO: {
+                    ...this.userInfo,
+                    childBirthday: this.userInfo.childBirthday + " 00:00:00"
+                }
             };
             this.$http.updateUserInfo(params).then(res => {
                 Tips.success("保存成功！");
-                setTimeout(() => {
-                    wx.navigateBack();
-                }, 1000);
+                this.getUserInfo();
+                // setTimeout(() => {
+                //     wx.navigateBack();
+                // }, 1000);
             });
         },
         // 选择文件

@@ -24,7 +24,11 @@
             src="https://hbimg.huabanimg.com/4a97f12a1b64141e8b2482e25062e8b4643bd728aa943-gg68bB_fw658"
             v-if="bannerList && bannerList.length"
         >
-            <swiper-item v-for="(item, index) in bannerList" :key="index">
+            <swiper-item
+                v-for="(item, index) in bannerList"
+                :key="index"
+                @click="bannerClick(item)"
+            >
                 <div class="bannerItem">
                     <img :src="item.picture" alt />
                 </div>
@@ -176,6 +180,10 @@ export default {
             this.queryHotspot();
             // 绘本推荐列表
             this.queryBookRecommend();
+        },
+        // 点击banner图
+        bannerClick(item) {
+            wx.navigateTo(`/pages/index/webview/main?link=${item.link}`);
         },
         // 点击图书
         bookClick(book) {

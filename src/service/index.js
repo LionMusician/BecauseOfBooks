@@ -162,7 +162,8 @@ export default {
     // 查询个人信息 
     getUserInfo: (data) => {
         return fly.request('/becausebooks-app/own/getUserInfo', data, {
-            method: 'post'
+            method: 'post',
+            silence: true
         });
     },
     // 更新个人信息 

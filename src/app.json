@@ -7,6 +7,7 @@
         "pages/index/familyAct/main",
         "pages/index/familyAct/detail/main",
         "pages/index/shopCar/main",
+        "pages/index/webview/main",
         "pages/index/confirmOrder/main",
         "pages/book/main",
         "pages/book/bookDetail/main",
