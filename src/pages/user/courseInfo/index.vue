@@ -3,17 +3,17 @@
         <van-row>
             <van-col span="6">
                 <p class="table-title active">
-                    <span>借阅日期</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-title active">
-                    <span>应还日期</span>
+                    <span>日期</span>
                 </p>
             </van-col>
             <van-col span="6">
                 <p class="table-title">
-                    <span>书籍</span>
+                    <span>时间</span>
+                </p>
+            </van-col>
+            <van-col span="6">
+                <p class="table-title">
+                    <span>内容</span>
                 </p>
             </van-col>
             <van-col span="6">
@@ -66,8 +66,12 @@ export default {
             let params = {};
             this.$http.getCourseOrder(params).then(res => {
                 this.courseList = res.courseScheduleVOS.map(item => {
-                    item.startDate = item.startTime.slice(0, 10).replace(/\-/g, '.');
-                    item.endDate = item.startTime.slice(0, 10).replace(/\-/g, '.');
+                    item.startDate = item.startTime
+                        .slice(0, 10)
+                        .replace(/\-/g, ".");
+                    item.endDate = item.startTime
+                        .slice(0, 10)
+                        .replace(/\-/g, ".");
                     return item;
                 });
             });

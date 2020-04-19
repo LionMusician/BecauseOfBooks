@@ -104,10 +104,10 @@ export default {
                 let category = [];
                 res.categoryVOS.forEach((item, index) => {
                     let options = [];
-                    options.push({
-                        text: item.name,
-                        value: item.id
-                    });
+                    // options.push({
+                    //     text: item.name,
+                    //     value: item.id
+                    // });
                     if (item.children) {
                         item.children.forEach(tip => {
                             options.push({
@@ -115,12 +115,13 @@ export default {
                                 value: tip.id
                             });
                         });
+                        category.push({
+                            value: item.children[0].id,
+                            options
+                        });
                     }
-                    category.push({
-                        value: item.id,
-                        options
-                    });
                 });
+
                 this.menuList = category;
                 this.queryBook();
             });
