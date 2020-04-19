@@ -224,4 +224,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container {
+    .top {
+        .menus {
+            width: 750rpx;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            /deep/ .van-dropdown-menu {
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                float: left; // 使其脱离文档流 宽度为所有字元素的和
+                min-width: 100%;
+                .van-dropdown-menu__item {
+                    float: left;
+                    max-width: 300rpx;
+                    margin-right: 10rpx;
+                }
+            }
+        }
+    }
+}
 </style>
