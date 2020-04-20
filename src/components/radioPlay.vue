@@ -16,15 +16,16 @@ export default {
         // 配色方案
         color: {
             type: String,
-            default: 'btn green'
+            default: "btn green"
         },
         audio: {
             type: Object,
             default: () => {
                 return {
-                    src: 'https://win-web-ra01-sycdn.kuwo.cn/527bb77f6e1201ac44afee03eb9a6fb7/5e771076/resource/n1/128/41/59/2128455865.mp3',
+                    src:
+                        "https://win-web-ra01-sycdn.kuwo.cn/527bb77f6e1201ac44afee03eb9a6fb7/5e771076/resource/n1/128/41/59/2128455865.mp3",
                     time: 0
-                }
+                };
             }
         }
     },
@@ -32,67 +33,63 @@ export default {
         return {
             animation: false,
             duration: 10,
-            innerAudioContext: {}, // 音频对象
-        }
+            innerAudioContext: null
+        };
     },
-    onLoad () {
+    onLoad() {
         this.initAudio();
+        let innerAudioContext = wx.createInnerAudioContext();
+        this.innerAudioContext = innerAudioContext;
+        innerAudioContext.autoplay = true;
+        console.log(innerAudioContext);
+
+        innerAudioContext.onCanplay(() => {
+            innerAudioContext.duration;
+            setTimeout(() => {
+                this.duration = innerAudioContext.duration;
+            }, 500);
+        });
+        innerAudioContext.onEnded(res => {});
+
+        innerAudioContext.onError(res => {
+            // 播放音频失败的回调
+            console.log("播放音频失败", res);
+        });
+
+        innerAudioContext.onStop(res => {
+            console.log("播放结束!");
+        });
     },
-    onUnload: function () {
-        this.innerAudioContext.destroy();
+    onUnload: function() {
+        innerAudioContext.destroy();
     },
     methods: {
         // 初始化音频
-        initAudio() {
-            this.innerAudioContext = wx.createInnerAudioContext();
-            this.innerAudioContext.autoplay = false
-            this.innerAudioContext.src = this.audio.src;
-            console.log(this.innerAudioContext);
-            
-            this.innerAudioContext.onCanplay(() => {
-                this.innerAudioContext.duration;
-                setTimeout(() => {
-                    this.duration = this.innerAudioContext.duration;
-                }, 500);
-            })
-            this.innerAudioContext.onEnded((res) => {
-
-            })
-
-            this.innerAudioContext.onError((res) => {
-                // 播放音频失败的回调
-                console.log('播放音频失败', res);
-            })
-
-            this.innerAudioContext.onStop((res) => {
-                console.log('播放结束!');
-            })
-            
-        },
+        initAudio() {},
         // 播放
         audioPlay() {
-            if(this.animation) {
-                this.innerAudioContext.pause()
-
-            }else {
-                this.innerAudioContext.play()
+            if (this.animation) {
+                this.innerAudioContext.pause();
+            } else {
+                this.innerAudioContext.src = this.audio.src;
+                this.innerAudioContext.play();
             }
             this.animation = !this.animation;
-            // this.duration && this.countDown();
+            this.duration && this.countDown();
         },
         // 倒计时
         countDown() {
-            if(this.duration) {
+            if (this.duration) {
                 setTimeout(() => {
                     this.duration = this.duration - 1;
                     this.countDown();
                 }, 1000);
-            }else {
-                this.audioPlay()
+            } else {
+                this.audioPlay();
             }
         }
-    },
-}
+    }
+};
 </script>
 <style lang="scss" scoped>
 .main {
@@ -139,7 +136,6 @@ export default {
         }
         &.gray {
             background: $--color-gray-c;
-
         }
     }
 }

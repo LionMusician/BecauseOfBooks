@@ -254,4 +254,12 @@ export default class wxApi {
             }
         })
     }
+
+
+    /**
+     * 录音
+     */
+    static getRecorderManager(data = {}) {
+        return wx.getRecorderManager(data)
+    }
 }

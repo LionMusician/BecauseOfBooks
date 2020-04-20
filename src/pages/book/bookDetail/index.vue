@@ -370,6 +370,12 @@ export default {
                 text-align: center;
                 @include sc($--text-lg, $--color-gray-c);
             }
+            &.detail {
+                img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
         }
     }
 }

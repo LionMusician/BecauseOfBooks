@@ -32,12 +32,30 @@
                 max-count="1"
             ></van-uploader>
         </div>
+        <div class="comment-image">
+            <p class="upload-title">上传语音评论：</p>
+            <div class="btns">
+                <van-icon v-if="recording" name="pause-circle-o" color="#98C145" :size="40" @click="pauseRecord" />
+                <van-icon v-else name="play-circle-o" color="#98C145" :size="40" @click="startRecord" />
+                <van-count-down
+                    class="control-count-down"
+                    millisecond
+                    :time="30000"
+                    :auto-start="false"
+                    format="mm:ss"
+                    @finish="finished"
+                />
+                <van-icon v-if="!comment.audio" name="stop-circle-o" color="#FD4346" :size="40" @click="stopRecord" />
+                <van-icon v-if="!recording && comment.audio" name="replay" color="#009145" :size="40" @click="reStartRecord" />
+            </div>
+        </div>
         <div class="submit">
             <van-button type="primary" block @click="submitComment">发布评论</van-button>
         </div>
     </div>
 </template>
 <script>
+const recorderManager = wx.getRecorderManager();
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
 export default {
@@ -49,13 +67,43 @@ export default {
             },
             comment: {
                 text: "",
-                picture: ""
+                picture: "",
+                audio: ""
             },
-            fileList: []
+            fileList: [],
+            recording: false, //正在录音
         };
     },
     onLoad() {
         this.getCommentInfo();
+        recorderManager.onStart(() => {
+            let countDown = this.$mp.page.selectComponent(".control-count-down");
+            countDown.start();
+            this.recording = true;
+        });
+        recorderManager.onPause(() => {
+            let countDown = this.$mp.page.selectComponent(".control-count-down");
+            countDown.pause();
+            this.recording = false;
+        });
+        recorderManager.onResume(() => {
+            let countDown = this.$mp.page.selectComponent(".control-count-down");
+            countDown.start();
+            this.recording = true;
+        });
+        recorderManager.onStop(res => {
+            let { tempFilePath } = res;
+            let countDown = this.$mp.page.selectComponent(".control-count-down");
+            countDown.pause();
+            this.recording = false;
+            Tips.loading('正在上传录音…');
+            
+            wx.uploadFile(tempFilePath, res => {
+                this.comment.audio = res.fileUrl;
+                Tips.loaded()
+                Tips.success("上传成功！");
+            });
+        });
     },
     methods: {
         // 获取评论对象信息
@@ -121,6 +169,34 @@ export default {
         setComment(e, index) {
             this.comment[index] = e.mp.detail;
         },
+        // 开始录音
+        startRecord() {
+            recorderManager.start({
+                duration: 30000,
+                format: "mp3"
+            });
+        },
+        // 暂停录音
+        pauseRecord() {
+            recorderManager.pause();
+        },
+        // 继续录音
+        pauseResume() {
+            recorderManager.resume();
+        },
+        // 停止录音
+        stopRecord() {
+            recorderManager.stop();
+        },
+        // 重录
+        reStartRecord() {
+            this.comment.audio = "";
+            let countDown = this.$mp.page.selectComponent(".control-count-down");
+            countDown.reset();
+            setTimeout(() => {
+                this.startRecord()
+            }, 50);
+        },
         // 发布
         submitComment() {
             let query = this.$root.$mp.query;
@@ -161,12 +237,17 @@ export default {
         @include wh(710rpx, auto);
         margin: 20rpx auto;
         .upload-title {
-            @include hh(80rpx);
+            @include hh(100rpx);
+        }
+        .btns {
+            width: 400rpx;
+            margin: 0 auto;
+            @include fj;
         }
     }
     .submit {
         width: 690rpx;
-        margin: 0 auto;
+        margin: 100rpx auto 0;
     }
 }
 </style>

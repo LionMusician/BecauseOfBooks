@@ -4,8 +4,8 @@
             <img :src="evaluate.headImage" alt />
         </div>
         <div class="right">
-            <p class="text">{{evaluate.text || '暂无评价'}}</p>
-            <radio-play v-if="evaluate.type === 'radio'"></radio-play>
+            <p class="text" v-if="evaluate.text">{{evaluate.text}}</p>
+            <radio-play v-if="evaluate.audio"></radio-play>
         </div>
     </div>
 </template>
@@ -50,6 +50,7 @@ export default {
             border-radius: 30rpx;
             letter-spacing: 4rpx;
             padding: 10rpx 20rpx 40rpx 20rpx;
+            margin-bottom: 20rpx;
         }
     }
 }
