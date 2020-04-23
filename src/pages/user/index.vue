@@ -99,7 +99,7 @@
 <script>
 import wxLogin from "@components/wxLogin.vue";
 import { userCellList } from "@/utils/state.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import wx from "@/utils/wx-api";
 export default {
 	components: { wxLogin },
@@ -128,7 +128,20 @@ export default {
 	computed: {
 		...mapGetters(["loginInfo", "userInfo"])
 	},
+	onLoad() {
+		this.getUserInfo();
+	},
 	methods: {
+		...mapActions(["setUserInfo"]),
+		// 获取用户信息
+		getUserInfo() {
+			if (!this.judgeLogin()) {
+				return;
+			}
+			this.$http.getUserInfo().then(r => {
+				this.setUserInfo(r.userVO);
+			});
+		},
 		// 显示登录按钮
 		getLogin() {
 			wx.login(r => {

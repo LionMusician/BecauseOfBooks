@@ -187,6 +187,9 @@ export default {
             if (!this.judgeLogin()) {
                 return this.getLogin();
             }
+            if(!book.remainStock) {
+                return Tips.toast("库存不足！");
+            }
             let data = {
                 bookId: book.id
             };
