@@ -36,7 +36,7 @@
             <ul>
                 <li id="detail" class="detail">
                     <p class="title">绘本详情</p>
-                    <img :src="book.introduction" alt />
+                    <image :src='book.introduction' class='detail-img' mode='widthFix'></image>
                 </li>
                 <li id="radio" v-if="book.audio" class="radio">
                     <p class="title">绘本音频</p>
@@ -249,6 +249,9 @@ export default {
         },
         // 加入书包
         addBookToBag(book) {
+            if(!book.remainStock) {
+                return Tips.toast("库存不足！");
+            }
             let data = {
                 bookId: book.id
             };
@@ -371,9 +374,8 @@ export default {
                 @include sc($--text-lg, $--color-gray-c);
             }
             &.detail {
-                img {
+                .detail-img {
                     width: 100%;
-                    height: auto;
                 }
             }
         }
