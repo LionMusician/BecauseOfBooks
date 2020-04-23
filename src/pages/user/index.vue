@@ -7,7 +7,7 @@
                 </div>
                 <div class="info">
                     <div class="top">
-                        <span class="name">{{userInfo.name || '请登录'}}</span>
+                        <span class="name">{{userInfo.name || userInfo.phone || '请登录'}}</span>
                         <span class="star">
                             <van-icon class="icon" name="star" />
                             <span>阅读达人</span>
