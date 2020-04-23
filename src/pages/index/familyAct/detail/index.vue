@@ -54,17 +54,18 @@
                 <li id="detail" class="detail">
                     <p class="title">活动详情</p>
                     <div>
-                        <img :src="book.introduction" alt />
+                        <image :src="book.introduction" class='bg' mode='widthFix'></image>
                     </div>
                 </li>
                 <li id="evalute" class="evalute">
                     <p class="title">活动评价</p>
-                    <ul>
+                    <ul v-if="book.commentVOS && book.commentVOS.length">
                         <li v-for="(item, index) in book.commentVOS" :key="index">
                             <evaluate-item :evaluate="item"></evaluate-item>
                         </li>
                     </ul>
-                    <p class="to-comment" @click="toComment">去评价 ></p>
+                    <p class="noCommentVOS" v-else>暂无评价</p>
+                    <p class="to-comment" v-if="book.isJoin" @click="toComment">去评价 ></p>
                 </li>
             </ul>
         </div>
@@ -361,7 +362,18 @@ export default {
                 text-align: center;
                 @include sc($--text-lg, $--color-gray-c);
             }
+            &.detail {
+                text-align: center;
+				.bg {
+                    width: 100%;
+				    margin: 0 auto
+				}
+			}
         }
     }
+}
+.noCommentVOS{
+    text-align: center;
+    padding: 40rpx 0;
 }
 </style>

@@ -1,65 +1,70 @@
 <template>
 	<div class="container">
-		<div class="couponDiv">
-			<div class="swiperDiv" id="couponView">
-				<swiper
-					previous-margin="20px"
-					next-margin="50px"
-					:display-multiple-items="1"
-					:current="current"
-					v-if="cardList && cardList.length"
-				>
-					<swiper-item v-for="(item, index) in cardList" :key="index">
-						<div class="bannerItem" :style="'backgroound: url(' + item.frontCover + ')'">
-							<div class="coupon" @click="cardClick(index)">
-								<div class="top">
-									<span>{{item.typeDesc}}</span>
-									<span>编码：{{item.code}}</span>
-								</div>
-								<div class="bottom">
-									<div class="imgDiv">
-										<img :src="item.qrCode" alt>
+		<div v-if="cardList && cardList.length">
+			<div class="couponDiv">
+				<div class="swiperDiv" id="couponView">
+					<swiper
+						previous-margin="20px"
+						next-margin="50px"
+						:display-multiple-items="1"
+						:current="current"
+						v-if="cardList && cardList.length"
+					>
+						<swiper-item v-for="(item, index) in cardList" :key="index">
+							<div class="bannerItem" :style="'backgroound: url(' + item.frontCover + ')'">
+								<div class="coupon" @click="cardClick(index)">
+									<div class="top">
+										<span>{{item.typeDesc}}</span>
+										<span>编码：{{item.code}}</span>
 									</div>
-									<div>
-										<p>升级该等级</p>
+									<div class="bottom">
+										<div class="imgDiv">
+											<img :src="item.qrCode" alt>
+										</div>
+										<div>
+											<p>升级该等级</p>
+										</div>
 									</div>
 								</div>
 							</div>
+						</swiper-item>
+					</swiper>
+				</div>
+			</div>
+			<div>
+				<div class="title">{{activeCard.typeDesc}}权益说明</div>
+				<div class="Des">
+					<p>有效期：{{activeCard.startDate}} - {{activeCard.endDate}}</p>
+					<p
+						v-if="activeCard.type === 1"
+					>可借阅书册{{activeCard.borrowBookNum}}册，每次借阅{{activeCard.borrowDays}}天</p>
+					<p
+						v-else-if="activeCard.type === 3"
+					>可参与活动{{activeCard.activityNum}}次，剩余参与{{activeCard.remainActivityNum}}次</p>
+				</div>
+				<div class="title">优惠券</div>
+				<div class="couponItem">
+					<div class="couponCss" v-for="(item, index) in couponList" :key="index">
+						<div class="couponContent">
+							<div class="text">{{item.typeDesc}}</div>
+							<div class="line"></div>
+							<div class="text" v-if="item.type === 1">满{{item.reachPrice}}元减{{item.reducePrice}}元</div>
+							<div class="text" v-else>{{item.price}}元代金券</div>
 						</div>
-					</swiper-item>
-				</swiper>
-			</div>
-		</div>
-		<div>
-			<div class="title">{{activeCard.typeDesc}}权益说明</div>
-			<div class="Des">
-				<p>有效期：{{activeCard.startDate}} - {{activeCard.endDate}}</p>
-				<p
-					v-if="activeCard.type === 1"
-				>可借阅书册{{activeCard.borrowBookNum}}册，每次借阅{{activeCard.borrowDays}}天</p>
-				<p
-					v-else-if="activeCard.type === 3"
-				>可参与活动{{activeCard.activityNum}}次，剩余参与{{activeCard.remainActivityNum}}次</p>
-			</div>
-			<div class="title">优惠券</div>
-			<div class="couponItem">
-				<div class="couponCss" v-for="(item, index) in couponList" :key="index">
-					<div class="couponContent">
-						<div class="text">{{item.typeDesc}}</div>
-						<div class="line"></div>
-						<div class="text" v-if="item.type === 1">满{{item.reachPrice}}元减{{item.reducePrice}}元</div>
-						<div class="text" v-else>{{item.price}}元代金券</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<no-data v-else></no-data>
 	</div>
 </template>
 
 <script>
 import utils from "@/utils/utils";
+import noData from "@components/noData.vue";
 export default {
 	name: "",
+	components: { noData },
 	data() {
 		let that = this;
 		return {
