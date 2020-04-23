@@ -211,7 +211,7 @@ export default {
             let params = {
                 userVO: {
                     ...this.userInfo,
-                    childBirthday: this.userInfo.childBirthday + " 00:00:00"
+                    childBirthday: this.userInfo.childBirthday ? this.userInfo.childBirthday + " 00:00:00" : ""
                 }
             };
             this.$http.updateUserInfo(params).then(res => {
