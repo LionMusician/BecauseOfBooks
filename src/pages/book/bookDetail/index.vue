@@ -1,68 +1,72 @@
 <template>
-	<div class="container">
-		<!-- 头部 -->
-		<van-sticky>
-			<header-view title="图书详情"></header-view>
-		</van-sticky>
-		<div class="cover">
-			<div class="logo">
-				<img :src="book.frontCover" alt>
-			</div>
-			<p class="name">{{book.name}}</p>
-			<ul class="tag-list">
-				<li class="tag" v-for="item in book.labelVOS" :key="item">{{item.name}}</li>
-			</ul>
-		</div>
-		<van-sticky>
-			<div class="func-list">
-				<ul>
-					<li
-						class="btn"
-						v-for="(item,index) in funcList"
-						:key="index"
-						@click="tagsClick(item)"
-						v-if="item.show"
-					>
-						<img
-							:src="'../../../../../../../static/images/book/' + item.pic"
-							:style="'width:' + item.width + 'rpx;height:' + item.height + 'rpx;'"
-						>
-						<p class="func-name">{{item.name}}</p>
-					</li>
-				</ul>
-			</div>
-		</van-sticky>
-		<div class="book-detial">
-			<ul>
-				<li id="detail" class="detail">
-					<p class="title">绘本详情</p>
-                    <image :src="book.introduction" class='bg' mode='widthFix'></image>
-				</li>
-				<li id="radio" v-if="book.audio" class="radio">
-					<p class="title">绘本音频</p>
-					<radio-play></radio-play>
-				</li>
-				<li id="video" v-if="book.video" class="video">
-					<p class="title">绘本视频</p>
-					<video-play></video-play>
-				</li>
-				<li id="evalute" class="evalute">
-					<p class="title">绘本评价</p>
-					<ul v-if="book.commentVOS && book.commentVOS.length">
-						<li v-for="(item, index) in book.commentVOS" :key="index">
-							<evaluate-item :evaluate="item"></evaluate-item>
-						</li>
-					</ul>
-					<p v-else class="noCommentVOS">暂无评价</p>
-					<p class="to-comment" v-if="book.isBorrow" @click="toComment">去评价 ></p>
-				</li>
-			</ul>
-		</div>
-		<cart-btn @btnClick="cartBtnClick" type="bag" :num="bagList.length"></cart-btn>
-		<van-popup :show="cartCoverShow" @close="cartBtnClick" position="bottom">
-			<cart-cover @cartListBtnClick="cartListBtnClick" @deleteBag="deleteBag" :cartList="bagList"></cart-cover>
-		</van-popup>
-	</div>
+    <div class="container">
+        <!-- 头部 -->
+        <van-sticky>
+            <header-view title="图书详情"></header-view>
+        </van-sticky>
+        <div class="cover">
+            <div class="logo">
+                <img :src="book.frontCover" alt />
+            </div>
+            <p class="name">{{book.name}}</p>
+            <ul class="tag-list">
+                <li class="tag" v-for="item in book.labelVOS" :key="item">{{item.name}}</li>
+            </ul>
+        </div>
+        <van-sticky>
+            <div class="func-list">
+                <ul>
+                    <li
+                        class="btn"
+                        v-for="(item,index) in funcList"
+                        :key="index"
+                        @click="tagsClick(item)"
+                        v-if="item.show"
+                    >
+                        <img
+                            :src="'../../../../../../../static/images/book/' + item.pic"
+                            :style="'width:' + item.width + 'rpx;height:' + item.height + 'rpx;'"
+                        />
+                        <p class="func-name">{{item.name}}</p>
+                    </li>
+                </ul>
+            </div>
+        </van-sticky>
+        <div class="book-detial">
+            <ul>
+                <li id="detail" class="detail">
+                    <p class="title">绘本详情</p>
+                    <image :src='book.introduction' class='detail-img' mode='widthFix'></image>
+                </li>
+                <li id="radio" v-if="book.audio" class="radio">
+                    <p class="title">绘本音频</p>
+                    <radio-play></radio-play>
+                </li>
+                <li id="video" v-if="book.video" class="video">
+                    <p class="title">绘本视频</p>
+                    <video-play></video-play>
+                </li>
+                <li id="evalute" class="evalute">
+                    <p class="title">绘本评价</p>
+                    <ul v-if="book.commentVOS && book.commentVOS.length">
+                        <li v-for="(item, index) in book.commentVOS" :key="index">
+                            <evaluate-item :evaluate="item"></evaluate-item>
+                        </li>
+                    </ul>
+                    <p class="title no-border" v-else>暂无评价</p>
+                    <p v-if="book.isBorrow" class="to-comment" @click="toComment">去评价 ></p>
+                </li>
+            </ul>
+        </div>
+        <cart-btn @btnClick="cartBtnClick" type="bag" :num="bagList.length"></cart-btn>
+        <van-popup :show="cartCoverShow" @close="cartBtnClick" position="bottom">
+            <cart-cover
+                @cartListBtnClick="cartListBtnClick"
+                @deleteBag="deleteBag"
+                :cartList="bagList"
+            ></cart-cover>
+        </van-popup>
+    </div>
 </template>
 
 <script>
@@ -289,87 +293,32 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-	.cover {
-		position: relative;
-		overflow: hidden;
-		@include wh(100%, 450rpx);
-		border-bottom: 1rpx solid $--color-gray-c;
-		@include fc(center);
-		margin-top: 30rpx;
-		.logo {
-			padding-bottom: 20rpx;
-			img {
-				@include wh(450rpx, 300rpx);
-			}
-		}
-		.name {
-			@include hh(60rpx);
-			@include sc($--text-xl, $--color-text);
-		}
-		.tag-list {
-			@include wh(150rpx, 300rpx);
-			position: absolute;
-			top: 30rpx;
-			right: 0;
-			padding-top: 30rpx;
-			@include fc(flex-start);
-			align-items: flex-end;
-			.tag {
-				text-align: center;
-				width: 100rpx;
-				box-sizing: content-box;
-				@include hh(28rpx);
-				border: 2rpx solid $--color-primary;
-				border-left-color: transparent;
-				border-radius: 10rpx;
-				@include sc($--text-sm, $--color-primary);
-				position: relative;
-				margin-bottom: 20rpx;
-				&::after {
-					content: "";
-					@include wh(20rpx, 20rpx);
-					position: absolute;
-					transform: rotate(45deg);
-					top: 4rpx;
-					left: -10rpx;
-					border-radius: 6rpx;
-					border-left: 2rpx solid $--color-primary;
-					border-bottom: 2rpx solid $--color-primary;
-				}
-			}
-		}
-	}
-	.func-list > ul {
-		@include wh(750rpx, 120rpx);
-		@include fj;
-		padding: 10rpx 40rpx;
-		background: $--color-white;
-		.btn {
-			@include wh(100rpx, 100rpx);
-			@include fc(center);
-			img {
-				@include wh(60rpx, 60rpx);
-			}
-			.func-name {
-				@include sc($--text-sm, $--color-text);
-			}
-		}
-	}
-	.book-detial {
-		li {
-			padding: 20rpx 30rpx;
-			.title {
-				@include hh(60rpx);
-				@include sc($--text-lg, $--color-text);
-				text-align: center;
-				border-top: 1rpx solid $--color-gray-c;
-			}
-			.to-comment {
-				@include hh(60rpx);
-				text-align: center;
-				@include sc($--text-lg, $--color-gray-c);
-			}
-			&.detail {
+    .cover {
+        position: relative;
+        overflow: hidden;
+        @include wh(100%, 450rpx);
+        border-bottom: 1rpx solid $--color-gray-c;
+        @include fc(center);
+        margin-top: 30rpx;
+        .logo {
+            padding-bottom: 20rpx;
+            img {
+                @include wh(450rpx, 300rpx);
+            }
+        }
+        .name {
+            @include hh(60rpx);
+            @include sc($--text-xl, $--color-text);
+        }
+        .tag-list {
+            @include wh(150rpx, 300rpx);
+            position: absolute;
+            top: 30rpx;
+            right: 0;
+            padding-top: 30rpx;
+            @include fc(flex-start);
+            align-items: flex-end;
+            .tag {
                 text-align: center;
                 width: 100rpx;
                 box-sizing: content-box;
@@ -418,6 +367,11 @@ export default {
                 @include sc($--text-lg, $--color-text);
                 text-align: center;
                 border-top: 1rpx solid $--color-gray-c;
+                &.no-border {
+                    border: none;
+                    line-height: 160rpx;
+                    color: $--color-gray-c;
+                }
             }
             .to-comment {
                 @include hh(60rpx);

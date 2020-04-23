@@ -64,7 +64,7 @@
                             <evaluate-item :evaluate="item"></evaluate-item>
                         </li>
                     </ul>
-                    <p class="noCommentVOS" v-else>暂无评价</p>
+                    <p class="title no-border" v-else>暂无评价</p>
                     <p class="to-comment" v-if="book.isJoin" @click="toComment">去评价 ></p>
                 </li>
             </ul>
@@ -356,6 +356,11 @@ export default {
                 @include sc($--text-lg, $--color-text);
                 text-align: center;
                 border-top: 1rpx solid $--color-gray-c;
+                &.no-border {
+                    border: none;
+                    line-height: 160rpx;
+                    color: $--color-gray-c;
+                }
             }
             .to-comment {
                 @include hh(60rpx);
@@ -371,9 +376,5 @@ export default {
 			}
         }
     }
-}
-.noCommentVOS{
-    text-align: center;
-    padding: 40rpx 0;
 }
 </style>
