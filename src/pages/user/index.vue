@@ -8,10 +8,10 @@
                 <div class="info">
                     <div class="top">
                         <span class="name">{{userInfo.name || userInfo.phone || '请登录'}}</span>
-                        <span class="star">
+                        <!-- <span class="star">
                             <van-icon class="icon" name="star" />
                             <span>阅读达人</span>
-                        </span>
+                        </span> -->
                     </div>
                     <div class="admin" @click="toUserInfo">
                         <span>账号管理</span>
@@ -32,13 +32,13 @@
                 <div class="main-sliver">
                     <div
                         class="inner-sliver"
-                        :style="'right:-' + (userInfo.stage - 1) * 230 + 'rpx'"
+                        :style="'right:-' + (userInfo.stage ? userInfo.stage - 1 : 0) * 230 + 'rpx'"
                     >
                         <div class="left"></div>
                         <div class="right"></div>
                     </div>
                 </div>
-                <div class="minutes-view" :style="'left:' + (userInfo.stage - 1) * 225 + 'rpx'">
+                <div class="minutes-view" :style="'left:' + (userInfo.stage ? userInfo.stage - 1 : 0) * 225 + 'rpx'">
                     <p>
                         &nbsp;
                         <i class="iconfont iconshoucangchenggong"></i>
@@ -106,7 +106,7 @@
 <script>
 import wxLogin from "@components/wxLogin.vue";
 import { userCellList } from "@/utils/state.js";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import wx from "@/utils/wx-api";
 export default {
     components: { wxLogin },
@@ -133,9 +133,22 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["loginInfo", "userInfo"])
+        ...mapGetters(["loginInfo", "userInfo"]),
+    },
+    onLoad() {
+        this.getUserInfo();
     },
     methods: {
+        ...mapActions(["setUserInfo"]),
+        // 获取用户信息
+        getUserInfo() {
+            if (!this.judgeLogin()) {
+                return;
+            }
+            this.$http.getUserInfo().then(r => {
+                this.setUserInfo(r.userVO);
+            });
+        },
         // 显示登录按钮
         getLogin() {
             wx.login(r => {
@@ -252,6 +265,8 @@ export default {
                     .name {
                         font-size: $--text-xxl;
                         color: $--color-black;
+                        display: inline-block;
+                        @include ellipsis;
                     }
                     .star {
                         @include fj(flex-start);
