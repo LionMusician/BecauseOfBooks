@@ -24,7 +24,7 @@
 		>
 			<div class="readListDiv">
 				<van-swipe-cell :right-width="65" v-for="(item, index) in readList" :key="index">
-					<div class="readListView">
+					<div class="readListView" @click="readDetail(item)">
 						<div class="left">
 							<div class="imgDiv">
 								<img :src="item.frontCover" alt>
@@ -54,6 +54,7 @@ import utils from "@/utils/utils";
 import noData from "@components/noData.vue";
 import Dialog from "../../../../static/vant/dialog/dialog.js";
 import Notify from "../../../../static/vant/notify/notify.js";
+import wx from "@/utils/wx-api";
 export default {
 	name: "",
 	data() {
@@ -91,8 +92,26 @@ export default {
 		 * 切换图书，活动
 		 **/
 		tabClick(index) {
+			console.log(index);
 			this.active = index;
 			this.getMyCollection();
+		},
+		/**
+		 * 查看详情
+		 */
+		readDetail(item) {
+			switch (item.type) {
+				case 1:
+					wx.navigateTo(
+						`/pages/book/bookDetail/main?id=${item.bizId}`
+					);
+					break;
+				case 2:
+					wx.navigateTo(
+						`/pages/index/familyAct/detail/main?id=${item.bizId}`
+					);
+					break;
+			}
 		},
 		/**
 		 * 删除
