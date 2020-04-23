@@ -279,7 +279,7 @@ export default {
         },
         // 购物车确认
         cartListBtnClick() {
-            wx.navigateTo({ url: `confirmAppoint/main` });
+            wx.navigateTo({ url: `/pages/book/confirmAppoint/main` });
         },
         // 去评论
         toComment() {
