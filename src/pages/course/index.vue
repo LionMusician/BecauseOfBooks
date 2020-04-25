@@ -45,7 +45,7 @@
                                 <div class="timeItem" v-for="(t, i) in item.times" :key="i">
                                     <div class="imgDiv" @click="orderOrCancelCourse(t)">
                                         <img
-                                            v-if="t.check"
+                                            v-if="t.check || t.timeout"
                                             src="../../../static/images/course/unCheck.png"
                                             alt
                                         />

@@ -8,6 +8,7 @@
 			:scroll-y="readList"
 			:style="'height:' + scrollHeight + 'rpx;'"
 			class="book-list"
+            @scrolltolower="scrollBottom"
 		>
 			<div class="readListDiv">
 				<div class="readListView" v-for="(item, index) in readList" :key="index">
@@ -21,6 +22,10 @@
 						<div class="content">{{item.introduction}}</div>
 					</div>
 				</div>
+                <div class="loading-view">
+                    <van-loading v-if="total > readList.length" size="14px">加载中…</van-loading>
+                    <no-more v-else></no-more>
+                </div>
 			</div>
 		</scroll-view>
 		<no-data v-else></no-data>
@@ -30,6 +35,7 @@
 <script>
 import headerView from "@components/headerView.vue";
 import noData from "@components/noData.vue";
+import noMore from "@components/noMore.vue";
 
 export default {
 	name: "",
@@ -37,7 +43,10 @@ export default {
 		let that = this;
 		return {
 			scrollHeight: that.getWindowHeight(66),
-			readList: []
+			readList: [],
+            page: 1,
+            size: 10,
+            total: 0
 		};
 	},
 	onLoad() {
@@ -48,13 +57,27 @@ export default {
 		// 阅读指导数据
 		queryReadGuide() {
 			this.$http.queryReadGuide().then(res => {
-				this.readList = res.readGuideVOS;
+				this.total = res.total;
+                if (this.page === 1) {
+                    this.readList = res.readGuideVOS;
+                } else {
+                    this.readList = [...this.readList, ...res.readGuideVOS];
+                }
 			});
-		}
+		},
+        // 上拉加载
+        scrollBottom() {
+			if(this.total === this.bookList.length) {
+				return;
+			}
+            this.page = this.page + 1;
+            this.queryReadGuide();
+        },
 	},
 	components: {
 		headerView,
-		noData
+		noData,
+		noMore
 	}
 };
 </script>

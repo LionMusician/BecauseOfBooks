@@ -2,7 +2,8 @@
     "usingComponents": {
         "van-popup": "/static/vant/popup/index",
         "van-dropdown-menu": "/static/vant/dropdown-menu/index",
-        "van-dropdown-item": "/static/vant/dropdown-item/index"
+        "van-dropdown-item": "/static/vant/dropdown-item/index",
+        "van-loading": "/static/vant/loading/index"
     },
     "disableScroll": true
 }

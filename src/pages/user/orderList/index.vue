@@ -7,7 +7,7 @@
 				<van-tab title="已完成"></van-tab>
 			</van-tabs>
 		</van-sticky>
-		<ul class="order-list">
+		<ul v-if="orderList.length" class="order-list">
 			<li class="order-item" v-for="(item, index) in orderList" :key="index">
 				<div class="order-top">
 					<p class="shop-name">{{item.readingHallName}}</p>
@@ -70,9 +70,11 @@
 				</div>
 			</li>
 		</ul>
+        <no-data v-else></no-data>
 	</div>
 </template>
 <script>
+import noData from "@components/noData.vue";
 export default {
 	data() {
 		return {
@@ -85,6 +87,7 @@ export default {
 		this.tabActive = ~~state || 0;
 		this.getMyOrder();
 	},
+    components: { noData },
 	methods: {
 		// 查询我的订单
 		getMyOrder() {
@@ -97,7 +100,7 @@ export default {
 						item.statusText = this.getStatus(item.status);
 					});
 				}
-				this.orderList = res.orderVOS;
+				this.orderList = res.orderVOS || [];
 			});
 		},
 		/**

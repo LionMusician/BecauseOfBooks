@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <van-row>
+        <van-row v-if="courseList.length">
             <van-col span="6">
                 <p class="table-title active">
                     <span>日期</span>
@@ -22,34 +22,38 @@
                 </p>
             </van-col>
         </van-row>
-        <van-row v-for="(item, index) in courseList" :key="index">
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.startDate}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.endDate}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.name}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.statusDesc}}</span>
-                </p>
-            </van-col>
-        </van-row>
+        <div v-if="courseList.length">
+            <van-row v-for="(item, index) in courseList" :key="index">
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.startDate}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.endDate}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.name}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.statusDesc}}</span>
+                    </p>
+                </van-col>
+            </van-row>
+        </div>
+        <no-data v-else></no-data>
         <!-- <div class="btn" @click="btnComfirm">确认</div> -->
     </div>
 </template>
 <script>
 import utils from "@/utils/utils.js";
 import wx from "@/utils/wx-api";
+import noData from "@components/noData.vue";
 export default {
     data() {
         return {
@@ -60,20 +64,25 @@ export default {
         wx.setNavigationBarTitle("课程预约");
         this.getCourseOrder();
     },
+    components: { noData },
     methods: {
         // 查询课程预约
         getCourseOrder() {
             let params = {};
             this.$http.getCourseOrder(params).then(res => {
-                this.courseList = res.courseScheduleVOS.map(item => {
-                    item.startDate = item.startTime
-                        .slice(0, 10)
-                        .replace(/\-/g, ".");
-                    item.endDate = item.startTime
-                        .slice(11, 16)
-                        .replace(/\-/g, ".");
-                    return item;
-                });
+                if (res.courseScheduleVOS) {
+                    this.courseList = res.courseScheduleVOS.map(item => {
+                        item.startDate = item.startTime
+                            .slice(0, 10)
+                            .replace(/\-/g, ".");
+                        item.endDate = item.startTime
+                            .slice(11, 16)
+                            .replace(/\-/g, ".");
+                        return item;
+                    });
+                } else {
+                    this.courseList = [];
+                }
             });
         }
     }

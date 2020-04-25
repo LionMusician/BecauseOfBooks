@@ -1,6 +1,7 @@
 {
     "disableScroll": true,
     "usingComponents": {
-        "van-popup": "/static/vant/popup/index"
+        "van-popup": "/static/vant/popup/index",
+        "van-loading": "/static/vant/loading/index"
     }
 }

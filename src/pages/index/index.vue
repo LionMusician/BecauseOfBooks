@@ -36,7 +36,7 @@
         </swiper>
         <!-- 搜索 -->
         <div class="searchDiv">
-            <search placeholder="图书搜索" ref="search" @search="init"></search>
+            <search placeholder="图书搜索" ref="search" @search="searchBook"></search>
         </div>
         <!-- 首页导航 -->
         <van-row class="navView">
@@ -56,7 +56,7 @@
         <!-- 精选热点 -->
         <van-row class="titleRow">
             <van-col span="12" class="left">精选热点</van-col>
-            <van-col span="12" class="right">更多</van-col>
+            <van-col span="12" class="right" @click="navigate(1)">更多</van-col>
         </van-row>
         <div class="hotRow">
             <van-row v-for="(item, index) in hotList" :key="index">
@@ -191,6 +191,10 @@ export default {
                 return this.getLogin();
             }
             wx.navigateTo(`/pages/book/bookDetail/main?id=${book.id}`);
+        },
+        // 搜索图书
+        searchBook(e) {
+            wx.reLaunch(`/pages/book/main?search=${e}`);
         },
         // 获取阅读馆列表
         queryReadingHall() {

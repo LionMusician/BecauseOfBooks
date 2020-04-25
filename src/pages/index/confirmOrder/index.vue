@@ -88,14 +88,14 @@ export default {
                 id: this.$root.$mp.query.id
             };
             this.$http.getOrderDetail(params).then(res => {
-                let data = res.orderItemVOS;
+                let data = res.orderVO.orderItemVOS;
                 data.forEach(item => {
                     item.startDate = utils.mklog(item.startDate);
                     item.endDate = utils.mklog(item.endDate);
                 });
-                this.orderId = res.id;
+                this.orderId = res.orderVO.id;
                 this.carList = data || [];
-                this.totalPrice = res.totalPrice * 100;
+                this.totalPrice = utils.accMul(res.orderVO.totalPrice, 100);
             });
         },
         /**

@@ -1,12 +1,13 @@
 <template>
     <div class="container">
         <div class="top">
-            <search placeholder="图书搜索" @search="queryBook"></search>
+            <search ref="search" placeholder="图书搜索" @search="searchBook"></search>
             <div class="menus">
                 <van-dropdown-menu active-color="#8CC223">
                     <van-dropdown-item
                         v-for="(item, index) in menuList"
                         :key="index"
+                        :title="item.title"
                         :value="item.value"
                         :options="item.options"
                         @change="(e) => { return selectMenu(e, index) }"
@@ -20,6 +21,7 @@
                 :scroll-y="listScroll"
                 :style="'height:' + scrollHeight + 'rpx;'"
                 class="book-list"
+                @scrolltolower="scrollBottom"
             >
                 <ul>
                     <li v-for="(item, index) in bookList" :key="index">
@@ -31,6 +33,10 @@
                         ></book-item>
                     </li>
                 </ul>
+                <div class="loading-view">
+                    <van-loading v-if="total > bookList.length" size="14px">加载中…</van-loading>
+                    <no-more v-else></no-more>
+                </div>
             </scroll-view>
             <no-data v-else></no-data>
         </div>
@@ -55,12 +61,21 @@ import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import cartCover from "@components/cartCover.vue";
 import noData from "@components/noData.vue";
+import noMore from "@components/noMore.vue";
 import wxLogin from "@components/wxLogin.vue";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 export default {
-    components: { search, bookItem, cartBtn, cartCover, noData, wxLogin },
+    components: {
+        search,
+        bookItem,
+        cartBtn,
+        cartCover,
+        noData,
+        wxLogin,
+        noMore
+    },
     data() {
         let that = this;
         return {
@@ -71,7 +86,11 @@ export default {
             cartCoverShow: false, // 默认不显示购物车
             menuList: [],
             bookList: [],
-            bagList: []
+            bagList: [],
+            searchInput: "",
+            page: 1,
+            size: 10,
+            total: 0
         };
     },
     computed: {
@@ -79,6 +98,10 @@ export default {
     },
     onLoad() {
         this.queryCategory();
+        let searchInput = this.$root.$mp.query.search;
+        if (searchInput) {
+            this.searchInput = searchInput;
+        }
     },
     onShow() {
         this.queryBag();
@@ -104,10 +127,6 @@ export default {
                 let category = [];
                 res.categoryVOS.forEach((item, index) => {
                     let options = [];
-                    // options.push({
-                    //     text: item.name,
-                    //     value: item.id
-                    // });
                     if (item.children) {
                         item.children.forEach(tip => {
                             options.push({
@@ -117,6 +136,7 @@ export default {
                         });
                         category.push({
                             value: item.children[0].id,
+                            title: item.name,
                             options
                         });
                     }
@@ -136,18 +156,44 @@ export default {
         // 选择分类
         selectMenu(e, index) {
             this.menuList[index].value = e.mp.detail;
-            this.queryBook();
+            this.refreshList();
         },
         // 获取图书列表
-        queryBook(name = "") {
+        queryBook() {
             let data = {
                 categoryIds: this.calccategoryIds(),
-                name: name,
-                readingHallId: this.shopId
+                name: this.searchInput,
+                readingHallId: this.shopId,
+                page: this.page,
+                size: this.size
             };
             this.$http.queryBook(data).then(res => {
-                this.bookList = res.bookVOS;
+                this.$refs.search.inputValue = this.searchInput;
+				this.total = res.total;
+                if (this.page === 1) {
+                    this.bookList = res.bookVOS;
+                } else {
+                    this.bookList = [...this.bookList, ...res.bookVOS];
+                }
             });
+        },
+        // 刷新列表
+        refreshList() {
+            this.page = 1;
+            this.queryBook();
+        },
+        // 搜索
+        searchBook(e) {
+            this.searchInput = e;
+            this.refreshList();
+        },
+        // 上拉加载
+        scrollBottom() {
+			if(this.total === this.bookList.length) {
+				return;
+			}
+            this.page = this.page + 1;
+            this.queryBook();
         },
         // 点击图书
         bookClick(book) {
@@ -161,17 +207,21 @@ export default {
             if (!this.judgeLogin()) {
                 return this.getLogin();
             }
-            if (book.isCollect) {
-                return Tips.toast("图书已收藏！");
-            }
             let data = {
                 bizId: book.id,
                 type: 1 // 类型：1-图书，2-活动
             };
-            this.$http.addCollection(data).then(res => {
-                Tips.success("收藏成功！");
-                this.queryBook();
-            });
+            if (book.isCollect) {
+                this.$http.deleteCollection(data).then(res => {
+                    Tips.success("取消收藏成功！");
+                    this.refreshList();
+                });
+            } else {
+                this.$http.addCollection(data).then(res => {
+                    Tips.success("收藏成功！");
+                    this.refreshList();
+                });
+            }
         },
         // 查询书包
         queryBag() {
@@ -187,7 +237,7 @@ export default {
             if (!this.judgeLogin()) {
                 return this.getLogin();
             }
-            if(!book.remainStock) {
+            if (!book.remainStock) {
                 return Tips.toast("库存不足！");
             }
             let data = {

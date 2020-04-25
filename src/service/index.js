@@ -103,6 +103,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询订单详情 
+    getOrderDetail: (data) => {
+        return fly.request('/becausebooks-app/home/getOrderDetail', data, {
+            method: 'post'
+        });
+    },
 
 
 
@@ -199,12 +205,6 @@ export default {
     // 查询我的订单 
     getMyOrder: (data) => {
         return fly.request('/becausebooks-app/own/getMyOrder', data, {
-            method: 'post'
-        });
-    },
-    // 查询订单详情 
-    getOrderDetail: (data) => {
-        return fly.request('/becausebooks-app/own/getOrderDetail', data, {
             method: 'post'
         });
     },

@@ -250,12 +250,13 @@ export default {
             this.$http.queryShoppingCart().then(res => {
                 let data = res.shoppingCartVOS;
                 data.forEach(item => {
+                    item.activityVO = item.activityVO || {}
                     let activityVO = item.activityVO;
                     activityVO.adultPriceAll =
                         Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
                     activityVO.childPriceAll =
                         Number(item.childNum) *
-                        Number(item.activityVO.childPrice); // 儿童价格
+                        Number(activityVO.childPrice); // 儿童价格
                     item.checked = false;
                 });
                 this.carList = data;

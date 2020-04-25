@@ -22,34 +22,38 @@
                 </p>
             </van-col>
         </van-row>
-        <van-row v-for="(item, index) in courseList" :key="index">
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.startDate}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.endDate}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.bookName}}</span>
-                </p>
-            </van-col>
-            <van-col span="6">
-                <p class="table-content">
-                    <span>{{item.statusDesc}}</span>
-                </p>
-            </van-col>
-        </van-row>
-        <div class="btn" @click="btnComfirm">确认</div>
+        <div v-if="courseList.length">
+            <van-row v-for="(item, index) in courseList" :key="index">
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.startDate}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.endDate}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.bookName}}</span>
+                    </p>
+                </van-col>
+                <van-col span="6">
+                    <p class="table-content">
+                        <span>{{item.statusDesc}}</span>
+                    </p>
+                </van-col>
+            </van-row>
+        </div>
+        <no-data v-else></no-data>
+        <!-- <div class="btn" @click="btnComfirm">确认</div> -->
     </div>
 </template>
 <script>
 import utils from "@/utils/utils.js";
 import wx from "@/utils/wx-api";
+import noData from "@components/noData.vue";
 export default {
     data() {
         return {
@@ -60,6 +64,10 @@ export default {
         wx.setNavigationBarTitle("书籍借阅");
         this.getBookBorrow();
     },
+    onUnload() {
+        Object.assign(this.$data, this.$options.data());
+    },
+    components: { noData },
     methods: {
         // 查询书籍借阅
         getBookBorrow() {
@@ -79,6 +87,8 @@ export default {
                             : "";
                         return item;
                     });
+                } else {
+                    this.courseList = [];
                 }
             });
         }

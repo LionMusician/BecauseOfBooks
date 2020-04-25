@@ -3,6 +3,9 @@
     "usingComponents": {
         "van-row": "/static/vant/row/index",
         "van-col": "/static/vant/col/index",
-        "van-transition": "/static/vant/transition/index"
+        "van-dropdown-menu": "/static/vant/dropdown-menu/index",
+        "van-dropdown-item": "/static/vant/dropdown-item/index",
+        "van-transition": "/static/vant/transition/index",
+        "van-loading": "/static/vant/loading/index"
     }
 }

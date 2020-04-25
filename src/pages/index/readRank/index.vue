@@ -1,10 +1,11 @@
 <template>
 	<div class="container">
 		<div class="top">
-			<search placeholder="图书搜索" @search="queryBorrowSort"></search>
+			<search placeholder="图书搜索" @search="searchBook"></search>
 		</div>
 		<div class="main">
-			<scroll-view :scroll-y="listScroll" :style="'height:' + scrollHeight + 'rpx;'" class="book-list">
+			<scroll-view :scroll-y="listScroll" :style="'height:' + scrollHeight + 'rpx;'" class="book-list"
+            @scrolltolower="scrollBottom">
 				<ul>
 					<li v-for="(item, index) in bookList" :key="index">
 						<book-item
@@ -14,6 +15,10 @@
 							@addBookToBag="addBookToBag"
 						></book-item>
 					</li>
+					<div class="loading-view">
+						<van-loading v-if="total > bookList.length" size="14px">加载中…</van-loading>
+						<no-more v-else></no-more>
+					</div>
 				</ul>
 			</scroll-view>
 			<cart-btn @btnClick="cartBtnClick" type="bag" :num="bagList.length"></cart-btn>
@@ -29,19 +34,25 @@ import search from "@components/search.vue";
 import bookItem from "@components/bookItem.vue";
 import cartBtn from "@components/cartBtn.vue";
 import cartCover from "@components/cartCover.vue";
+import noMore from "@components/noMore.vue";
+import noData from "@components/noData.vue";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
 import { mapGetters } from "vuex";
 export default {
-	components: { search, bookItem, cartBtn, cartCover },
+	components: { search, bookItem, cartBtn, cartCover, noMore, noData },
 	data() {
 		let that = this;
 		return {
 			listScroll: true, // 允许列表滚动
-			scrollHeight: that.getWindowHeight(40),
+			scrollHeight: that.getWindowHeight(100),
 			cartCoverShow: false, // 默认不显示购物车
 			bookList: [],
-			bagList: []
+			bagList: [],
+            searchValue: "",
+            page: 1,
+            size: 10,
+            total: 0
 		};
 	},
 	computed: {
@@ -52,16 +63,41 @@ export default {
 		this.queryBag();
 	},
 	methods: {
+        // 搜索
+        searchBook(e) {
+            this.searchInput = e;
+            this.refreshList();
+        },
 		// 获取图书列表
-		queryBorrowSort(name = "") {
+		queryBorrowSort() {
 			let data = {
-				name: name,
-				readingHallId: this.shopId
+				name: this.searchValue,
+				readingHallId: this.shopId,
+                page: this.page,
+                size: this.size
 			};
 			this.$http.queryBorrowSort(data).then(res => {
-				this.bookList = res.bookVOS;
+				this.total = res.total;
+                if (this.page === 1) {
+                    this.bookList = res.bookVOS;
+                } else {
+                    this.bookList = [...this.bookList, ...res.bookVOS];
+                }
 			});
 		},
+        // 刷新列表
+        refreshList() {
+            this.page = 1;
+            this.queryBorrowSort();
+        },
+        // 上拉加载
+        scrollBottom() {
+			if(this.total === this.bookList.length) {
+				return;
+			}
+            this.page = this.page + 1;
+            this.queryBorrowSort();
+        },
 		// 点击图书
 		bookClick(book) {
 			wx.navigateTo(`/pages/book/bookDetail/main?id=${book.id}`);
@@ -75,10 +111,17 @@ export default {
 				bizId: book.id,
 				type: 1 // 类型：1-图书，2-活动
 			};
-			this.$http.addCollection(data).then(res => {
-				Tips.success("收藏成功！");
-				this.queryBorrowSort();
-			});
+            if (book.isCollect) {
+                this.$http.deleteCollection(data).then(res => {
+                    Tips.success("取消收藏成功！");
+                    this.refreshList();
+                });
+            } else {
+                this.$http.addCollection(data).then(res => {
+                    Tips.success("收藏成功！");
+                    this.refreshList();
+                });
+            }
 		},
 		// 查询书包
 		queryBag() {

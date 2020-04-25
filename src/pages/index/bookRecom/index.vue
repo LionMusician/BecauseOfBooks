@@ -8,13 +8,14 @@
         </div>
         <!-- 图书列表 -->
         <scroll-view
-            v-if="booksList && booksList.length"
-            :scroll-y="booksList"
+            v-if="bookList && bookList.length"
+            :scroll-y="bookList"
             :style="'height:' + scrollHeight + 'rpx;'"
             class="book-list"
+            @scrolltolower="scrollBottom"
         >
             <div class="bookList">
-                <div v-for="(item, index) in booksList" :key="index" class="bookItem">
+                <div v-for="(item, index) in bookList" :key="index" class="bookItem">
                     <div class="imgDiv">
                         <img :src="item.frontCover" @click="bookClick(item)" alt />
                     </div>
@@ -31,6 +32,10 @@
                         <span class="text">{{item.recommendReason}}</span>
                     </div>
                 </div>
+                <div class="loading-view">
+                    <van-loading v-if="total > bookList.length" size="14px">加载中…</van-loading>
+                    <no-more v-else></no-more>
+                </div>
             </div>
         </scroll-view>
         <no-data v-else></no-data>
@@ -45,6 +50,7 @@
 import wx from "@/utils/wx-api";
 import headerView from "@components/headerView.vue";
 import noData from "@components/noData.vue";
+import noMore from "@components/noMore.vue";
 import search from "@components/search.vue";
 import wxLogin from "@components/wxLogin.vue";
 export default {
@@ -54,9 +60,12 @@ export default {
         return {
             loginInShow: false,
             wxCode: "",
-            scrollHeight: that.getWindowHeight(160),
-            booksList: [],
-            searchValue: ""
+            scrollHeight: that.getWindowHeight(60),
+            bookList: [],
+            searchValue: "",
+            page: 1,
+            size: 10,
+            total: 0
         };
     },
     onLoad() {
@@ -87,23 +96,44 @@ export default {
          */
         search(val) {
             this.searchValue = val;
-            this.queryBookRecommend();
+            this.refreshList();
         },
         // 获取绘本推荐列表
         queryBookRecommend() {
             let parmas = {
-                name: this.searchValue
+                name: this.searchValue,
+                page: this.page,
+                size: this.size
             };
             this.$http.queryBookRecommend(parmas).then(res => {
-                this.booksList = res.bookVOS;
+				this.total = res.total;
+                if (this.page === 1) {
+                    this.bookList = res.bookVOS;
+                } else {
+                    this.bookList = [...this.bookList, ...res.bookVOS];
+                }
             });
-        }
+        },
+        // 刷新列表
+        refreshList() {
+            this.page = 1;
+            this.queryBookRecommend();
+        },
+        // 上拉加载
+        scrollBottom() {
+			if(this.total === this.bookList.length) {
+				return;
+			}
+            this.page = this.page + 1;
+            this.queryBookRecommend();
+        },
     },
     components: {
         headerView,
         search,
         noData,
-        wxLogin
+        wxLogin,
+        noMore
     }
 };
 </script>
