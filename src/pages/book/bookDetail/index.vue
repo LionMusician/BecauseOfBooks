@@ -34,6 +34,10 @@
         </van-sticky>
         <div class="book-detial">
             <ul>
+                <li v-if="book.introductionText" class="detail">
+                    <p class="title">内容简介</p>
+                    <p class="intro">{{book.introductionText}}</p>
+                </li>
                 <li id="detail" class="detail">
                     <p class="title">绘本详情</p>
                     <image :src='book.introduction' class='detail-img' mode='widthFix'></image>
@@ -44,7 +48,7 @@
                 </li>
                 <li id="video" v-if="book.video" class="video">
                     <p class="title">绘本视频</p>
-                    <video-play></video-play>
+                    <video-play :videoUrl="book.video"></video-play>
                 </li>
                 <li id="evalute" class="evalute">
                     <p class="title">绘本评价</p>
@@ -369,9 +373,13 @@ export default {
                 border-top: 1rpx solid $--color-gray-c;
                 &.no-border {
                     border: none;
-                    line-height: 160rpx;
+                    @include hh(160rpx);
                     color: $--color-gray-c;
                 }
+            }
+            .intro {
+                @include sc($--text-nm, $--color-text);
+                text-indent: 2em;
             }
             .to-comment {
                 @include hh(60rpx);

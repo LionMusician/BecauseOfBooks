@@ -51,6 +51,23 @@
         <cart-btn :num="carNum" @btnClick="carClick"></cart-btn>
         <div class="book-detial">
             <ul>
+                <li class="detail">
+                    <p class="title">活动简介</p>
+                    <div class="infoDiv">
+                        <div class="titleDiv">
+                            <div class="left">
+                                <p class="inner-title">【{{book.name}}】</p>
+                                <p class="num">限制人数: {{book.totalNum}}</p>
+                            </div>
+                        </div>
+                        <div class="timeDiv">
+                            <div class="left">
+                                <p>地址：{{book.address}}</p>
+                                <p>时间：{{book.startDate}} - {{book.startDate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
                 <li id="detail" class="detail">
                     <p class="title">活动详情</p>
                     <div>
@@ -360,6 +377,14 @@ export default {
                     border: none;
                     line-height: 160rpx;
                     color: $--color-gray-c;
+                }
+            }
+            .infoDiv{
+                text-align: left;
+                padding-left: 10rpx;
+                @include sc($--text-nm, $--color-text);
+                .inner-title {
+                    margin-left: -12rpx;
                 }
             }
             .to-comment {

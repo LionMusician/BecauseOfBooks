@@ -128,6 +128,10 @@ export default {
                 res.categoryVOS.forEach((item, index) => {
                     let options = [];
                     if (item.children) {
+                        options.push({
+                            text: "全部",
+                            value: -1
+                        });
                         item.children.forEach(tip => {
                             options.push({
                                 text: tip.name,
@@ -135,7 +139,8 @@ export default {
                             });
                         });
                         category.push({
-                            value: item.children[0].id,
+                            // value: item.children[0].id,
+                            value: -1,
                             title: item.name,
                             options
                         });
@@ -150,6 +155,9 @@ export default {
         calccategoryIds() {
             let ids = this.menuList.map(item => {
                 return item.value;
+            });
+            ids = ids.filter(item => {
+                return item !== -1;
             });
             return ids;
         },
@@ -169,7 +177,7 @@ export default {
             };
             this.$http.queryBook(data).then(res => {
                 this.$refs.search.inputValue = this.searchInput;
-				this.total = res.total;
+                this.total = res.total;
                 if (this.page === 1) {
                     this.bookList = res.bookVOS;
                 } else {
@@ -189,9 +197,9 @@ export default {
         },
         // 上拉加载
         scrollBottom() {
-			if(this.total === this.bookList.length) {
-				return;
-			}
+            if (this.total === this.bookList.length) {
+                return;
+            }
             this.page = this.page + 1;
             this.queryBook();
         },

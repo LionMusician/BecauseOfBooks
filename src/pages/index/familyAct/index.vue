@@ -22,11 +22,11 @@
         <cart-btn :num="carNum" @btnClick="carClick"></cart-btn>
         <!-- 列表 -->
         <scroll-view
-			v-if="activityList.length"
+            v-if="activityList.length"
             :scroll-y="activityList"
             :style="'height:' + scrollHeight + 'rpx;'"
             class="book-list"
-			@scrolltolower="scrollBottom"
+            @scrolltolower="scrollBottom"
         >
             <div class="activityView">
                 <div
@@ -51,8 +51,8 @@
                         </div>
                         <div class="timeDiv">
                             <div class="left">
-                                <p>时间：{{item.startDate}} - {{item.startDate}}</p>
                                 <p>地址：{{item.address}}</p>
+                                <p>时间：{{item.startDate}} - {{item.startDate}}</p>
                             </div>
                             <div class="right">
                                 <p v-if="item.adultPrice">
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </scroll-view>
-		<no-data v-else></no-data>
+        <no-data v-else></no-data>
     </div>
 </template>
 
@@ -102,7 +102,7 @@ export default {
             searchInput: "",
             page: 1,
             size: 10,
-			total: 0
+            total: 0
         };
     },
     computed: {
@@ -177,10 +177,9 @@ export default {
                 } else {
                     this.activityList = [...this.bookList, ...res.activityVOS];
                 }
-				this.total = res.total;
-				console.log(this.total);
-				console.log(this.activityList.length);
-				
+                this.total = res.total;
+                console.log(this.total);
+                console.log(this.activityList.length);
             });
         },
         // 刷新列表
@@ -190,9 +189,9 @@ export default {
         },
         // 上拉加载
         scrollBottom() {
-			if(this.total === this.activityList.length) {
-				return;
-			}
+            if (this.total === this.activityList.length) {
+                return;
+            }
             this.page = this.page + 1;
             this.queryActivity();
         },
@@ -232,8 +231,8 @@ export default {
         headerView,
         search,
         cartBtn,
-		noData,
-		noMore
+        noData,
+        noMore
     }
 };
 </script>

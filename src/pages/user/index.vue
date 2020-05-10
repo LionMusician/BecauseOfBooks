@@ -11,7 +11,7 @@
                         <!-- <span class="star">
                             <van-icon class="icon" name="star" />
                             <span>阅读达人</span>
-                        </span> -->
+                        </span>-->
                     </div>
                     <div class="admin" @click="toUserInfo">
                         <span>账号管理</span>
@@ -19,10 +19,10 @@
                     </div>
                 </div>
                 <div class="user">
-                    <div class="iconDiv">
+                    <!-- <div class="iconDiv">
                         <van-icon class="icon" name="service" />
                         <span>客服</span>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="starDiv" id="steps">
@@ -38,7 +38,10 @@
                         <div class="right"></div>
                     </div>
                 </div>
-                <div class="minutes-view" :style="'left:' + (userInfo.stage ? userInfo.stage - 1 : 0) * 225 + 'rpx'">
+                <div
+                    class="minutes-view"
+                    :style="'left:' + (userInfo.stage ? userInfo.stage - 1 : 0) * 225 + 'rpx'"
+                >
                     <p>
                         &nbsp;
                         <i class="iconfont iconshoucangchenggong"></i>
@@ -133,7 +136,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["loginInfo", "userInfo"]),
+        ...mapGetters(["loginInfo", "userInfo"])
     },
     onLoad() {
         this.getUserInfo();

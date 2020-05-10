@@ -59,7 +59,7 @@
             <van-col span="12" class="right" @click="navigate(1)">更多</van-col>
         </van-row>
         <div class="hotRow">
-            <van-row v-for="(item, index) in hotList" :key="index">
+            <van-row v-for="(item, index) in hotList" :key="index" @click="bannerClick(item)">
                 <van-col span="14">
                     <p class="title">【{{item.title}}】</p>
                     <div class="content">{{item.introduction}}</div>

@@ -36,36 +36,37 @@ export default {
             innerAudioContext: null
         };
     },
-    onLoad() {
+    onReady() {
         this.initAudio();
-        let innerAudioContext = wx.createInnerAudioContext();
-        this.innerAudioContext = innerAudioContext;
-        innerAudioContext.autoplay = true;
-        console.log(innerAudioContext);
-
-        innerAudioContext.onCanplay(() => {
-            innerAudioContext.duration;
-            setTimeout(() => {
-                this.duration = innerAudioContext.duration;
-            }, 500);
-        });
-        innerAudioContext.onEnded(res => {});
-
-        innerAudioContext.onError(res => {
-            // 播放音频失败的回调
-            console.log("播放音频失败", res);
-        });
-
-        innerAudioContext.onStop(res => {
-            console.log("播放结束!");
-        });
     },
     onUnload: function() {
         innerAudioContext.destroy();
     },
     methods: {
         // 初始化音频
-        initAudio() {},
+        initAudio() {
+            let innerAudioContext = wx.createInnerAudioContext();
+            this.innerAudioContext = innerAudioContext;
+            innerAudioContext.autoplay = true;
+            console.log(innerAudioContext);
+
+            innerAudioContext.onCanplay(() => {
+                innerAudioContext.duration;
+                setTimeout(() => {
+                    this.duration = innerAudioContext.duration;
+                }, 500);
+            });
+            innerAudioContext.onEnded(res => {});
+
+            innerAudioContext.onError(res => {
+                // 播放音频失败的回调
+                console.log("播放音频失败", res);
+            });
+
+            innerAudioContext.onStop(res => {
+                console.log("播放结束!");
+            });
+        },
         // 播放
         audioPlay() {
             if (this.animation) {
@@ -73,6 +74,7 @@ export default {
             } else {
                 this.innerAudioContext.src = this.audio.src;
                 this.innerAudioContext.play();
+                console.log(this.innerAudioContext);
             }
             this.animation = !this.animation;
             this.duration && this.countDown();
