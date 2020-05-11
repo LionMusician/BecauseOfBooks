@@ -42,13 +42,21 @@
                     <p class="title">绘本详情</p>
                     <image :src='book.introduction' class='detail-img' mode='widthFix'></image>
                 </li>
-                <li id="radio" v-if="book.audio" class="radio">
+                <li id="radio"  v-if="book.audio" class="radio">
                     <p class="title">绘本音频</p>
-                    <radio-play></radio-play>
+                    <div class="media-link" @click="bannerClick(book.audio)">
+                        <img src="../../../../static/images/book/audioPlay.png" alt="">
+                        <p>点击查看绘本音频</p>
+                    </div>
+                    <!-- <radio-play></radio-play> -->
                 </li>
                 <li id="video" v-if="book.video" class="video">
                     <p class="title">绘本视频</p>
-                    <video-play :videoUrl="book.video"></video-play>
+                    <div class="media-link" @click="bannerClick(book.video)">
+                        <img src="../../../../static/images/book/videoPlay.png" alt="">
+                        <p>点击查看绘本视频</p>
+                    </div>
+                    <!-- <video-play :videoUrl="book.video"></video-play> -->
                 </li>
                 <li id="evalute" class="evalute">
                     <p class="title">绘本评价</p>
@@ -176,7 +184,7 @@ export default {
                     this.goToPoint("video");
                     break;
                 case 3:
-                    this.addBookToBag(item);
+                    this.addBookToBag();
                     break;
                 case 4:
                     // 收藏
@@ -239,7 +247,7 @@ export default {
                 id: id
             };
             this.$http.getBookDetail(data).then(res => {
-                this.book = res.bookVO;
+                this.book = {...res.bookVO};
             });
         },
         // 查询书包
@@ -252,7 +260,8 @@ export default {
             });
         },
         // 加入书包
-        addBookToBag(book) {
+        addBookToBag() {
+            let book = this.book;
             if(!book.remainStock) {
                 return Tips.toast("库存不足！");
             }
@@ -290,7 +299,11 @@ export default {
             wx.navigateTo({
                 url: `/pages/user/editComment/main?type=1&id=${this.bookId}`
             });
-        }
+        },
+        // 点击banner图
+        bannerClick(link) {
+            wx.navigateTo({url: `/pages/index/webview/main?link=${link}`});
+        },
     }
 };
 </script>
@@ -375,6 +388,20 @@ export default {
                     border: none;
                     @include hh(160rpx);
                     color: $--color-gray-c;
+                }
+            }
+            .media-link {
+                @include fj(center);
+                width: 400rpx;
+                margin: 0 auto;
+                padding: 0 50rpx;
+                img {
+                    @include wh(50rpx, 50rpx);
+                    margin-right: 10rpx;
+                }
+                p {
+                    width: auto;
+                    @include sc($--text-nm, $--color-text);
                 }
             }
             .intro {

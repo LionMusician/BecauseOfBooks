@@ -66,6 +66,9 @@ export default {
             @include hh(80rpx);
             @include fj;
             border-bottom: 2rpx solid $--color-gray-c;
+            .name {
+                @include ellipsis;
+            }
             .deleteBtn {
                 padding: 0 30rpx;
             }

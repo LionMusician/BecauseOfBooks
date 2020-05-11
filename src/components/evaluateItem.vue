@@ -5,7 +5,7 @@
         </div>
         <div class="right">
             <p class="text" v-if="evaluate.text">{{evaluate.text}}</p>
-            <radio-play v-if="evaluate.audio"></radio-play>
+            <radio-play v-if="evaluate.audio" :audio="evaluate.audio"></radio-play>
         </div>
     </div>
 </template>

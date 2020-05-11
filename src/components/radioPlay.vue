@@ -19,14 +19,7 @@ export default {
             default: "btn green"
         },
         audio: {
-            type: Object,
-            default: () => {
-                return {
-                    src:
-                        "https://win-web-ra01-sycdn.kuwo.cn/527bb77f6e1201ac44afee03eb9a6fb7/5e771076/resource/n1/128/41/59/2128455865.mp3",
-                    time: 0
-                };
-            }
+            type: Object
         }
     },
     data() {
@@ -39,31 +32,18 @@ export default {
     onReady() {
         this.initAudio();
     },
-    onUnload: function() {
-        innerAudioContext.destroy();
-    },
     methods: {
         // 初始化音频
         initAudio() {
             let innerAudioContext = wx.createInnerAudioContext();
+            innerAudioContext.src = this.audio;
             this.innerAudioContext = innerAudioContext;
-            innerAudioContext.autoplay = true;
-            console.log(innerAudioContext);
-
-            innerAudioContext.onCanplay(() => {
-                innerAudioContext.duration;
-                setTimeout(() => {
-                    this.duration = innerAudioContext.duration;
-                }, 500);
-            });
-            innerAudioContext.onEnded(res => {});
-
-            innerAudioContext.onError(res => {
+            this.innerAudioContext.onError(res => {
                 // 播放音频失败的回调
                 console.log("播放音频失败", res);
             });
 
-            innerAudioContext.onStop(res => {
+            this.innerAudioContext.onStop(res => {
                 console.log("播放结束!");
             });
         },
@@ -72,12 +52,14 @@ export default {
             if (this.animation) {
                 this.innerAudioContext.pause();
             } else {
-                this.innerAudioContext.src = this.audio.src;
                 this.innerAudioContext.play();
+                // this.duration = this.innerAudioContext.duration;
                 console.log(this.innerAudioContext);
             }
             this.animation = !this.animation;
-            this.duration && this.countDown();
+            if (this.duration > 1) {
+                this.countDown();
+            }
         },
         // 倒计时
         countDown() {
