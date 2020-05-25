@@ -10,7 +10,7 @@
 		>
 			<div class="imgDiv">
 				<i v-if="type === 'car'" class="iconfont icongouwuche rotateY"></i>
-				<i v-else-if="type === 'bag'" class="iconfont iconshubao- rotate"></i>
+				<!-- <i v-else-if="type === 'bag'" class="iconfont iconshubao- rotate"></i> -->
 				<i v-else class="iconfont icongongwen rotate"></i>
 			</div>
 			<div class="sup" v-if="num">{{num > 99 ? '99+' : num}}</div>

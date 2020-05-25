@@ -17,7 +17,7 @@
             <div class="bookList">
                 <div v-for="(item, index) in bookList" :key="index" class="bookItem">
                     <div class="imgDiv">
-                        <img :src="item.frontCover" @click="bookClick(item)" alt />
+                        <img :src="item.frontCover" mode="heightFix" @click="bookClick(item)" alt />
                     </div>
                     <p class="title">{{item.name}}</p>
                     <div class="labelDiv">

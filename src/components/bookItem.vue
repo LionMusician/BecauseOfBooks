@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main" @click="bookClick">
             <div class="left">
-                <img class="logo" :src="book.frontCover" alt />
+                <img class="logo" mode="heightFix" :src="book.frontCover" alt />
             </div>
             <div class="right">
                 <div class="name">{{book.name}}</div>
@@ -67,7 +67,7 @@ export default {
         border-bottom: 1rpx solid $--color-gray-c;
         .left {
             @include wh(240rpx, 240rpx);
-            @include fj;
+            @include fj(center);
             .logo {
                 @include wh(220rpx, 200rpx);
                 // background: $--color-primary;

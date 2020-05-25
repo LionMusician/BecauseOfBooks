@@ -19,7 +19,7 @@
                 >
                     <div class="left">
                         <div class="imgDiv">
-                            <img :src="item.picture" alt />
+                            <img :src="item.picture" mode="heightFix" alt />
                         </div>
                     </div>
                     <div class="right">

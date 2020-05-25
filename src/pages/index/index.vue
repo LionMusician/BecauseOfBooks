@@ -66,7 +66,7 @@
                 </van-col>
                 <van-col span="10">
                     <div class="imgDiv">
-                        <img :src="item.picture" alt />
+                        <img :src="item.picture" mode="heightFix" alt />
                     </div>
                 </van-col>
             </van-row>
@@ -85,7 +85,7 @@
                 @click="bookClick(item)"
             >
                 <div class="imgDiv">
-                    <img :src="item.frontCover" alt />
+                    <img :src="item.frontCover" mode="heightFix" alt />
                 </div>
                 <p class="title">{{item.name}}</p>
             </van-col>
