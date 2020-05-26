@@ -6,7 +6,7 @@
         </van-sticky>
         <div class="cover">
             <div class="logo">
-                <img :src="book.frontCover" alt />
+                <img :src="book.frontCover" mode='heightFix' alt />
             </div>
             <p class="name">{{book.name}}</p>
             <ul class="tag-list">
@@ -40,7 +40,7 @@
                 </li>
                 <li id="detail" class="detail">
                     <p class="title">绘本详情</p>
-                    <image :src='book.introduction' class='detail-img' mode='widthFix'></image>
+                    <image v-for="(item,index) in book.imgList" :src='item' class='detail-img' mode='widthFix'></image>
                 </li>
                 <li id="radio"  v-if="book.audio" class="radio">
                     <p class="title">绘本音频</p>
@@ -247,7 +247,9 @@ export default {
                 id: id
             };
             this.$http.getBookDetail(data).then(res => {
-                this.book = {...res.bookVO};
+                let book = {...res.bookVO};
+                book.imgList = book.introduction.split('|');
+                this.book = book;
             });
         },
         // 查询书包

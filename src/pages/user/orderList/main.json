@@ -4,6 +4,8 @@
         "van-tab": "/static/vant/tab/index",
         "van-tabs": "/static/vant/tabs/index",
         "van-button": "/static/vant/button/index",
-        "van-sticky": "/static/vant/sticky/index"
+        "van-sticky": "/static/vant/sticky/index",
+        "van-action-sheet": "/static/vant/action-sheet/index",
+        "van-cell": "/static/vant/cell/index"
     }
 }

@@ -250,13 +250,12 @@ export default {
             this.$http.queryShoppingCart().then(res => {
                 let data = res.shoppingCartVOS;
                 data.forEach(item => {
-                    item.activityVO = item.activityVO || {}
+                    item.activityVO = item.activityVO || {};
                     let activityVO = item.activityVO;
                     activityVO.adultPriceAll =
                         Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
                     activityVO.childPriceAll =
-                        Number(item.childNum) *
-                        Number(activityVO.childPrice); // 儿童价格
+                        Number(item.childNum) * Number(activityVO.childPrice); // 儿童价格
                     item.checked = false;
                 });
                 this.carList = data;
@@ -381,12 +380,29 @@ export default {
                 shoppingCartIds: shoppingCartIds,
                 voucherIds: voucherIds
             };
-            this.$http.confirmOrder(parmas).then(res => {
-                wx.navigateTo(`/pages/index/confirmOrder/main?id=${res}`);
-            });
-            // .catch(() => {
-            // 	wx.navigateTo("/pages/index/confirmOrder/main");
-            // });
+            this.$http
+                .confirmOrder(parmas)
+                .then(res => {
+                    wx.navigateTo(`/pages/index/confirmOrder/main?id=${res}`);
+                })
+                .catch(err => {
+                    if (err.code === 500) {
+                        Dialog({
+                            message: err.msg,
+                            asyncClose: true,
+                            showCancelButton: true,
+                            confirmButtonText: "查看"
+                        })
+                            .then(() => {
+                                wx.navigateTo(
+                                    `/pages/user/orderList/main?state=1`
+                                );
+                            })
+                            .catch(() => {
+                                Dialog.close();
+                            });
+                    }
+                });
         },
         /**
          * 选择优惠券
