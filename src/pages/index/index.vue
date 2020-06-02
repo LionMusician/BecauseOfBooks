@@ -159,6 +159,8 @@ export default {
     },
     onShow() {
         this.shopName = this.shopId;
+            // 绘本推荐列表
+        this.queryBookRecommend();
     },
     methods: {
         ...mapActions(["setShopId"]),
@@ -178,8 +180,6 @@ export default {
             this.searchValue = value;
             // 精选热点
             this.queryHotspot();
-            // 绘本推荐列表
-            this.queryBookRecommend();
         },
         // 点击banner图
         bannerClick(item) {
@@ -387,6 +387,7 @@ export default {
             padding-top: 10rpx;
             padding-bottom: 40rpx;
             font-size: $--text-lg;
+            @include ellipsis;
         }
     }
 }

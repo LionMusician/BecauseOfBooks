@@ -202,6 +202,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询评论
+    getComment: (data) => {
+        return fly.request('/becausebooks-app/own/getComment', data, {
+            method: 'post'
+        });
+    },
     // 查询我的订单 
     getMyOrder: (data) => {
         return fly.request('/becausebooks-app/own/getMyOrder', data, {

@@ -1,11 +1,14 @@
 <template>
     <div class="main">
-        <div class="left">
+        <div class="left" v-if="page === 'common'">
             <img :src="evaluate.headImage" alt />
         </div>
         <div class="right">
             <p class="text" v-if="evaluate.text">{{evaluate.text}}</p>
             <radio-play v-if="evaluate.audio" :audio="evaluate.audio"></radio-play>
+        </div>
+        <div class="delete" v-if="page === 'user'" @click="deleteComment">
+            <van-icon name="delete" size="60rpx" />
         </div>
     </div>
 </template>
@@ -22,11 +25,21 @@ export default {
                     value: "这是一条评价"
                 };
             }
+        },
+        page: {
+            type: String,
+            default: "common"
         }
     },
     components: {
         radioPlay
-    }
+    },
+    methods: {
+        // 删除评论
+        deleteComment() {
+            this.$emit("deleteComment", this.evaluate);
+        }
+    },
 };
 </script>
 <style lang="scss" scoped>
