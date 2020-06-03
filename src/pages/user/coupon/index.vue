@@ -35,11 +35,11 @@
 				<div class="title">{{activeCard.typeDesc}}权益说明</div>
 				<div class="Des">
 					<p>有效期：{{activeCard.startDate}} - {{activeCard.endDate}}</p>
-					<p
+					<!-- <p
 						v-if="activeCard.type === 1"
-					>可借阅书册{{activeCard.borrowBookNum}}册，每次借阅{{activeCard.borrowDays}}天</p>
+					>可借阅书册{{activeCard.borrowBookNum}}册，每次借阅{{activeCard.borrowDays}}天</p>-->
 					<p
-						v-else-if="activeCard.type === 3"
+						v-if="activeCard.type === 3"
 					>可参与活动{{activeCard.activityNum}}次，剩余参与{{activeCard.remainActivityNum}}次</p>
 				</div>
 				<div class="title">优惠券</div>
@@ -86,8 +86,8 @@ export default {
 			this.$http.getMyCardAndVoucher().then(res => {
 				if (res.userCardVOS && res.userCardVOS.length) {
 					res.userCardVOS.forEach(item => {
-						item.startDate = utils.mklog(item.startDate);
-						item.endDate = utils.mklog(item.endDate);
+						item.startDate = utils.getDateYMD(item.startDate);
+						item.endDate = utils.getDateYMD(item.endDate);
 					});
 				}
 				this.cardList = res.userCardVOS;

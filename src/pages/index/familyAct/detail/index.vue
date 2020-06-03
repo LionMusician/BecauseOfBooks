@@ -43,7 +43,8 @@
                             :src="'../../../../../../../../../static/images/book/' + item.pic"
                             :style="'width:' + item.width + 'rpx;height:' + item.height + 'rpx;'"
                         />
-                        <p class="func-name">{{item.name}}</p>
+                        <button  class="func-name" plain open-type='share' v-if="item.name === '分享'">{{item.name}}</button>
+                        <p class="func-name" v-else>{{item.name}}</p>
                     </li>
                 </ul>
             </div>
@@ -165,6 +166,16 @@ export default {
     onLoad() {
         // 查询购物车
         this.queryShoppingCart();
+    },
+    //分享
+    onShareAppMessage() {
+        let path = `/pages/index/familyAct/detail/main?id=${
+            this.$root.$mp.query.id
+        }&from=CODE&share=true`;
+        return {
+            title: '因为书阅读馆',
+            path: path
+        };
     },
     methods: {
         /**
@@ -362,6 +373,7 @@ export default {
             }
             .func-name {
                 @include sc($--text-sm, $--color-text);
+                border: none;
             }
         }
     }
