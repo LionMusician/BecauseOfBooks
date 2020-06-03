@@ -285,8 +285,8 @@ export default {
 	.top {
 		.menus {
 			width: 750rpx;
-			overflow-x: scroll;
-			overflow-y: hidden;
+			// overflow-x: scroll;
+			// overflow-y: hidden;
 			/deep/ .van-dropdown-menu {
 				display: -webkit-flex;
 				display: -ms-flexbox;
