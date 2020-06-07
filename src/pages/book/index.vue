@@ -2,18 +2,20 @@
 	<div class="container">
 		<div class="top">
 			<search ref="search" placeholder="图书搜索" @search="searchBook"></search>
-			<div class="menus">
-				<van-dropdown-menu active-color="#8CC223">
-					<van-dropdown-item
-						v-for="(item, index) in menuList"
-						:key="index"
-						:title="item.title"
-						:value="item.value"
-						:options="item.options"
-						@change="(e) => { return selectMenu(e, index) }"
-					></van-dropdown-item>
-				</van-dropdown-menu>
-			</div>
+            <div class="menu-box">
+                <div class="menus">
+                    <van-dropdown-menu active-color="#8CC223">
+                        <van-dropdown-item
+                            v-for="(item, index) in menuList"
+                            :key="index"
+                            :title="item.title"
+                            :value="item.value"
+                            :options="item.options"
+                            @change="(e) => { return selectMenu(e, index) }"
+                        ></van-dropdown-item>
+                    </van-dropdown-menu>
+                </div>
+            </div>
 		</div>
 		<div class="main">
 			<scroll-view
@@ -283,8 +285,12 @@ export default {
 <style lang="scss" scoped>
 .container {
 	.top {
+        .menu-box {
+            width: 750rpx;
+			overflow-x: scroll;
+        }
 		.menus {
-			width: 750rpx;
+			width: 1000rpx;
 			// overflow-x: scroll;
 			// overflow-y: hidden;
 			/deep/ .van-dropdown-menu {
