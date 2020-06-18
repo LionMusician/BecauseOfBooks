@@ -44,10 +44,12 @@
 							<div class="other">
 								<div class="timeItem" v-for="(t, i) in item.times" :key="i">
 									<div class="imgDiv" @click="orderOrCancelCourse(t)">
-										<img v-if="t.check || t.timeout" src="../../../static/images/course/check.png" alt>
-										<img v-else src="../../../static/images/course/unCheck.png" alt>
+										<img v-if="t.usedNum === t.totalNum" src="../../../static/images/course/unCheck.png" alt>
+										<img v-else-if="t.check || t.timeout" src="../../../static/images/course/check.png" alt>
+										<img v-else src="../../../static/images/course/oncheck.jpg" alt>
 									</div>
-									<p class="time" :class="t.check ? '' : 'check'">{{t.check ? '取消预约': '预约'}}</p>
+									<p class="time" v-if="t.usedNum === t.totalNum">已约满</p>
+									<p class="time" v-else :class="t.check ? '' : 'check'">{{t.check ? '取消预约': '预约'}}</p>
 									<p class="time">{{t.startTime}}</p>
 									<div class="progress">
 										<van-progress
@@ -277,8 +279,8 @@ export default {
 					height: 120rpx;
 					overflow: hidden;
 					img {
-						width: 100rpx;
-						height: 120rpx;
+						width: 40rpx;
+						height: 40rpx;
 					}
 				}
 				.infoDiv {
