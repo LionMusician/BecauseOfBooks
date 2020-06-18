@@ -2,17 +2,20 @@
 	<div class="container">
 		<div class="top">
 			<search ref="search" placeholder="图书搜索" @search="searchBook"></search>
-			<div class="menus">
-				<van-dropdown-menu active-color="#8CC223">
-					<van-dropdown-item
-						v-for="(item, index) in menuList"
-						:key="index"
-						:title="item.title"
-						:value="item.value"
-						:options="item.options"
-						@change="(e) => { return selectMenu(e, index) }"
-					></van-dropdown-item>
-				</van-dropdown-menu>
+			<div class="menu-box">
+				<div class="menus" id="menus">
+					<van-dropdown-menu active-color="#8CC223" z-index="9999">
+						<van-dropdown-item
+							get-container="body"
+							v-for="(item, index) in menuList"
+							:key="index"
+							:title="item.title"
+							:value="item.value"
+							:options="item.options"
+							@change="(e) => { return selectMenu(e, index) }"
+						></van-dropdown-item>
+					</van-dropdown-menu>
+				</div>
 			</div>
 		</div>
 		<div class="main">
@@ -145,6 +148,14 @@ export default {
 
 				this.menuList = category;
 				this.queryBook();
+				wx
+					.createSelectorQuery()
+					.select("#menus")
+					.boundingClientRect(e => {
+						let height = 140 + e.height;
+						this.scrollHeight = this.getWindowHeight(height);
+					})
+					.exec();
 			});
 		},
 		// 计算分类id列表
@@ -283,21 +294,25 @@ export default {
 <style lang="scss" scoped>
 .container {
 	.top {
+		.menu-box {
+			-webkit-overflow-scrolling: touch;
+		}
 		.menus {
-			width: 750rpx;
-			// overflow-x: scroll;
-			// overflow-y: hidden;
+			width: 100vw;
+			padding: 0 20rpx;
+			height: auto;
+			/deep/ ._van-dropdown-menu {
+				display: inline-block;
+				height: auto;
+			}
 			/deep/ .van-dropdown-menu {
-				display: -webkit-flex;
-				display: -ms-flexbox;
-				display: flex;
-				float: left; // 使其脱离文档流 宽度为所有字元素的和
-				min-width: 100%;
-				.van-dropdown-menu__item {
-					float: left;
-					max-width: 300rpx;
-					margin-right: 10rpx;
-				}
+				display: inline-block;
+				float: left;
+				height: auto;
+			}
+			/deep/ .van-dropdown-menu__item {
+				display: inline-block;
+				z-index: 999999999;
 			}
 		}
 	}
