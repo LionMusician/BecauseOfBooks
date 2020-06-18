@@ -74,7 +74,7 @@
                 />
                 <van-field
                     v-if="!smartShow"
-                    :value="userInfo.childSexLabel"
+                    :value="userInfo.childSex === 2 ? '女' : '男'"
                     label="性别"
                     input-align="right"
                     placeholder="选择性别"
@@ -293,6 +293,8 @@ export default {
         // 选择性别
         selectGender(e) {
             let detail = e.mp.detail;
+            console.log(detail);
+            
             this.userInfo.childSexLabel = detail.value.label;
             this.userInfo.childSex = detail.value.value;
             this.genderHide();
