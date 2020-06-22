@@ -11,18 +11,22 @@
 						v-if="cardList && cardList.length"
 					>
 						<swiper-item v-for="(item, index) in cardList" :key="index">
-							<div class="bannerItem" :style="'backgroound: url(' + item.frontCover + ')'">
-								<div class="coupon" @click="cardClick(index)">
-									<div class="top">
-										<span>{{item.typeDesc}}</span>
-										<span>编码：{{item.code}}</span>
-									</div>
+							<div class="bannerItem">
+								<div
+									class="coupon"
+									@click="cardClick(index)"
+									:style="{backgroundImage:'url('+item.frontCover+')', backgroundSize: '100%'}"
+								>
 									<div class="bottom">
-										<div class="imgDiv">
-											<img :src="item.qrCode" alt>
+										<div class="left">
+											<p>姓名：{{item.userName}}</p>
+											<p>编码：{{item.code}}</p>
+											<p>时间：{{item.startDate}} - {{item.endDate}}</p>
 										</div>
-										<div>
-											<p>升级该等级</p>
+										<div class="right">
+											<div class="imgBox">
+												<img :src="item.qrCode" alt>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -125,28 +129,48 @@ export default {
 				height: 100%;
 				padding: 40rpx 20rpx 40rpx 20rpx;
 				.coupon {
-					@include fc();
-					background: $--color-primary;
+					// @include fc();
+					// background: $--color-primary;
+					position: relative;
 					width: 100%;
 					height: 100%;
 					border-radius: 40rpx;
 					padding: 20rpx 40rpx;
 					font-size: $--text-nm;
 					color: $--color-white;
-					.top {
-						@include fj();
-						width: 100%;
-					}
 					.bottom {
-						@include fj();
+						position: absolute;
+						left: 0;
+						bottom: 0;
+						@include fj(flex-end);
 						width: 100%;
-						.imgDiv {
-							width: 80rpx;
-							height: 80rpx;
-							overflow: hidden;
-							img {
-								width: 80rpx;
-								height: 80rpx;
+						height: 100%;
+						align-items: flex-end;
+						justify-content: flex-end;
+						.left {
+							flex: 1;
+							height: 100%;
+							@include fc();
+							align-items: flex-start;
+							justify-content: flex-end;
+							padding-left: 40rpx;
+							padding-bottom: 40rpx;
+							font-size: $--text-sm;
+						}
+						.right {
+							@include fc(center);
+							width: 140rpx;
+							padding-right: 40rpx;
+							padding-bottom: 40rpx;
+							.imgBox {
+								width: 100rpx;
+								height: 100rpx;
+								img {
+									width: auto;
+									height: auto;
+									max-width: 100%;
+									max-height: 100%;
+								}
 							}
 						}
 					}
