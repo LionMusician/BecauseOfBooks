@@ -4,9 +4,10 @@
 			<img :src="evaluate.headImage" alt>
 		</div>
 		<div class="right">
+			<p class="name">{{evaluate.userName}}</p>
+			<radio-play v-if="evaluate.audio" :audio="evaluate.audio" color="btn gray"></radio-play>
 			<p class="text" v-if="evaluate.text">{{evaluate.text}}</p>
 			<img class="img" v-if="evaluate.picture" :src="evaluate.picture" alt>
-			<radio-play v-if="evaluate.audio" :audio="evaluate.audio"></radio-play>
 		</div>
 		<div class="delete" v-if="page === 'user'" @click="deleteComment">
 			<van-icon name="delete" size="60rpx"/>
@@ -45,7 +46,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .main {
-	@include fj;
+	@include fj(flex-start);
+	align-items: flex-start;
 	.left {
 		@include wh(140rpx, 140rpx);
 		padding: 20rpx;
@@ -57,17 +59,21 @@ export default {
 	}
 	.right {
 		width: 500rpx;
+		.name {
+			@include hh(140rpx);
+			@include sc($--text-xl, $--color-glass);
+		}
 		.text {
 			line-height: 40rpx;
-			@include sc($--text-sm, $--color-gray-6);
-			background: $--color-gray-de;
+			@include sc($--text-nm, $--color-gray-6);
+			// background: $--color-gray-de;
 			border-radius: 30rpx;
-			letter-spacing: 4rpx;
-			padding: 10rpx 20rpx 40rpx 20rpx;
-			margin-bottom: 20rpx;
+			letter-spacing: 2rpx;
+			padding: 10rpx 20rpx 20rpx 10rpx;
+			margin: 20rpx 0;
 		}
 		.img {
-			@include wh(200rpx, 200rpx);
+			@include wh(160rpx, 160rpx);
 		}
 	}
 }

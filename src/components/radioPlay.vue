@@ -119,7 +119,15 @@ export default {
             @include sc($--text-lg, $--color-white);
         }
         &.gray {
-            background: $--color-gray-c;
+            background: $--color-gray-de;
+            .sound{
+                .circle {
+                    border-color: $--color-gray-6;
+                }
+            }
+            .time {
+                color: $--color-gray-6;
+            }
         }
     }
 }

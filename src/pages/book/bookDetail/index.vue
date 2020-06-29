@@ -40,7 +40,7 @@
                 </li>
                 <li id="detail" class="detail">
                     <p class="title">绘本详情</p>
-                    <image v-for="(item,index) in book.imgList" :src='item' class='detail-img' mode='widthFix'></image>
+                    <image v-for="(item,index) in book.imgList" :key="index" :src='item' class='detail-img' mode='widthFix'></image>
                 </li>
                 <li id="radio"  v-if="book.audio" class="radio">
                     <p class="title">绘本音频</p>
@@ -379,7 +379,7 @@ export default {
         }
     }
     .book-detial {
-        li {
+        &>ul>li {
             padding: 20rpx 30rpx;
             .title {
                 @include hh(60rpx);

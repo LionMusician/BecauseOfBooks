@@ -90,8 +90,8 @@ export default {
 			this.$http.getMyCardAndVoucher().then(res => {
 				if (res.userCardVOS && res.userCardVOS.length) {
 					res.userCardVOS.forEach(item => {
-						item.startDate = utils.getDateYMD(item.startDate);
-						item.endDate = utils.getDateYMD(item.endDate);
+						item.startDate = item.startDate.slice(0, 10);
+						item.endDate = item.endDate.slice(0, 10);
 					});
 				}
 				this.cardList = res.userCardVOS;
