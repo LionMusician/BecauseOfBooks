@@ -103,7 +103,7 @@ export default {
 		};
 	},
 	onLoad() {
-		this.getDateNow();
+		// this.getDateNow();
 		this.queryBag();
 		this.takeBookDetail();
 	},
@@ -180,6 +180,22 @@ export default {
 			this.$http.takeBookDetail().then(res => {
 				this.timeList = res.takeTimes;
 				this.timeSelect = res.takeTimes[0].code;
+				let dateList = res.takeDates;
+				this.dateNow = `${dateList[0].slice(0, 4)}年${dateList[0].slice(5, 7)}月`;
+				this.dateList = [
+					{
+						id: 0,
+						label: `${dateList[0].slice(8, 10)}日`
+					},
+					{
+						id: 1,
+						label: `${dateList[1].slice(8, 10)}日`
+					},
+					{
+						id: 2,
+						label: `${dateList[2].slice(8, 10)}日`
+					}
+				];
 			});
 		},
 		// 选择取书日期

@@ -10,7 +10,7 @@
     },
     "miniprogramRoot": "dist/wx/",
     "compileType": "miniprogram",
-    "appid": "touristappid",
+    "appid": "wx65ca5d434b474abb",
     "projectname": "frame",
     "condition": {
         "search": {

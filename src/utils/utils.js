@@ -12,7 +12,7 @@ export default class utils {
     static mklog(datemillis) {
         console.log(new Date(datemillis));
         
-        var date = datemillis ? new Date(datemillis.replace(/-/g, "/")) : new Date(); //新建一个事件对象
+        var date = datemillis ? new Date(datemillis) : new Date(); //新建一个事件对象
         var month = date.getMonth() + 1; //获取月份
         var strDate = date.getDate(); //获取日期
         var sh = date.getHours(); //获取时

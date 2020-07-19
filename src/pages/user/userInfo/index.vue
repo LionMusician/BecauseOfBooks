@@ -193,9 +193,10 @@ export default {
                 res.userVO.address = `${res.userVO.provinceName || ""} ${res
                     .userVO.cityName || ""} ${res.userVO.countyName || ""}`;
                 if (res.userVO.childBirthday) {
-                    res.userVO.childBirthday = utils
-                        .mklog(res.userVO.childBirthday)
-                        .split(" ")[0];
+                    res.userVO.childBirthday = res.userVO.childBirthday.substring(0, 10)
+                    // res.userVO.childBirthday = utils
+                    //     .mklog(res.userVO.childBirthday)
+                    //     .split(" ")[0];
                 }
 
                 this.userInfo = res.userVO;
@@ -310,6 +311,7 @@ export default {
         // 选择生日
         birthSelect(e) {
             let detail = e.mp.detail;
+            console.log(detail);
             this.userInfo.childBirthday = utils.mklog(detail).substring(0, 10);
             this.timePickerHide();
         },
