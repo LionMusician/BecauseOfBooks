@@ -166,10 +166,8 @@ export default {
 								width: 100rpx;
 								height: 100rpx;
 								img {
-									width: auto;
-									height: auto;
-									max-width: 100%;
-									max-height: 100%;
+									width: 100rpx;
+									height: 100rpx;
 								}
 							}
 						}

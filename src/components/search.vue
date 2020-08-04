@@ -56,7 +56,7 @@ export default {
         }
     }
     .input {
-        @include sc($--text-lg, $--color-gray-c);
+        @include sc($--text-lg, $--color-dark);
         @include wh(610rpx, 52rpx);
     }
     .placeholder {
