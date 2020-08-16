@@ -18,7 +18,7 @@
 
 						<span class="star">
 							<van-icon class="icon" name="star"/>
-							<span>{{userInfo.stageDesc}}</span>
+							<span class="stageDesc">{{userInfo.stageDesc}}</span>
 						</span>
 					</div>
 					<div class="admin" @click="toUserInfo">
@@ -153,6 +153,11 @@ export default {
 			}
 			this.$http.getUserInfo().then(r => {
 				this.setUserInfo(r.userVO);
+			}).catch(err => {
+				if(err.code === 1000) {
+					this.setUserInfo({});
+					this.getLogin();
+				}
 			});
 		},
 		// 显示登录按钮
@@ -300,6 +305,11 @@ export default {
 							font-size: $--text-nm;
 							margin-right: 10rpx;
 							color: $--color-secondary !important;
+						}
+						.stageDesc {
+							display: block;
+							max-width: 6em;
+							@include ellipsis;
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="page-top">
-            <van-image round width="80" height="80"></van-image>
+            <!-- <van-image round width="80" height="80"></van-image> -->
             <h2 class="page-title">我的积分</h2>
             <p class="year">· {{year}} ·</p>
         </div>
@@ -83,7 +83,7 @@ export default {
 <style lang="scss" scoped>
 .container {
     .page-top {
-        @include wh(100%, 400rpx);
+        @include wh(100%, auto);
         @include fc(center);
         .page-title {
             font-size: $--text-xxl;

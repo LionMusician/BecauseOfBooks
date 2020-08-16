@@ -136,6 +136,11 @@ export default {
 			this.$http.orderOrCancelCourse(parmas).then(res => {
 				Toast.success(item.check ? "取消预约成功" : "预约成功");
 				this.queryCourse();
+			}).catch(err => {
+				if(err.code === 1000) {
+					this.setUserInfo({});
+					this.getLogin();
+				}
 			});
 		},
 		/**
@@ -179,6 +184,11 @@ export default {
 			};
 			this.$http.queryCourse(parmas).then(res => {
 				this.courseList = this.getData(res.courseVOS);
+			}).catch(err => {
+				if(err.code === 1000) {
+					this.setUserInfo({});
+					this.getLogin();
+				}
 			});
 		},
 		/**

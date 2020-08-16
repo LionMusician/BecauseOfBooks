@@ -64,7 +64,7 @@ import noMore from "@components/noMore.vue";
 import wxLogin from "@components/wxLogin.vue";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
 	components: {
 		search,
@@ -106,6 +106,7 @@ export default {
 		this.queryBag();
 	},
 	methods: {
+        ...mapActions(["setUserInfo"]),
 		// 显示登录按钮
 		getLogin() {
 			wx.login(r => {
@@ -245,6 +246,11 @@ export default {
 					this.cartCoverShow = false;
 				}
 				this.bagList = res.bookBorrowVOS || [];
+			}).catch(err => {
+				if(err.code === 1000) {
+					this.setUserInfo({});
+					this.getLogin();
+				}
 			});
 		},
 		// 加入书包
