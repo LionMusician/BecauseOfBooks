@@ -13,7 +13,7 @@ const mixins = {
     methods: {
         // 判断是否登录
         judgeLogin() {
-            if (store.getters.loginInfo && JSON.stringify(store.getters.userInfo) !== '{}') {
+            if (store.getters.loginInfo && store.getters.loginInfo.token && JSON.stringify(store.getters.userInfo) !== '{}') {
                 return true;
             } else {
                 return false;

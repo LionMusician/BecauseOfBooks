@@ -411,9 +411,10 @@ export default {
                 text-indent: 2em;
             }
             .to-comment {
-                @include hh(60rpx);
+                @include hh(80rpx);
                 text-align: center;
-                @include sc($--text-lg, $--color-gray-c);
+                @include sc($--text-lg, $--color-dark);
+                font-weight: 700;
             }
             &.detail {
                 .detail-img {

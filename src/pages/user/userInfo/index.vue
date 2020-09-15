@@ -131,7 +131,7 @@ import headerView from "@components/headerView.vue";
 import utils from "@/utils/utils";
 import wx from "@/utils/wx-api";
 import Tips from "@/utils/Tips";
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
     name: "",
     data() {
@@ -182,10 +182,17 @@ export default {
         // 获取个人信息
         this.getUserInfo();
     },
+	computed: {
+		...mapGetters(["loginInfo"])
+	},
     methods: {
         ...mapActions(["setUserInfo"]),
         // 获取个人信息
         getUserInfo() {
+            if(!this.loginInfo.token) {
+                this.setUserInfo({});
+                return;
+            }
             this.$http.getUserInfo().then(res => {
                 this.setUserInfo(res.userVO);
                 res.userVO.childSexLabel =
