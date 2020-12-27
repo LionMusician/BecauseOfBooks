@@ -26,7 +26,8 @@
         "pages/user/comments/main",
         "pages/user/invest/main",
         "pages/user/orderList/main",
-        "pages/user/coupon/main"
+        "pages/user/coupon/main",
+        "pages/user/growthRecord/main"
     ],
     "window": {
         "backgroundTextStyle": "light",
