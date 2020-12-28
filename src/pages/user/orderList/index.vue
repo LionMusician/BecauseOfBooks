@@ -26,18 +26,19 @@
                     <div class="order-price" slot="price">
                         <div class="adult">
                             <p class="name">
-                                <span>成人：&yen;</span>
-                                <span class="price">{{tip.adultPrice}}</span>
+                                <!-- <span>成人：&yen;</span> -->
+                                <span>&yen;</span>
+                                <span class="price">{{tip.price}}</span>
                             </p>
                             <p class="count">x{{tip.adultNum}}</p>
                         </div>
-                        <div class="adult">
+                        <!-- <div class="adult">
                             <p class="name">
                                 <span>儿童：&yen;</span>
                                 <span class="price">{{tip.childPrice}}</span>
                             </p>
                             <p class="count">x{{tip.childNum}}</p>
-                        </div>
+                        </div>-->
                     </div>
                     <div class="goods-footer" slot="footer">
                         <!-- <van-button
@@ -99,7 +100,7 @@ export default {
             tabActive: 0,
             orderList: [],
             actionShow: false,
-            totalPriceView: 0
+            totalPriceView: 0,
         };
     },
     onLoad() {
@@ -112,11 +113,11 @@ export default {
         // 查询我的订单
         getMyOrder() {
             let params = {
-                statusList: [this.tabActive]
+                statusList: [this.tabActive],
             };
-            this.$http.getMyOrder(this.tabActive ? params : {}).then(res => {
+            this.$http.getMyOrder(this.tabActive ? params : {}).then((res) => {
                 if (res.orderVOS && res.orderVOS.length) {
-                    res.orderVOS.forEach(item => {
+                    res.orderVOS.forEach((item) => {
                         item.statusText = this.getStatus(item.status);
                     });
                 }
@@ -165,20 +166,20 @@ export default {
          * 支付
          */
         toPay() {
-            wx.login(r => {
+            wx.login((r) => {
                 let params = {
                     payChannel: 0,
                     orderId: this.orderId,
-                    wxCode: r.code
+                    wxCode: r.code,
                 };
                 // console.log(JSON.stringify(params));
 
-                this.$http.xcxpay(params).then(res => {
+                this.$http.xcxpay(params).then((res) => {
                     console.log(res);
                 });
             });
-        }
-    }
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>

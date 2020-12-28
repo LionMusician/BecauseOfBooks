@@ -37,7 +37,8 @@
                                 <div class="priceDiv">
                                     <div>
                                         <div class="row">
-                                            <div>成人：</div>
+                                            <!-- <div>成人：</div> -->
+                                            <div>价格：</div>
                                             <div>
                                                 <van-stepper
                                                     integer
@@ -50,11 +51,9 @@
                                                     minus-class="plus-minus"
                                                 />
                                             </div>
-                                            <div
-                                                class="price"
-                                            >&yen;{{item.activityVO.adultPriceAll}}</div>
+                                            <div class="price">&yen;{{item.activityVO.priceAll}}</div>
                                         </div>
-                                        <div class="row">
+                                        <!-- <div class="row">
                                             <div>儿童：</div>
                                             <div>
                                                 <van-stepper
@@ -71,7 +70,7 @@
                                             <div
                                                 class="price"
                                             >&yen;{{item.activityVO.childPriceAll}}</div>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +177,7 @@ export default {
             useCouponAmt: 0, // 优惠券优惠金额
             totalPrice: 0, // 购物车无优惠总金额
             shoppingCartVOS: [], // 下单参数 -- 购物车集合
-            userVoucherVOS: [] // 下单参数 -- 用户券
+            userVoucherVOS: [], // 下单参数 -- 用户券
         };
     },
     onLoad() {
@@ -196,16 +195,17 @@ export default {
             this.totalPrice = 0; // 购物车无优惠总金额
             this.shoppingCartVOS = []; // 下单参数 -- 购物车集合
             this.userVoucherVOS = []; // 下单参数 -- 用户券
-            data.forEach(item => {
+            data.forEach((item) => {
                 if (item.checked) {
                     // 计算金额
-                    let adultPrice =
-                        Number(item.adultNum) *
-                        Number(item.activityVO.adultPrice); // 成人价格
-                    let childPrice =
-                        Number(item.childNum) *
-                        Number(item.activityVO.childPrice); // 儿童价格
-                    let totalPrice = Number(adultPrice) + Number(childPrice);
+                    // let adultPrice =
+                    //     Number(item.adultNum) *
+                    //     Number(item.activityVO.adultPrice); // 成人价格
+                    // let childPrice =
+                    //     Number(item.childNum) *
+                    //     Number(item.activityVO.childPrice); // 儿童价格
+                    // let totalPrice = Number(adultPrice) + Number(childPrice);
+                    let totalPrice = Number(item.num * item.unitPrice);
                     num += totalPrice;
                     this.totalPrice += totalPrice;
                     // 整理下单用购物车参数
@@ -215,14 +215,14 @@ export default {
                         childNum: item.childNum,
                         price: totalPrice,
                         activityVO: {
-                            id: item.activityVO.id
-                        }
+                            id: item.activityVO.id,
+                        },
                     };
                     this.shoppingCartVOS.push(obj);
                 }
             });
             if (this.useCoupon && this.useCoupon.length) {
-                this.useCoupon.forEach(item => {
+                this.useCoupon.forEach((item) => {
                     // 计算金额
                     if (item.type === 1) {
                         num -= item.reducePrice;
@@ -240,22 +240,24 @@ export default {
                 num = 0;
             }
             return num;
-        }
+        },
     },
     methods: {
         /**
          * 查询购物车
          **/
         queryShoppingCart() {
-            this.$http.queryShoppingCart().then(res => {
+            this.$http.queryShoppingCart().then((res) => {
                 let data = res.shoppingCartVOS;
-                data.forEach(item => {
+                data.forEach((item) => {
                     item.activityVO = item.activityVO || {};
                     let activityVO = item.activityVO;
-                    activityVO.adultPriceAll =
-                        Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
-                    activityVO.childPriceAll =
-                        Number(item.childNum) * Number(activityVO.childPrice); // 儿童价格
+                    // activityVO.adultPriceAll =
+                    //     Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
+                    // activityVO.childPriceAll =
+                    //     Number(item.childNum) * Number(activityVO.childPrice); // 儿童价格
+                    activityVO.priceAll =
+                        Number(item.num) * Number(item.unitPrice);
                     item.checked = false;
                 });
                 this.carList = data;
@@ -265,9 +267,9 @@ export default {
          * 查询优惠券列表
          **/
         queryVoucher() {
-            this.$http.queryVoucher().then(res => {
+            this.$http.queryVoucher().then((res) => {
                 let data = res.userVoucherVOS;
-                data.forEach(item => {
+                data.forEach((item) => {
                     item.startTime = utils.mklog(item.startTime);
                     item.endTime = utils.mklog(item.endTime);
                     item.check = false;
@@ -276,7 +278,7 @@ export default {
                         item.disabled = true;
                     }
                     if (this.useCoupon && this.useCoupon.length) {
-                        this.useCoupon.forEach(use => {
+                        this.useCoupon.forEach((use) => {
                             if (item.voucherId === use.voucherId) {
                                 item.check = true;
                             }
@@ -293,11 +295,11 @@ export default {
             Dialog({
                 message: `确认删除商品【${item.activityVO.name}】？`,
                 asyncClose: true,
-                showCancelButton: true
+                showCancelButton: true,
             })
                 .then(() => {
                     let parmas = {
-                        ids: [item.id]
+                        ids: [item.id],
                     };
                     this.deleteShoppingCart(parmas);
                 })
@@ -309,10 +311,10 @@ export default {
          * 删除购物车
          **/
         deleteShoppingCart(parmas) {
-            this.$http.deleteShoppingCart(parmas).then(res => {
+            this.$http.deleteShoppingCart(parmas).then((res) => {
                 Notify({
                     type: "success",
-                    message: "删除成功"
+                    message: "删除成功",
                 });
                 this.queryShoppingCart();
                 Dialog.close();
@@ -323,21 +325,21 @@ export default {
          **/
         onClickButton() {
             if (this.isEdit) {
-                this.delGoods().then(res => {
+                this.delGoods().then((res) => {
                     Dialog({
                         message: res,
                         asyncClose: true,
-                        showCancelButton: true
+                        showCancelButton: true,
                     })
                         .then(() => {
                             let ids = [];
-                            this.carList.forEach(item => {
+                            this.carList.forEach((item) => {
                                 if (item.checked) {
                                     ids.push(item.id);
                                 }
                             });
                             let parmas = {
-                                ids: ids
+                                ids: ids,
                             };
                             this.deleteShoppingCart(parmas);
                         })
@@ -347,7 +349,7 @@ export default {
                 });
             } else {
                 let arr = 0;
-                this.carList.forEach(item => {
+                this.carList.forEach((item) => {
                     if (item.checked) {
                         arr++;
                     }
@@ -355,7 +357,7 @@ export default {
                 if (!arr) {
                     Notify({
                         type: "warning",
-                        message: "请选择商品"
+                        message: "请选择商品",
                     });
                     return false;
                 }
@@ -366,10 +368,10 @@ export default {
          * 去结算
          */
         confirmOrder() {
-            let shoppingCartIds = this.shoppingCartVOS.map(item => {
+            let shoppingCartIds = this.shoppingCartVOS.map((item) => {
                 return item.id;
             });
-            let voucherIds = this.userVoucherVOS.map(item => {
+            let voucherIds = this.userVoucherVOS.map((item) => {
                 return item.voucherId;
             });
             let parmas = {
@@ -378,20 +380,20 @@ export default {
                 // totalPrice: this.totalPrice,
                 // userVoucherVOS: this.userVoucherVOS
                 shoppingCartIds: shoppingCartIds,
-                voucherIds: voucherIds
+                voucherIds: voucherIds,
             };
             this.$http
                 .confirmOrder(parmas)
-                .then(res => {
+                .then((res) => {
                     wx.navigateTo(`/pages/index/confirmOrder/main?id=${res}`);
                 })
-                .catch(err => {
+                .catch((err) => {
                     if (err.code === 500) {
                         Dialog({
                             message: err.msg,
                             asyncClose: true,
                             showCancelButton: true,
-                            confirmButtonText: "查看"
+                            confirmButtonText: "查看",
                         })
                             .then(() => {
                                 wx.navigateTo(
@@ -410,7 +412,7 @@ export default {
         couponChange() {
             let arr = [];
             this.useCoupon = [];
-            this.couponList.forEach(item => {
+            this.couponList.forEach((item) => {
                 if (item.check) {
                     arr.push(item);
                 }
@@ -424,7 +426,7 @@ export default {
          */
         selectCoupon() {
             let arr = 0;
-            this.carList.forEach(item => {
+            this.carList.forEach((item) => {
                 if (item.checked) {
                     arr++;
                 }
@@ -432,7 +434,7 @@ export default {
             if (!arr) {
                 Notify({
                     type: "warning",
-                    message: "请选择商品"
+                    message: "请选择商品",
                 });
                 return false;
             }
@@ -450,7 +452,7 @@ export default {
                     resolve(text);
                 } else {
                     let num = 0;
-                    this.carList.forEach(item => {
+                    this.carList.forEach((item) => {
                         if (item.checked) {
                             num++;
                         }
@@ -459,7 +461,7 @@ export default {
                     if (!num) {
                         Notify({
                             type: "warning",
-                            message: "请选择要删除的商品"
+                            message: "请选择要删除的商品",
                         });
                         reject(false);
                     } else {
@@ -487,7 +489,7 @@ export default {
          * 改变全选，对应列表改变
          */
         carListChange() {
-            this.carList.map(item => {
+            this.carList.map((item) => {
                 item.checked = this.allChecked;
             });
         },
@@ -499,17 +501,18 @@ export default {
             item[type] = e.mp.detail;
 
             // 计算成人价格
-            item.activityVO.adultPriceAll =
-                Number(item.adultNum) * Number(item.activityVO.adultPrice);
+            // item.activityVO.adultPriceAll =
+            //     Number(item.adultNum) * Number(item.activityVO.adultPrice);
 
-            // 计算儿童价格
-            item.activityVO.childPriceAll =
-                Number(item.childNum) * Number(item.activityVO.childPrice);
+            // // 计算儿童价格
+            // item.activityVO.childPriceAll =
+            //     Number(item.childNum) * Number(item.activityVO.childPrice);
 
-            // 计算总价
-            item.price =
-                Number(item.activityVO.adultPriceAll) +
-                Number(item.activityVO.childPriceAll);
+            // // 计算总价
+            // item.price =
+            //     Number(item.activityVO.adultPriceAll) +
+            //     Number(item.activityVO.childPriceAll);
+            item.priceAll = Number(item.num) * Number(item.activityVO.priceAll);
 
             // 更新购物车
             this.upDateShopCar(item);
@@ -533,12 +536,12 @@ export default {
                     adultNum: item.adultNum,
                     childNum: item.childNum,
                     id: item.id,
-                    price: item.price
-                }
+                    price: item.price,
+                },
             };
-            this.$http.updateShoppingCart(parmas).then(res => {});
-        }
-    }
+            this.$http.updateShoppingCart(parmas).then((res) => {});
+        },
+    },
 };
 </script>
 

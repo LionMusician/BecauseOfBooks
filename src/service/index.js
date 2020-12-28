@@ -184,6 +184,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询我的成长记录
+    getMyGrowthRecord: (data) => {
+        return fly.request('/becausebooks-app/own/getMyGrowthRecord', data, {
+            method: 'post'
+        });
+    },
     // 查询课程预约 
     getCourseOrder: (data) => {
         return fly.request('/becausebooks-app/own/getCourseOrder', data, {

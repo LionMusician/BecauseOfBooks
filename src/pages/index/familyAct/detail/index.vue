@@ -10,15 +10,15 @@
             </div>
             <div class="name">{{book.name}}</div>
             <div class="price">
-                <span class="color">成人：</span>
-                {{book.adultPrice}}
+                <!-- <span class="color">成人：</span> -->
+                &yen;{{book.price}}
             </div>
-            <div class="price">
+            <!-- <div class="price">
                 <span class="color">儿童：</span>
                 {{book.childPrice}}
-            </div>
+            </div> -->
             <div class="progress">
-                <div class="color">已报名{{book.joinNum}}人</div>
+                <div class="color">已报名{{book.joinNum || 0}}人</div>
                 <div class="progressItem">
                     <van-progress
                         :percentage="(book.joinNum / book.totalNum) *100"
