@@ -14,9 +14,9 @@ export default class wxApi {
     * 保留当前页面，跳转到应用内的某个页面
     */
     static navigateTo(url, parms) {
-        if(!this.flag){
+        if (!this.flag) {
             this.flag = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.flag = false;
             }, this.delay);
             wx.navigateTo({
@@ -29,24 +29,24 @@ export default class wxApi {
     * 关闭当前页面，跳转到应用内的某个页面
     */
     static redirectTo(url, parms) {
-        if(!this.flag){
+        if (!this.flag) {
             this.flag = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.flag = false;
             }, this.delay);
             wx.redirectTo({
                 url: parms ? `${url}?${parms}` : url
             });
-        }    
+        }
     }
 
     /**
     * 关闭所有页面，跳转到应用内的某个页面
     */
     static reLaunch(url, parms) {
-        if(!this.flag){
+        if (!this.flag) {
             this.flag = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.flag = false;
             }, this.delay);
             wx.reLaunch({
@@ -59,9 +59,9 @@ export default class wxApi {
     * 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
     */
     static switchTab(url) {
-        if(!this.flag){
+        if (!this.flag) {
             this.flag = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.flag = false;
             }, this.delay);
             wx.switchTab({
@@ -73,14 +73,14 @@ export default class wxApi {
     /**
     * 关闭当前页面，返回上一页面或多级页面
     */
-   static navigateBack(delta) {
-       if(!this.flag){
+    static navigateBack(delta) {
+        if (!this.flag) {
             this.flag = true;
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.flag = false;
             }, this.delay);
             wx.navigateBack({
-                delta:parseInt(delta)
+                delta: parseInt(delta)
             });
         }
     }
@@ -97,7 +97,7 @@ export default class wxApi {
     /**
     * 设置页面标题
     */
-    static setNavigationBarTitle(title){
+    static setNavigationBarTitle(title) {
         wx.setNavigationBarTitle({
             title: title,
         });
@@ -106,7 +106,7 @@ export default class wxApi {
     /**
     * 页面滚动到指定位置
     */
-    static pageScrollTo(scrollTop){
+    static pageScrollTo(scrollTop) {
         wx.pageScrollTo({
             scrollTop: scrollTop,
         });
@@ -115,8 +115,8 @@ export default class wxApi {
     /**
     * 获取节点的下边界坐标，滚动到底部
     */
-    static getRect(id){
-        wx.createSelectorQuery().select('#'+id).boundingClientRect(function(rect){
+    static getRect(id) {
+        wx.createSelectorQuery().select('#' + id).boundingClientRect(function (rect) {
             // 使页面滚动到底部
             // console.log(rect);
             wx.pageScrollTo({
@@ -124,44 +124,44 @@ export default class wxApi {
             })
         }).exec()
     }
-    
+
     /**
      * 图片预览
      */
-    static previewImage(current,urls){
+    static previewImage(current, urls) {
         wx.previewImage({
             current: current, // 当前显示图片的http链接
             urls: urls // 需要预览的图片http链接列表
-          })
+        })
     }
 
     /**
      * 停止下拉刷新
      */
-    static stopPullDownRefresh(){
+    static stopPullDownRefresh() {
         wx.stopPullDownRefresh();
     }
 
     /**
      * 设置缓存
      */
-    static setStorageSync(key, data){
+    static setStorageSync(key, data) {
         wx.setStorageSync(key, data);
     }
 
     /**
      * 获取缓存
      */
-    static getStorageSync(key){
+    static getStorageSync(key) {
         wx.getStorageSync(key);
     }
 
     /***
      * 获取当前位置
      */
-    static getLocation(fn){
+    static getLocation(fn) {
         wx.getLocation({
-            success: (res)=>{
+            success: (res) => {
                 fn(res);
             }
         })
@@ -170,42 +170,42 @@ export default class wxApi {
     /**
      * 打开地图选择位置
      */
-    static chooseLocation(fn){
+    static chooseLocation(fn) {
         wx.chooseLocation({
-            success: (res)=> {
+            success: (res) => {
                 fn(res);
             },
-            fail:(msg)=> {
-              if(msg.errMsg.indexOf('auth')!=-1) {
-                setTimeout(() => {
-                  wx.openSetting();
-                });
-              }
+            fail: (msg) => {
+                if (msg.errMsg.indexOf('auth') != -1) {
+                    setTimeout(() => {
+                        wx.openSetting();
+                    });
+                }
             }
-          });
+        });
     }
 
     /**
      * 创建节点查询
      */
-    static createSelectorQuery(){
+    static createSelectorQuery() {
         return wx.createSelectorQuery();
     }
 
     /**
      * 确认框
      */
-    static showModal(title,content,fn){
+    static showModal(title, content, fn) {
         wx.showModal({
             title: title,
             content: content,
-            success: function(res) {
-              if (res.confirm) {
-                fn();
-                console.log('用户点击确定')
-              } else if (res.cancel) {
-                console.log('用户点击取消')
-              }
+            success: function (res) {
+                if (res.confirm) {
+                    fn();
+                    console.log('用户点击确定')
+                } else if (res.cancel) {
+                    console.log('用户点击取消')
+                }
             }
         })
     }
@@ -215,9 +215,9 @@ export default class wxApi {
      * 获取头像信息
      */
 
-    static getUserInfo(fn){
+    static getUserInfo(fn) {
         wx.getUserInfo({
-            success:(res)=>{
+            success: (res) => {
                 fn(res);
             }
         })
@@ -249,7 +249,7 @@ export default class wxApi {
             filePath,
             name: 'file',
             formData: {},
-            success (res){
+            success(res) {
                 fn(JSON.parse(res.data).data)
             }
         })
@@ -261,5 +261,43 @@ export default class wxApi {
      */
     static getRecorderManager(data = {}) {
         return wx.getRecorderManager(data)
+    }
+
+    /**
+     * 微信支付
+     */
+
+    static requestPayment(data = {}, fn) {
+        wx.requestPayment({
+            timeStamp: data.timeStamp + '',
+            nonceStr: data.nonceStr,
+            package: data.package,
+            signType: data.signType,
+            paySign: data.paySign,
+            success: (res) => {
+                wx.showToast({
+                    title: "支付成功",
+                    icon: 'success',
+                    mask: true,
+                    duration: 800
+                });
+                fn(res)
+            },
+            fail: r => {
+                console.log(r);
+                if (r.errMsg == "requestPayment:fail cancel") {
+                    // console.log('失败')
+                    wx.showToast({
+                        title: "支付失败",
+                        icon: 'none',
+                        mask: true,
+                        duration: 1000
+                    });
+                    setTimeout(() => {
+                        wx.redirectTo({ url: `/pages/user/orderList/main` });
+                    }, 1000);
+                }
+            }
+        })
     }
 }

@@ -30,7 +30,7 @@
                                 <span>&yen;</span>
                                 <span class="price">{{tip.price}}</span>
                             </p>
-                            <p class="count">x{{tip.adultNum}}</p>
+                            <p class="count">x{{tip.num}}</p>
                         </div>
                         <!-- <div class="adult">
                             <p class="name">
@@ -101,6 +101,7 @@ export default {
             orderList: [],
             actionShow: false,
             totalPriceView: 0,
+            orderId: "",
         };
     },
     onLoad() {
@@ -153,6 +154,7 @@ export default {
          */
         onClickButton(item) {
             this.totalPriceView = item.payPrice;
+            this.orderId = item.orderItemVOS[0].orderId;
             this.actionShow = true;
         },
         /**
@@ -175,7 +177,13 @@ export default {
                 // console.log(JSON.stringify(params));
 
                 this.$http.xcxpay(params).then((res) => {
-                    console.log(res);
+                    this.close();
+                    wx.requestPayment(res, (r) => {
+                        console.log(r);
+                        setTimeout(() => {
+                            this.getMyOrder();
+                        }, 800);
+                    });
                 });
             });
         },

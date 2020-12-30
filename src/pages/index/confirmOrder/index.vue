@@ -18,7 +18,7 @@
                     </div>-->
                     <div class="infoDiv">
                         <p class="title">【{{item.name}}】</p>
-                        <p class="other">出发人数：{{item.adultNum + item.childNum}}人</p>
+                        <p class="other">出发人数：{{num}}人</p>
                         <p class="other">时间：{{item.startDate}} - {{item.endDate}}</p>
                         <p class="other">地址：{{item.address}}</p>
                         <div class="price">&yen;{{item.price}}</div>
@@ -67,13 +67,13 @@ export default {
             orderId: null,
             totalPrice: 0,
             scrollHeight: that.getWindowHeight(160),
-            carList: []
+            carList: [],
         };
     },
     computed: {
         totalPriceView() {
             return (this.totalPrice / 100).toFixed(2);
-        }
+        },
     },
     onLoad() {
         // 查询待支付订单
@@ -85,11 +85,11 @@ export default {
          **/
         getOrderDetail() {
             let params = {
-                id: this.$root.$mp.query.id
+                id: this.$root.$mp.query.id,
             };
-            this.$http.getOrderDetail(params).then(res => {
+            this.$http.getOrderDetail(params).then((res) => {
                 let data = res.orderVO.orderItemVOS;
-                data.forEach(item => {
+                data.forEach((item) => {
                     item.startDate = utils.mklog(item.startDate);
                     item.endDate = utils.mklog(item.endDate);
                 });
@@ -114,25 +114,31 @@ export default {
          * 支付
          */
         toPay() {
-            wx.login(r => {
+            wx.login((r) => {
                 console.log(r);
 
                 let params = {
                     payChannel: 0,
                     orderId: this.orderId,
-                    wxCode: r.code
+                    wxCode: r.code,
                 };
                 // console.log(JSON.stringify(params));
 
-                this.$http.xcxpay(params).then(res => {
-                    console.log(res);
+                this.$http.xcxpay(params).then((res) => {
+                    wx.requestPayment(res, (r) => {
+                        console.log(r);
+                        this.close();
+                        setTimeout(() => {
+                            wx.redirectTo("/pages/user/orderList/main");
+                        }, 800);
+                    });
                 });
             });
-        }
+        },
     },
     components: {
-        headerView
-    }
+        headerView,
+    },
 };
 </script>
 

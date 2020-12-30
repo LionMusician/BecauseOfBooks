@@ -112,10 +112,12 @@ export default {
         },
     },
     onLoad() {
-        // 查询购物车
-        this.queryShoppingCart();
         // 查询分类列表
         this.queryCategory();
+    },
+    onShow() {
+        // 查询购物车
+        this.queryShoppingCart();
     },
     methods: {
         search(val) {

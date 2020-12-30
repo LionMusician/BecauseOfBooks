@@ -38,10 +38,10 @@ const userCellList = [{
     label: "我的地址",
     value: 10
 },
-{
-    label: "成长记录卡",
-    value: 11
-},
+    // {
+    //     label: "成长记录卡",
+    //     value: 11
+    // },
 ]
 
 export {

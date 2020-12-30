@@ -42,10 +42,10 @@
                                             <div>
                                                 <van-stepper
                                                     integer
-                                                    min="0"
+                                                    min="1"
                                                     :disable-plus="stepperDis"
-                                                    :value="item.adultNum"
-                                                    @change="stepperChange($event,item, 'adultNum')"
+                                                    :value="item.num"
+                                                    @change="stepperChange($event,item, 'num')"
                                                     input-class="inputClass"
                                                     plus-class="plus-minus"
                                                     minus-class="plus-minus"
@@ -152,7 +152,7 @@
                 </van-action-sheet>
             </div>
         </div>
-        <div v-else>暂无数据</div>
+        <no-data v-else></no-data>
     </div>
 </template>
 
@@ -161,6 +161,7 @@ import wx from "@/utils/wx-api";
 import Dialog from "../../../../static/vant/dialog/dialog.js";
 import Notify from "../../../../static/vant/notify/notify.js";
 import utils from "@/utils/utils";
+import noData from "@components/noData.vue";
 export default {
     name: "",
     data() {
@@ -186,6 +187,9 @@ export default {
         // 查询优惠券列表
         this.queryVoucher();
     },
+    components: {
+        noData,
+    },
     computed: {
         // 实付金额
         payPrice() {
@@ -205,14 +209,15 @@ export default {
                     //     Number(item.childNum) *
                     //     Number(item.activityVO.childPrice); // 儿童价格
                     // let totalPrice = Number(adultPrice) + Number(childPrice);
-                    let totalPrice = Number(item.num * item.unitPrice);
+                    // let totalPrice = Number(item.num * item.price);
+                    let totalPrice = item.price;
                     num += totalPrice;
                     this.totalPrice += totalPrice;
                     // 整理下单用购物车参数
                     let obj = {
                         id: item.id,
-                        adultNum: item.adultNum,
-                        childNum: item.childNum,
+                        num: item.num,
+                        // childNum: item.childNum,
                         price: totalPrice,
                         activityVO: {
                             id: item.activityVO.id,
@@ -256,8 +261,7 @@ export default {
                     //     Number(item.adultNum) * Number(activityVO.adultPrice); // 成人价格
                     // activityVO.childPriceAll =
                     //     Number(item.childNum) * Number(activityVO.childPrice); // 儿童价格
-                    activityVO.priceAll =
-                        Number(item.num) * Number(item.unitPrice);
+                    activityVO.priceAll = Number(item.price);
                     item.checked = false;
                 });
                 this.carList = data;
@@ -519,7 +523,7 @@ export default {
 
             // 计算是否有人数限制
             if (item.activityVO.totalNum) {
-                let total = Number(item.adultNum) + Number(item.childNum);
+                let total = Number(item.num);
                 if (total === item.activityVO.totalNum) {
                     this.stepperDis = true;
                     return false;
@@ -533,13 +537,15 @@ export default {
             let parmas = {
                 shoppingCartVO: {
                     activityVO: item.activityVO,
-                    adultNum: item.adultNum,
-                    childNum: item.childNum,
+                    num: item.num,
+                    // childNum: item.childNum,
                     id: item.id,
                     price: item.price,
                 },
             };
-            this.$http.updateShoppingCart(parmas).then((res) => {});
+            this.$http.updateShoppingCart(parmas).then((res) => {
+                this.queryShoppingCart();
+            });
         },
     },
 };
