@@ -272,7 +272,7 @@ export default {
          **/
         queryShoppingCart() {
             this.$http.queryShoppingCart().then(res => {
-                this.carList = res.shoppingCartVOS;
+                this.carList = res.shoppingCartVOS || [];
             });
         },
         /**

@@ -302,6 +302,7 @@ export default {
                         color: $--color-black;
                         display: inline-block;
                         @include ellipsis;
+                        max-width: 230rpx;
                     }
                     .star {
                         @include fj(flex-start);

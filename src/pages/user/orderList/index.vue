@@ -20,7 +20,6 @@
                     v-for="(tip, i) in item.orderItemVOS"
                     :key="i"
                     :title="tip.name"
-                    desc="描述信息"
                     :thumb="tip.frontCover"
                 >
                     <div class="order-price" slot="price">

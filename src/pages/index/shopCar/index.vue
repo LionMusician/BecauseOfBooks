@@ -253,7 +253,7 @@ export default {
          **/
         queryShoppingCart() {
             this.$http.queryShoppingCart().then((res) => {
-                let data = res.shoppingCartVOS;
+                let data = res.shoppingCartVOS || [];
                 data.forEach((item) => {
                     item.activityVO = item.activityVO || {};
                     let activityVO = item.activityVO;

@@ -300,4 +300,24 @@ export default class wxApi {
             }
         })
     }
+
+    /**
+     * 保存图片到本地
+     */
+    static saveImageToPhotosAlbum(filePath, fn) {
+        wx.saveImageToPhotosAlbum({
+            filePath,
+            success(res) {
+                fn(res)
+            },
+            fail() {
+                wx.showToast({
+                    title: "保存失败",
+                    icon: 'none',
+                    mask: true,
+                    duration: 1000
+                });
+            }
+        })
+    }
 }
