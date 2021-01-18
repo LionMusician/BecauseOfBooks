@@ -220,6 +220,12 @@ export default {
             method: 'post'
         });
     },
+    // 查询我的活动
+    getMyActivity: (data) => {
+        return fly.request('/becausebooks-app/own/getMyActivity', data, {
+            method: 'post'
+        });
+    },
 
     //--------------------------图书--------------------------------
     // 查询书包
